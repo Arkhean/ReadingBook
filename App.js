@@ -7,9 +7,23 @@ import Home from './components/Home';
 import Month from './components/Month';
 import Add from './components/Add';
 import Search from './components/Search';
+import AsyncStorage from '@react-native-community/async-storage';
 
+
+/* pour sauvegarder la base de données */
+const storeData = async (value) => {
+  try {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem('@storage_Key', jsonValue);
+  } catch (e) {
+    // saving error
+  }
+}
+
+/* pile d'écran de navigation */
 const Stack = createStackNavigator();
 
+/* options pour chaque écran */
 const options = {
     headerStyle: {
         backgroundColor: '#3399ff',
