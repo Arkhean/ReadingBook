@@ -2,6 +2,24 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity } from 'react-native';
 
 export default class Home extends Component {
+    constructor(props){
+        super(props);
+        this.state = { books: [] };
+        this.addBook = this.addBook.bind(this);
+
+        this.props.navigation.addListener('focus', () => {
+            if (this.props.route.params?.newBook){
+                this.addBook(this.props.route.params.newBook);
+            }
+        });
+    }
+
+    addBook(book){
+        const books = this.state.books;
+        books.push(book);
+        this.setState({books: books});
+    }
+
     showToast(){
         ToastAndroid.show("toujours pas fait", ToastAndroid.SHORT);
     }
@@ -11,8 +29,13 @@ export default class Home extends Component {
         <View style={styles.view}>
             <Text style={styles.title}>Bienvenue dans ton Carnet de Lecture !</Text>
 
-            <View style={{marginTop:100}}>
-                <TouchableOpacity style={styles.ButtonStyle} activeOpacity={0.5} onPress={() => this.props.navigation.navigate('Add')}>
+            <Text style={styles.subTitle}>Il y a {this.state.books.length} livres dans ta bibliothèque.</Text>
+
+            <View style={{marginTop:30}}>
+                <TouchableOpacity
+                    style={styles.ButtonStyle}
+                    activeOpacity={0.5}
+                    onPress={() => this.props.navigation.navigate('Ajouter un Livre'/*, {addBook: this.addBook}*/)}>
                     <Image
                      source={require('./icons/books.png')}
                      style={styles.ImageIconStyle}
@@ -20,7 +43,10 @@ export default class Home extends Component {
                     <Text style={styles.TextStyle}> Ajouter un livre </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.ButtonStyle} activeOpacity={0.5} onPress={() => this.props.navigation.navigate('Search')}>
+                <TouchableOpacity
+                    style={styles.ButtonStyle}
+                    activeOpacity={0.5}
+                    onPress={() => this.props.navigation.navigate('Search')}>
                     <Image
                      source={require('./icons/search.png')}
                      style={styles.ImageIconStyle}
@@ -28,7 +54,10 @@ export default class Home extends Component {
                     <Text style={styles.TextStyle}> Rechercher un livre </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.ButtonStyle} activeOpacity={0.5} onPress={() => this.showToast()}>
+                <TouchableOpacity
+                    style={styles.ButtonStyle}
+                    activeOpacity={0.5}
+                    onPress={() => this.showToast()}>
                     <Image
                      source={require('./icons/books.png')}
                      style={styles.ImageIconStyle}
@@ -36,7 +65,10 @@ export default class Home extends Component {
                     <Text style={styles.TextStyle}> Voir la Bibliothèque </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.ButtonStyle} activeOpacity={0.5} onPress={() => this.props.navigation.navigate('Month')}>
+                <TouchableOpacity
+                    style={styles.ButtonStyle}
+                    activeOpacity={0.5}
+                    onPress={() => this.props.navigation.navigate('Month')}>
                     <Image
                      source={require('./icons/calendar.png')}
                      style={styles.ImageIconStyle}
@@ -53,12 +85,18 @@ const styles = StyleSheet.create({
     view: {
         margin: 20,
         flex: 1,
-        //justifyContent:'space-between',
+        justifyContent: 'center',
     },
     title: {
-        alignItems: "center",
+        //flexDirection: 'row',
+        //justifyContent: 'space-between',
+        //alignItems: 'center',
         margin: 20,
         fontSize: 30
+    },
+    subTitle: {
+        margin: 20,
+        fontSize: 15
     },
     ButtonStyle: {
         flexDirection: 'row',

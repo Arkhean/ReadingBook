@@ -42,13 +42,14 @@ export default class App extends Component {
             <Stack.Screen
                 name="Home"
                 component={Home}
-                options={options}/>
+                options={options}
+                /*initialParams={{newBook: undefined}}*//>
             <Stack.Screen
                 name="Month"
                 component={Month}
                 options={options}/>
             <Stack.Screen
-                name="Add"
+                name="Ajouter un Livre"
                 component={Add}
                 options={options}/>
             <Stack.Screen

@@ -1,12 +1,12 @@
 import React, { Component, useState } from 'react';
-import { Text, View, StyleSheet, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TextInput, ScrollView, TouchableOpacity, Button, Image, ToastAndroid } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 /* textinput custom avec un titre au dessus */
 class MyTextInput extends Component {
     constructor(props){
         super(props);
-        this.state = { text: '' };
+        this.state = { text: '', max: this.props.maxLength === undefined ? 40 : this.props.maxLength };
         this.setText = this.setText.bind(this);
     }
 
@@ -22,6 +22,7 @@ class MyTextInput extends Component {
                     style={styles.input}
                     value={this.state.text}
                     keyboardType={this.props.type}
+                    maxLength={this.state.max}
                     onChangeText={text => this.setText(text)}/>
             </View>
         );
@@ -85,8 +86,28 @@ export default class Add extends Component {
             readingdate: null,
             comment: '' };
             this.setTitle = this.setTitle.bind(this);
+            this.save = this.save.bind(this);
+
+        this.props.navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity
+                    style={styles.ButtonStyle}
+                    activeOpacity={0.5}
+                    onPress={() => this.save()} >
+                    <Image
+                     source={require('./icons/done.png')}
+                     style={styles.ImageIconStyle}
+                    />
+                </TouchableOpacity>
+            ),
+        });
     }
 
+    save(){
+        //this.props.route.params.addBook(this.state);
+        //this.props.navigation.goBack();
+        this.props.navigation.navigate('Home', {newBook: this.state});
+    }
 
     setTitle(title){
         this.setState({title});
@@ -102,6 +123,8 @@ export default class Add extends Component {
                 <MyTextInput title='Prix' type='numeric'/>
                 <MyTextInput title='Nombres de pages' type='numeric'/>
                 <MydateInput title='Date de sortie' />
+                <MydateInput title='Date de lecture' />
+                <MyTextInput title='Commentaires' type='default' maxLength={200}/>
             </ScrollView>
         );
     }
@@ -120,5 +143,14 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         paddingHorizontal: 10,
         marginBottom: 5,
+        alignItems: 'center',
+    },
+    ImageIconStyle: {
+        padding: 10,
+        marginRight: 15,
+        margin: 5,
+        height: 30,
+        width: 30,
+        resizeMode: 'stretch',
     },
 });
