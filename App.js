@@ -7,18 +7,9 @@ import Home from './components/Home';
 import Month from './components/Month';
 import Add from './components/Add';
 import Search from './components/Search';
+import Lib from './components/Lib';
 import AsyncStorage from '@react-native-community/async-storage';
 
-
-/* pour sauvegarder la base de données */
-const storeData = async (value) => {
-  try {
-    const jsonValue = JSON.stringify(value);
-    await AsyncStorage.setItem('@storage_Key', jsonValue);
-  } catch (e) {
-    // saving error
-  }
-}
 
 /* pile d'écran de navigation */
 const Stack = createStackNavigator();
@@ -42,8 +33,7 @@ export default class App extends Component {
             <Stack.Screen
                 name="Home"
                 component={Home}
-                options={options}
-                /*initialParams={{newBook: undefined}}*//>
+                options={options}/>
             <Stack.Screen
                 name="Month"
                 component={Month}
@@ -55,6 +45,10 @@ export default class App extends Component {
             <Stack.Screen
                 name="Search"
                 component={Search}
+                options={options}/>
+            <Stack.Screen
+                name="Bibliothèque"
+                component={Lib}
                 options={options}/>
           </Stack.Navigator>
         </NavigationContainer>

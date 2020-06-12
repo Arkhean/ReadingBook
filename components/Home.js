@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, Alert } from 'react-native';
+
+/* pour sauvegarder la base de données */
+const storeData = async (value) => {
+  try {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem('@storage_Key', jsonValue);
+  } catch (e) {
+    // saving error
+  }
+}
 
 export default class Home extends Component {
     constructor(props){
@@ -16,8 +26,15 @@ export default class Home extends Component {
 
     addBook(book){
         const books = this.state.books;
+        for(var b of books){
+            if (b.title === book.title && b.author === book.author){
+                Alert.alert('Erreur : '+book.title+' de '+book.author+' est déjà dans la bibliothèque !');
+                return;
+            }
+        }
         books.push(book);
         this.setState({books: books});
+        storeData(books);
     }
 
     showToast(){
@@ -35,7 +52,7 @@ export default class Home extends Component {
                 <TouchableOpacity
                     style={styles.ButtonStyle}
                     activeOpacity={0.5}
-                    onPress={() => this.props.navigation.navigate('Ajouter un Livre'/*, {addBook: this.addBook}*/)}>
+                    onPress={() => this.props.navigation.navigate('Ajouter un Livre')}>
                     <Image
                      source={require('./icons/books.png')}
                      style={styles.ImageIconStyle}
@@ -57,7 +74,7 @@ export default class Home extends Component {
                 <TouchableOpacity
                     style={styles.ButtonStyle}
                     activeOpacity={0.5}
-                    onPress={() => this.showToast()}>
+                    onPress={() => this.props.navigation.navigate('Bibliothèque', {books: this.state.books})}>
                     <Image
                      source={require('./icons/books.png')}
                      style={styles.ImageIconStyle}
@@ -83,19 +100,18 @@ export default class Home extends Component {
 
 const styles = StyleSheet.create({
     view: {
-        margin: 20,
+        //margin: 20,
         flex: 1,
         justifyContent: 'center',
+        //backgroundColor: '#ffcc99',
     },
     title: {
-        //flexDirection: 'row',
-        //justifyContent: 'space-between',
-        //alignItems: 'center',
-        margin: 20,
+        marginHorizontal: 40,
+        marginBottom: 60,
         fontSize: 30
     },
     subTitle: {
-        margin: 20,
+        marginHorizontal: 40,
         fontSize: 15
     },
     ButtonStyle: {
@@ -103,7 +119,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#3399ff',
         borderWidth: 0.5,
-        borderColor: '#fff',
+        borderColor: '#ffcc99',
         height: 50,
         marginHorizontal: 20,
         marginVertical: 10,
