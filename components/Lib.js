@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
-import Book from './book'
+import Book from './book';
 import StorageManager from './StorageManager';
 
 export default class Lib extends Component {
@@ -16,11 +16,6 @@ export default class Lib extends Component {
     async loadLibrary(){
         let books = await StorageManager.loadLibrary();
         this.setState({books: books});
-    }
-
-
-    showToast(){
-        ToastAndroid.show("toujours pas fait", ToastAndroid.SHORT);
     }
 
   render() {

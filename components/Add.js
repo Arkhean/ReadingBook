@@ -81,8 +81,8 @@ const defaultState = {  title: '',
                         editor: '',
                         price: 0,
                         nPages: 0,
-                        date: null,
-                        readingdate: null,
+                        purchaseDate: new Date(Date.now()),
+                        readingDate: new Date(Date.now()),
                         comment: '' };
 
 export default class Add extends Component {
@@ -146,8 +146,8 @@ export default class Add extends Component {
                 <MyTextInput title='Editeur' type='default' onChange={text => this.setState({editor: text})}/>
                 <MyTextInput title='Prix' type='numeric' onChange={text => this.setState({price: text})}/>
                 <MyTextInput title='Nombres de pages' type='numeric' onChange={text => this.setState({nPages: text})}/>
-                <MydateInput title='Date de sortie' onChange={text => this.setState({date: text})}/>
-                <MydateInput title='Date de lecture' onChange={text => this.setState({readingdate: text})}/>
+                <MydateInput title='Date de sortie' onChange={text => this.setState({purchaseDate: text})}/>
+                <MydateInput title='Date de lecture' onChange={text => this.setState({readingDate: text})}/>
                 <MyTextInput title='Commentaires' type='default' maxLength={200} onChange={text => this.setState({comment: text})}/>
             </ScrollView>
         );

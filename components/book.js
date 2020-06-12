@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     view: {
         justifyContent: 'center',
         borderWidth: 1,
-        height: 60,
+        //height: 40,
     },
     title: {
         marginBottom: 4,
