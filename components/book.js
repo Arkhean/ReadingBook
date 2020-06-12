@@ -10,7 +10,8 @@ export default class Book extends Component {
     render(){
         return (
             <View style={styles.view}>
-                <Text style={styles.TextStyle}>{this.props.book.title}</Text>
+                <Text style={styles.title}>{this.props.book.title}</Text>
+                <Text style={styles.author}>{this.props.book.author}</Text>
             </View>
         );
     }
@@ -20,11 +21,18 @@ const styles = StyleSheet.create({
     view: {
         justifyContent: 'center',
         borderWidth: 1,
-        height: 50,
+        height: 60,
     },
-    TextStyle: {
+    title: {
         marginBottom: 4,
         marginLeft: 20,
         fontSize: 25
+    },
+    author: {
+        marginBottom: 4,
+        marginRight: 20,
+        fontSize: 15,
+        fontStyle: 'italic',
+        textAlign: 'right'
     },
 });

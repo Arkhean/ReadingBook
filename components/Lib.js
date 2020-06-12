@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import Book from './book'
-
-/* pour sauvegarder la base de données */
-const storeData = async (value) => {
-  try {
-    const jsonValue = JSON.stringify(value);
-    await AsyncStorage.setItem('@storage_Key', jsonValue);
-  } catch (e) {
-    // saving error
-  }
-}
+import StorageManager from './StorageManager';
 
 export default class Lib extends Component {
     constructor(props){
         super(props);
-        this.state = { list: this.props.route.params.books };
+        this.state = { books: [] };
+        this.loadLibrary();
+        this.props.navigation.addListener('focus', () => {
+            this.loadLibrary();
+        });
+    }
+
+    async loadLibrary(){
+        let books = await StorageManager.loadLibrary();
+        this.setState({books: books});
     }
 
 
@@ -24,10 +24,9 @@ export default class Lib extends Component {
     }
 
   render() {
-      console.log(this.state.list);
     return (
         <ScrollView style={styles.view}>
-            {this.state.list.map((book,i) => <Book key={i} book={book}/>)}
+            {this.state.books.map((book,i) => <Book key={i} book={book}/>)}
         </ScrollView>
     );
   }

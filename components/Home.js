@@ -1,40 +1,23 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, Alert } from 'react-native';
+import StorageManager from './StorageManager';
 
-/* pour sauvegarder la base de données */
-const storeData = async (value) => {
-  try {
-    const jsonValue = JSON.stringify(value);
-    await AsyncStorage.setItem('@storage_Key', jsonValue);
-  } catch (e) {
-    // saving error
-  }
-}
 
 export default class Home extends Component {
     constructor(props){
         super(props);
-        this.state = { books: [] };
-        this.addBook = this.addBook.bind(this);
+        this.state = { listOfKeys: [] };
+        StorageManager.prune();
+        this.loadKeys();
 
         this.props.navigation.addListener('focus', () => {
-            if (this.props.route.params?.newBook){
-                this.addBook(this.props.route.params.newBook);
-            }
+            this.loadKeys();
         });
     }
 
-    addBook(book){
-        const books = this.state.books;
-        for(var b of books){
-            if (b.title === book.title && b.author === book.author){
-                Alert.alert('Erreur : '+book.title+' de '+book.author+' est déjà dans la bibliothèque !');
-                return;
-            }
-        }
-        books.push(book);
-        this.setState({books: books});
-        storeData(books);
+    async loadKeys(){
+        let listOfKeys = await StorageManager.loadKeys();
+        this.setState({listOfKeys: listOfKeys});
     }
 
     showToast(){
@@ -46,7 +29,7 @@ export default class Home extends Component {
         <View style={styles.view}>
             <Text style={styles.title}>Bienvenue dans ton Carnet de Lecture !</Text>
 
-            <Text style={styles.subTitle}>Il y a {this.state.books.length} livres dans ta bibliothèque.</Text>
+            <Text style={styles.subTitle}>Il y a {this.state.listOfKeys.length} livres dans ta bibliothèque.</Text>
 
             <View style={{marginTop:30}}>
                 <TouchableOpacity

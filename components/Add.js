@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react';
 import { Text, View, StyleSheet, TextInput, ScrollView, TouchableOpacity, Button, Image, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import StorageManager from './StorageManager';
 
 /* textinput custom avec un titre au dessus */
 class MyTextInput extends Component {
@@ -88,8 +89,10 @@ export default class Add extends Component {
     constructor(props){
         super(props);
         this.state = defaultState;
-            this.setTitle = this.setTitle.bind(this);
-            this.save = this.save.bind(this);
+        this.setTitle = this.setTitle.bind(this);
+        this.save = this.save.bind(this);
+        this.listOfKeys = [];
+        this.loadKeys();
 
         this.props.navigation.setOptions({
             headerRight: () => (
@@ -110,12 +113,23 @@ export default class Add extends Component {
         });
     }
 
+    async loadKeys(){
+        this.listOfKeys = await StorageManager.loadKeys();
+    }
+
     save(){
+        let newK = this.state.title+this.state.author;
         if (this.state.title !== "" && this.state.author !== ""){
-            this.props.navigation.navigate('Home', {newBook: this.state});
+            for(let k of this.listOfKeys){
+                if (k == newK){
+                    Alert.alert('Erreur : '+this.state.title+' de '+this.state.author+' est déjà dans la bibliothèque !');
+                    return;
+                }
+            }
+            StorageManager.store(newK, this.state).then(() => this.props.navigation.goBack());
         }
         else{
-            Alert.alert('Il faut au minimum renseigner le titre et l\'auteur !')
+            Alert.alert('Il faut au minimum renseigner le titre et l\'auteur !');
         }
     }
 
