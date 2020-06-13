@@ -60,7 +60,10 @@ export default class Month extends Component {
                 <Text style={styles.title}> {this.state.nbRead+ ' livres lus'} </Text>
                 <Text style={styles.title}> {this.state.total+ ' € dépensés'} </Text>
                 <Divider style={{ backgroundColor: 'blue' }}/>
-                {this.state.booksToShow.map((book, i) => <Book key={i} book={book}/>)}
+                {this.state.booksToShow.map((book, i) => <Book key={i}
+                                                            book={book}
+                                                            simpleMode={true}
+                                                            nav={this.props.navigation}/>)}
             </View>
         );
     }

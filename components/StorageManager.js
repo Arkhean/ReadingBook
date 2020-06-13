@@ -88,6 +88,7 @@ export default class StorageManager {
         }
     }
 
+    /* remove all data */
     static async prune(){
         try {
             const jsonValue = await AsyncStorage.getItem('listOfKeys');

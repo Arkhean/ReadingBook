@@ -21,7 +21,10 @@ export default class Lib extends Component {
   render() {
     return (
         <ScrollView style={styles.view}>
-            {this.state.books.map((book,i) => <Book key={i} book={book}/>)}
+            {this.state.books.map((book,i) => <Book key={i}
+                                                    book={book}
+                                                    simpleMode={true}
+                                                    nav={this.props.navigation}/>)}
         </ScrollView>
     );
   }
