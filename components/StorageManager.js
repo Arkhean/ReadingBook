@@ -10,6 +10,11 @@ export default class StorageManager {
             const jsonList = await AsyncStorage.getItem('listOfKeys');
             if (jsonList != null){
                 let listOfKeys = JSON.parse(jsonList);
+                for(let k of listOfKeys){
+                    if (k == key){
+                        return;
+                    }
+                }
                 listOfKeys.push(key);
                 await AsyncStorage.setItem('listOfKeys', JSON.stringify(listOfKeys));
             }
@@ -108,5 +113,13 @@ export default class StorageManager {
             console.log('Erreur prune : '+e);
         }
     }
+
+    /*static newId() {
+        if( typeof newId.counter == 'undefined' ) {
+            newId.counter = 0;
+        }
+        newId.counter += 1;
+        return newId.counter;
+    }*/
 
 }

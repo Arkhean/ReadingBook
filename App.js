@@ -8,6 +8,7 @@ import Month from './components/Month';
 import Add from './components/Add';
 import Search from './components/Search';
 import Lib from './components/Lib';
+import VisualBook from './components/VisualBook';
 import AsyncStorage from '@react-native-community/async-storage';
 
 
@@ -39,7 +40,7 @@ export default class App extends Component {
                 component={Month}
                 options={options}/>
             <Stack.Screen
-                name="Ajouter un Livre"
+                name="Add"
                 component={Add}
                 options={options}/>
             <Stack.Screen
@@ -50,6 +51,11 @@ export default class App extends Component {
                 name="Bibliothèque"
                 component={Lib}
                 options={options}/>
+            <Stack.Screen
+                name="VisualBook"
+                component={VisualBook}
+                options={options}
+                initialParams={{book: null}}/>
           </Stack.Navigator>
         </NavigationContainer>
       );

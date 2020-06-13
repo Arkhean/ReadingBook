@@ -59,10 +59,10 @@ export default class Month extends Component {
                 <Text style={styles.title}> {this.state.nbBought+ ' livres achetés'} </Text>
                 <Text style={styles.title}> {this.state.nbRead+ ' livres lus'} </Text>
                 <Text style={styles.title}> {this.state.total+ ' € dépensés'} </Text>
-                <Divider style={{ backgroundColor: 'blue' }}/>
+                <Divider style={styles.divider}/>
                 {this.state.booksToShow.map((book, i) => <Book key={i}
                                                             book={book}
-                                                            simpleMode={true}
+                                                            onClick={() => this.props.navigation.navigate('VisualBook', {book: book})}
                                                             nav={this.props.navigation}/>)}
             </View>
         );
@@ -81,5 +81,10 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         fontSize: 25,
         //fontWeight: 'bold',
+    },
+    divider: {
+        backgroundColor: 'gray',
+        height: 2,
+        marginVertical: 15,
     },
 });

@@ -7,7 +7,8 @@ import StorageManager from './StorageManager';
 class MyTextInput extends Component {
     constructor(props){
         super(props);
-        this.state = { text: '', max: this.props.maxLength === undefined ? 40 : this.props.maxLength };
+        this.state = { text: this.props.value === 'unknown' ? '' : this.props.value,
+                        max: this.props.maxLength === undefined ? 40 : this.props.maxLength };
         this.setText = this.setText.bind(this);
     }
 
@@ -22,7 +23,7 @@ class MyTextInput extends Component {
                 <Text style={styles.text}>{this.props.title}</Text>
                 <TextInput
                     style={styles.input}
-                    value={this.state.text}
+                    value={this.state.text.toString()}
                     keyboardType={this.props.type}
                     maxLength={this.state.max}
                     onChangeText={text => this.setText(text)}/>
@@ -39,7 +40,7 @@ function pad(n) {return n < 10 ? "0"+n : n;}
 class MydateInput extends Component {
     constructor(props){
         super(props);
-        this.state = { date: new Date(Date.now()),
+        this.state = { date: new Date(this.props.value),
                         show: false };
         this.setDate = this.setDate.bind(this);
     }
@@ -75,7 +76,8 @@ class MydateInput extends Component {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const defaultState = {  title: '',
+const defaultState = {  //id: StorageManager.newId(),
+                        title: '',
                         author: '',
                         genre: 'unknown',
                         editor: 'unknown',
@@ -89,6 +91,11 @@ export default class Add extends Component {
     constructor(props){
         super(props);
         this.state = defaultState;
+        this.modificationMode = false;
+        if (this.props.route.params.book != null){
+            this.state = this.props.route.params.book;
+            this.modificationMode = true;
+        }
         this.setTitle = this.setTitle.bind(this);
         this.save = this.save.bind(this);
         this.listOfKeys = [];
@@ -107,10 +114,6 @@ export default class Add extends Component {
                 </TouchableOpacity>
             ),
         });
-
-        this.props.navigation.addListener('focus', () => {
-            this.setState(defaultState);
-        });
     }
 
     async loadKeys(){
@@ -120,13 +123,23 @@ export default class Add extends Component {
     save(){
         let newK = this.state.title+this.state.author;
         if (this.state.title !== "" && this.state.author !== ""){
-            for(let k of this.listOfKeys){
-                if (k == newK){
-                    Alert.alert('Erreur : '+this.state.title+' de '+this.state.author+' est déjà dans la bibliothèque !');
-                    return;
+            if (!this.modificationMode){
+                for(let k of this.listOfKeys){
+                    if (k == newK){
+                        Alert.alert('Erreur : '+this.state.title+' de '+this.state.author+' est déjà dans la bibliothèque !');
+                        return;
+                    }
                 }
             }
-            StorageManager.store(newK, this.state).then(() => this.props.navigation.goBack());
+            let array = this.props.navigation.dangerouslyGetState().routeNames;
+            let previousScreen = array[array.length-1];
+            if (previousScreen == 'Home'){
+                StorageManager.store(newK, this.state).then(() => this.props.navigation.goBack());
+            }
+            else{
+                /* retour sur VisualBook à mettre à jour */
+                StorageManager.store(newK, this.state).then(() => this.props.navigation.navigate(previousScreen, {book: this.state}));
+            }
         }
         else{
             Alert.alert('Il faut au minimum renseigner le titre et l\'auteur !');
@@ -140,15 +153,15 @@ export default class Add extends Component {
     render() {
         return (
             <ScrollView style={styles.view}>
-                <MyTextInput title='Titre' type='default' onChange={text => this.setState({title: text})}/>
-                <MyTextInput title='Auteur' type='default' onChange={text => this.setState({author: text})}/>
-                <MyTextInput title='Genre' type='default' onChange={text => this.setState({genre: text})}/>
-                <MyTextInput title='Editeur' type='default' onChange={text => this.setState({editor: text})}/>
-                <MyTextInput title='Prix' type='numeric' onChange={text => this.setState({price: text})}/>
-                <MyTextInput title='Nombres de pages' type='numeric' onChange={text => this.setState({nPages: text})}/>
-                <MydateInput title="Date d'achat" onChange={text => this.setState({purchaseDate: text})}/>
-                <MydateInput title='Date de lecture' onChange={text => this.setState({readingDate: text})}/>
-                <MyTextInput title='Commentaires' type='default' maxLength={200} onChange={text => this.setState({comment: text})}/>
+                <MyTextInput title='Titre' value={this.state.title} type='default' onChange={text => this.setState({title: text})}/>
+                <MyTextInput title='Auteur' value={this.state.author} type='default' onChange={text => this.setState({author: text})}/>
+                <MyTextInput title='Genre' value={this.state.genre} type='default' onChange={text => this.setState({genre: text})}/>
+                <MyTextInput title='Editeur' value={this.state.editor} type='default' onChange={text => this.setState({editor: text})}/>
+                <MyTextInput title='Prix' value={this.state.price} type='numeric' onChange={text => this.setState({price: text})}/>
+                <MyTextInput title='Nombres de pages' value={this.state.nPages} type='numeric' onChange={text => this.setState({nPages: text})}/>
+                <MydateInput title="Date d'achat" value={this.state.purchaseDate} onChange={text => this.setState({purchaseDate: text})}/>
+                <MydateInput title='Date de lecture' value={this.state.readingDate} onChange={text => this.setState({readingDate: text})}/>
+                <MyTextInput title='Commentaires' value={this.state.comment} type='default' maxLength={200} onChange={text => this.setState({comment: text})}/>
             </ScrollView>
         );
     }
@@ -166,7 +179,6 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         paddingHorizontal: 10,
-        //marginBottom: 5,
         alignItems: 'center',
     },
     ImageIconStyle: {

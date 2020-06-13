@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, Alert } from 'react-native';
 import StorageManager from './StorageManager';
+import { CommonActions } from '@react-navigation/native';
 
 
 export default class Home extends Component {
     constructor(props){
         super(props);
         this.state = { listOfKeys: [] };
-        StorageManager.prune();
+        //StorageManager.prune();
+
         this.loadKeys();
 
         this.props.navigation.addListener('focus', () => {
@@ -35,7 +37,7 @@ export default class Home extends Component {
                 <TouchableOpacity
                     style={styles.ButtonStyle}
                     activeOpacity={0.5}
-                    onPress={() => this.props.navigation.navigate('Ajouter un Livre')}>
+                    onPress={() => this.props.navigation.navigate('Add', {book: null})}>
                     <Image
                      source={require('./icons/books.png')}
                      style={styles.ImageIconStyle}
