@@ -37,7 +37,7 @@ export default class Home extends Component {
                 <TouchableOpacity
                     style={styles.ButtonStyle}
                     activeOpacity={0.5}
-                    onPress={() => this.props.navigation.navigate('Add', {book: null})}>
+                    onPress={() => this.props.navigation.navigate('BookScreen', {book: null, visualMode: false})}>
                     <Image
                      source={require('./icons/books.png')}
                      style={styles.ImageIconStyle}

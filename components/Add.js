@@ -76,7 +76,7 @@ class MydateInput extends Component {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const defaultState = {  //id: StorageManager.newId(),
+/*const defaultState = {  //id: StorageManager.newId(),
                         title: '',
                         author: '',
                         genre: 'unknown',
@@ -85,83 +85,27 @@ const defaultState = {  //id: StorageManager.newId(),
                         nPages: 0,
                         purchaseDate: new Date(Date.now()),
                         readingDate: new Date(Date.now()),
-                        comment: '' };
+                        comment: '' };*/
 
 export default class Add extends Component {
     constructor(props){
         super(props);
-        this.state = defaultState;
-        this.modificationMode = false;
-        if (this.props.route.params.book != null){
-            this.state = this.props.route.params.book;
-            this.modificationMode = true;
-        }
-        this.setTitle = this.setTitle.bind(this);
-        this.save = this.save.bind(this);
-        this.listOfKeys = [];
-        this.loadKeys();
-
-        this.props.navigation.setOptions({
-            headerRight: () => (
-                <TouchableOpacity
-                    style={styles.ButtonStyle}
-                    activeOpacity={0.5}
-                    onPress={() => this.save()} >
-                    <Image
-                     source={require('./icons/done.png')}
-                     style={styles.ImageIconStyle}
-                    />
-                </TouchableOpacity>
-            ),
-        });
+        //this.state = defaultState;
     }
 
-    async loadKeys(){
-        this.listOfKeys = await StorageManager.loadKeys();
-    }
-
-    save(){
-        let newK = this.state.title+this.state.author;
-        if (this.state.title !== "" && this.state.author !== ""){
-            if (!this.modificationMode){
-                for(let k of this.listOfKeys){
-                    if (k == newK){
-                        Alert.alert('Erreur : '+this.state.title+' de '+this.state.author+' est déjà dans la bibliothèque !');
-                        return;
-                    }
-                }
-            }
-            let array = this.props.navigation.dangerouslyGetState().routeNames;
-            let previousScreen = array[array.length-1];
-            if (previousScreen == 'Home'){
-                StorageManager.store(newK, this.state).then(() => this.props.navigation.goBack());
-            }
-            else{
-                /* retour sur VisualBook à mettre à jour */
-                StorageManager.store(newK, this.state).then(() => this.props.navigation.navigate(previousScreen, {book: this.state}));
-            }
-        }
-        else{
-            Alert.alert('Il faut au minimum renseigner le titre et l\'auteur !');
-        }
-    }
-
-    setTitle(title){
-        this.setState({title});
-    }
 
     render() {
         return (
             <ScrollView style={styles.view}>
-                <MyTextInput title='Titre' value={this.state.title} type='default' onChange={text => this.setState({title: text})}/>
-                <MyTextInput title='Auteur' value={this.state.author} type='default' onChange={text => this.setState({author: text})}/>
-                <MyTextInput title='Genre' value={this.state.genre} type='default' onChange={text => this.setState({genre: text})}/>
-                <MyTextInput title='Editeur' value={this.state.editor} type='default' onChange={text => this.setState({editor: text})}/>
-                <MyTextInput title='Prix' value={this.state.price} type='numeric' onChange={text => this.setState({price: text})}/>
-                <MyTextInput title='Nombres de pages' value={this.state.nPages} type='numeric' onChange={text => this.setState({nPages: text})}/>
-                <MydateInput title="Date d'achat" value={this.state.purchaseDate} onChange={text => this.setState({purchaseDate: text})}/>
-                <MydateInput title='Date de lecture' value={this.state.readingDate} onChange={text => this.setState({readingDate: text})}/>
-                <MyTextInput title='Commentaires' value={this.state.comment} type='default' maxLength={200} onChange={text => this.setState({comment: text})}/>
+                <MyTextInput title='Titre' value={this.props.book.title} type='default' onChange={text => this.props.onChange('title', text)}/>
+                <MyTextInput title='Auteur' value={this.props.book.author} type='default' onChange={text => this.props.onChange('author', text)}/>
+                <MyTextInput title='Genre' value={this.props.book.genre} type='default' onChange={text => this.props.onChange('genre', text)}/>
+                <MyTextInput title='Editeur' value={this.props.book.editor} type='default' onChange={text => this.props.onChange('editor', text)}/>
+                <MyTextInput title='Prix' value={this.props.book.price} type='numeric' onChange={text => this.props.onChange('price', text)}/>
+                <MyTextInput title='Nombres de pages' value={this.props.book.nPages} type='numeric' onChange={text => this.props.onChange('nPages', text)}/>
+                <MydateInput title="Date d'achat" value={this.props.book.purchaseDate} onChange={text => this.props.onChange('purchaseDate', text)}/>
+                <MydateInput title='Date de lecture' value={this.props.book.readingDate} onChange={text => this.props.onChange('readingDate', text)}/>
+                <MyTextInput title='Commentaires' value={this.props.book.comment} type='default' maxLength={200} onChange={text => this.props.onChange('comment', text)}/>
             </ScrollView>
         );
     }

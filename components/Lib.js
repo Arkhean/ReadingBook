@@ -23,7 +23,7 @@ export default class Lib extends Component {
         <ScrollView style={styles.view}>
             {this.state.books.map((book,i) => <Book key={i}
                                                     book={book}
-                                                    onClick={() => this.props.navigation.navigate('VisualBook', {book: book})}
+                                                    onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}
                                                     nav={this.props.navigation}/>)}
         </ScrollView>
     );

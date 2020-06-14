@@ -6,20 +6,10 @@ import { Divider } from 'react-native-elements';
 export default class VisualBook extends Component {
     constructor(props){
         super(props);
-        this.props.navigation.setOptions({
-            headerRight: () => (
-                <TouchableOpacity
-                    style={styles.ButtonStyle}
-                    activeOpacity={0.5}
-                    onPress={() => this.props.navigation.navigate('Add', {book: this.props.route.params.book})}>
-                    <Text style={styles.TextStyle}>Modifier</Text>
-                </TouchableOpacity>
-            ),
-        });
     }
 
     render() {
-        const book = this.props.route.params.book;
+        const book = this.props.book;
         const date1 = new Date(book.purchaseDate);
         const date2 = new Date(book.readingDate);
         return (
@@ -74,32 +64,5 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontStyle: 'italic',
         textAlign: 'right'
-    },
-    ButtonStyle: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#33bbff',
-        padding: 10,
-        marginHorizontal: 10,
-        marginVertical: 10,
-        borderRadius: 20,
-    },
-    TextStyle: {
-        color: '#fff',
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        paddingHorizontal: 10,
-        alignItems: 'center',
-    },
-    ImageIconStyle: {
-        padding: 10,
-        marginRight: 15,
-        margin: 5,
-        height: 30,
-        width: 30,
-        resizeMode: 'stretch',
     },
 });

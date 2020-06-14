@@ -5,10 +5,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './components/Home';
 import Month from './components/Month';
-import Add from './components/Add';
+import BookScreen from './components/BookScreen';
 import Search from './components/Search';
 import Lib from './components/Lib';
-import VisualBook from './components/VisualBook';
 import AsyncStorage from '@react-native-community/async-storage';
 
 
@@ -40,8 +39,8 @@ export default class App extends Component {
                 component={Month}
                 options={options}/>
             <Stack.Screen
-                name="Add"
-                component={Add}
+                name="BookScreen"
+                component={BookScreen}
                 options={options}/>
             <Stack.Screen
                 name="Search"
@@ -51,11 +50,6 @@ export default class App extends Component {
                 name="Bibliothèque"
                 component={Lib}
                 options={options}/>
-            <Stack.Screen
-                name="VisualBook"
-                component={VisualBook}
-                options={options}
-                initialParams={{book: null}}/>
           </Stack.Navigator>
         </NavigationContainer>
       );

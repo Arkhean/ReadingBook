@@ -62,7 +62,7 @@ export default class Month extends Component {
                 <Divider style={styles.divider}/>
                 {this.state.booksToShow.map((book, i) => <Book key={i}
                                                             book={book}
-                                                            onClick={() => this.props.navigation.navigate('VisualBook', {book: book})}
+                                                            onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}
                                                             nav={this.props.navigation}/>)}
             </View>
         );
