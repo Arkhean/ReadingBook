@@ -48,17 +48,6 @@ export default class Home extends Component {
                 <TouchableOpacity
                     style={styles.ButtonStyle}
                     activeOpacity={0.5}
-                    onPress={() => this.props.navigation.navigate('Search')}>
-                    <Image
-                     source={require('./icons/search.png')}
-                     style={styles.ImageIconStyle}
-                    />
-                    <Text style={styles.TextStyle}> Rechercher un livre </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.ButtonStyle}
-                    activeOpacity={0.5}
                     onPress={() => this.props.navigation.navigate('Bibliothèque', {books: this.state.books})}>
                     <Image
                      source={require('./icons/books.png')}

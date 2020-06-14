@@ -6,7 +6,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from './components/Home';
 import Month from './components/Month';
 import BookScreen from './components/BookScreen';
-import Search from './components/Search';
 import Lib from './components/Lib';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -41,10 +40,6 @@ export default class App extends Component {
             <Stack.Screen
                 name="BookScreen"
                 component={BookScreen}
-                options={options}/>
-            <Stack.Screen
-                name="Search"
-                component={Search}
                 options={options}/>
             <Stack.Screen
                 name="Bibliothèque"

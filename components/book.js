@@ -10,7 +10,7 @@ export default class Book extends Component {
     render(){
         return (
             <TouchableOpacity
-                style={styles.input}
+                style={styles.view}
                 activeOpacity={0.5}
                 onPress={this.props.onClick}>
                 <Text style={styles.title}>{this.props.book.title}</Text>
@@ -23,11 +23,7 @@ export default class Book extends Component {
 const styles = StyleSheet.create({
     view: {
         justifyContent: 'center',
-        borderWidth: 1,
-    },
-    input: {
-        borderWidth: 1,
-        justifyContent: 'center',
+        //borderWidth: 1,
     },
     title: {
         marginBottom: 4,

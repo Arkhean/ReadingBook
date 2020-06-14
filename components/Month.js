@@ -22,12 +22,56 @@ export default class Month extends Component {
         });
 
         this.props.navigation.setOptions({
-            title: months[this.state.month]+" "+this.state.year
+            title: 'Livres du mois',
+            headerRight: () => (
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                    <TouchableOpacity
+                        style={styles.ButtonStyle}
+                        activeOpacity={0.5}
+                        onPress={() => this.previousMonth()}>
+                        <Image
+                         source={require('./icons/back.png')}
+                         style={styles.ImageIconStyle}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.ButtonStyle}
+                        activeOpacity={0.5}
+                        onPress={() => this.nextMonth()}>
+                        <Image
+                         source={require('./icons/forward.png')}
+                         style={styles.ImageIconStyle}
+                        />
+                    </TouchableOpacity>
+                </View>
+            ),
         });
     }
 
-    async loadLibrary(){
-        let books = await StorageManager.loadLibrary();
+    nextMonth(){
+        let month = this.state.month;
+        let year = this.state.year;
+        month += 1;
+        if (month == 12){
+            month = 0;
+            year += 1;
+        }
+        this.setState({month: month, year: year}, () => this.selectBooksToShow());
+    }
+
+    previousMonth(){
+        let month = this.state.month;
+        let year = this.state.year;
+        month -= 1;
+        if (month == -1){
+            month = 11;
+            year -= 1;
+        }
+        this.setState({month: month, year: year}, () => this.selectBooksToShow());
+    }
+
+    selectBooksToShow(){
+        let books = this.state.books;
         let booksToShow = [];
         let nbBought = 0;
         let nbRead = 0;
@@ -38,7 +82,7 @@ export default class Month extends Component {
             let done = false; // pour éviter d'ajouter deux fois un même livre
             if (p.getMonth() == this.state.month && p.getFullYear() == this.state.year){
                 nbBought += 1;
-                total += book.price;
+                total += parseInt(book.price);
                 booksToShow.push(book);
                 done = true;
             }
@@ -49,21 +93,28 @@ export default class Month extends Component {
                 }
             }
         }
-        this.setState({books: books, nbBought: nbBought, nbRead: nbRead,
-                                    total: total, booksToShow: booksToShow});
+        this.setState({nbBought: nbBought, nbRead: nbRead, total: total,
+                                                booksToShow: booksToShow});
+    }
+
+    async loadLibrary(){
+        let books = await StorageManager.loadLibrary();
+        this.setState({books: books});
+        this.selectBooksToShow();
     }
 
     render() {
         return (
             <View style={styles.view}>
-                <Text style={styles.title}> {this.state.nbBought+ ' livres achetés'} </Text>
-                <Text style={styles.title}> {this.state.nbRead+ ' livres lus'} </Text>
-                <Text style={styles.title}> {this.state.total+ ' € dépensés'} </Text>
+                <Text style={styles.title}>{months[this.state.month]+" "+this.state.year}</Text>
+                <Divider style={styles.divider}/>
+                <Text style={styles.text}> {this.state.nbBought+ ' livres achetés'} </Text>
+                <Text style={styles.text}> {this.state.nbRead+ ' livres lus'} </Text>
+                <Text style={styles.text}> {this.state.total+ ' € dépensés'} </Text>
                 <Divider style={styles.divider}/>
                 {this.state.booksToShow.map((book, i) => <Book key={i}
                                                             book={book}
-                                                            onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}
-                                                            nav={this.props.navigation}/>)}
+                                                            onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>)}
             </View>
         );
     }
@@ -79,12 +130,33 @@ const styles = StyleSheet.create({
     title: {
         marginBottom: 4,
         marginLeft: 20,
+        fontSize: 30,
+        fontWeight: 'bold',
+        textAlign: "center"
+    },
+    text: {
+        marginBottom: 4,
+        marginLeft: 20,
         fontSize: 25,
-        //fontWeight: 'bold',
     },
     divider: {
         backgroundColor: 'gray',
         height: 2,
         marginVertical: 15,
+    },
+    ButtonStyle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#33bbff',
+        marginHorizontal: 10,
+        marginVertical: 10,
+        borderRadius: 15,
+    },
+    ImageIconStyle: {
+        padding: 10,
+        margin: 5,
+        height: 30,
+        width: 30,
+        resizeMode: 'stretch',
     },
 });
