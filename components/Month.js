@@ -9,13 +9,15 @@ const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet'
 export default class Month extends Component {
     constructor(props){
         super(props);
+        let now = new Date(Date.now());
         this.state = { books: [],
-                        month: 5,
-                        year: 2020,
+                        month: now.getMonth(),
+                        year: now.getFullYear(),
                         nbBought: 0,
                         nbRead: 0,
                         total: 0,
-                        booksToShow: [] };
+                        booksToShow: [],
+                        showPicker: false };
         this.loadLibrary();
         this.props.navigation.addListener('focus', () => {
             this.loadLibrary();
@@ -25,6 +27,15 @@ export default class Month extends Component {
             title: 'Livres du mois',
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
+                    /*<TouchableOpacity
+                        style={styles.ButtonStyle}
+                        activeOpacity={0.5}
+                        onPress={() => this.setState({showPicker: !this.state.showPicker})}>
+                        <Image
+                         source={require('./icons/search.png')}
+                         style={styles.ImageIconStyle}
+                        />
+                    </TouchableOpacity>*/
                     <TouchableOpacity
                         style={styles.ButtonStyle}
                         activeOpacity={0.5}
@@ -51,6 +62,10 @@ export default class Month extends Component {
     nextMonth(){
         let month = this.state.month;
         let year = this.state.year;
+        let now = new Date(Date.now());
+        if (year == now.getFullYear() && month == now.getMonth()){
+            return;
+        }
         month += 1;
         if (month == 12){
             month = 0;
@@ -148,7 +163,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#33bbff',
-        marginHorizontal: 10,
+        marginHorizontal: 5,
         marginVertical: 10,
         borderRadius: 15,
     },

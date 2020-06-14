@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import Book from './book';
 import StorageManager from './StorageManager';
 
 export default class Lib extends Component {
     constructor(props){
         super(props);
-        this.state = { books: [],
+        this.state = {  books: [],
+                        booksToShow: [],
                         filter: '',
-                        showFilter: false};
+                        showFilter: false,
+                        removeMode: false,
+                        checkBoxes: [] };
+        this.onCheckBoxChange = this.onCheckBoxChange.bind(this);
         this.loadLibrary();
         this.props.navigation.addListener('focus', () => {
             this.loadLibrary();
@@ -20,7 +25,7 @@ export default class Lib extends Component {
                     <TouchableOpacity
                         style={styles.ButtonStyle}
                         activeOpacity={0.5}
-                        onPress={() => console.log('todo')}>
+                        onPress={() => this.activateRemoveMode()}>
                         <Image
                          source={require('./icons/trash.png')}
                          style={styles.ImageIconStyle}
@@ -42,11 +47,6 @@ export default class Lib extends Component {
 
     async loadLibrary(){
         let books = await StorageManager.loadLibrary();
-        this.setState({books: books, booksToShow: books});
-    }
-
-    render() {
-        const books = this.state.books;
         const filter = this.state.filter;
         if (filter == ''){
             booksToShow = books;
@@ -62,16 +62,88 @@ export default class Lib extends Component {
                 }
             }
         }
+        let checkBoxes = booksToShow.map(() => false);
+        this.setState({books: books, booksToShow: books, checkBoxes: checkBoxes, removeMode: false});
+    }
+
+    onCheckBoxChange(i){
+        let checkBoxes = this.state.checkBoxes;
+        checkBoxes[i] = !checkBoxes[i];
+        this.setState({checkBoxes});
+    }
+
+    activateRemoveMode(){
+        this.setState({removeMode: !this.state.removeMode});
+        this.props.navigation.setOptions({
+            headerRight: () => (
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                    <TouchableOpacity
+                        style={styles.ButtonStyle}
+                        activeOpacity={0.5}
+                        onPress={() => this.applyRemove()}>
+                        <Image
+                         source={require('./icons/trash_forever.png')}
+                         style={styles.ImageIconStyle}
+                        />
+                    </TouchableOpacity>
+                </View>
+            ),
+        });
+    }
+
+    applyRemove(){
+        this.props.navigation.setOptions({
+            headerRight: () => (
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                    <TouchableOpacity
+                        style={styles.ButtonStyle}
+                        activeOpacity={0.5}
+                        onPress={() => this.activateRemoveMode()}>
+                        <Image
+                         source={require('./icons/trash.png')}
+                         style={styles.ImageIconStyle}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.ButtonStyle}
+                        activeOpacity={0.5}
+                        onPress={() => this.setState({showFilter: !this.state.showFilter })}>
+                        <Image
+                         source={require('./icons/search.png')}
+                         style={styles.ImageIconStyle}
+                        />
+                    </TouchableOpacity>
+                </View>
+            ),
+        });
+        for(let i in this.state.checkBoxes){
+            if (this.state.checkBoxes[i]){
+                StorageManager.remove(this.state.booksToShow[i].title+this.state.booksToShow[i].author);
+            }
+        }
+        this.loadLibrary();
+    }
+
+    render() {
         return (
             <View>
                 {this.state.showFilter && <TextInput
                     style={styles.input}
+                    value={this.state.filter}
                     onChangeText={text => this.setState({filter: text})}
                     />}
                 <ScrollView style={styles.view}>
-                    {booksToShow.map((book,i) => <Book key={i}
-                                        book={book}
-                                        onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>)}
+                    {this.state.booksToShow.map((book,i) => <View key={i} style={styles.view}>
+                        {this.state.removeMode &&
+                        <CheckBox
+                            disabled={false}
+                            value={this.state.checkBoxes[i]}
+                            onValueChange={() => this.onCheckBoxChange(i)}
+                         />}
+                        <Book
+                            book={book}
+                            onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>
+                    </View>)}
                 </ScrollView>
             </View>
         );
@@ -80,6 +152,8 @@ export default class Lib extends Component {
 
 const styles = StyleSheet.create({
     view: {
+        flexDirection: 'row',
+        borderWidth: 1
     },
     title: {
         marginHorizontal: 40,

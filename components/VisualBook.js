@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Button, Image } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import Book from './book';
 import { Divider } from 'react-native-elements';
 
