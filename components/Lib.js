@@ -116,11 +116,13 @@ export default class Lib extends Component {
                 </View>
             ),
         });
+        let toRemove = []
         for(let i in this.state.checkBoxes){
             if (this.state.checkBoxes[i]){
-                StorageManager.remove(this.state.booksToShow[i].title+this.state.booksToShow[i].author);
+                toRemove.push(this.state.booksToShow[i].title+this.state.booksToShow[i].author);
             }
         }
+        StorageManager.removeMany(toRemove);
         this.loadLibrary();
     }
 

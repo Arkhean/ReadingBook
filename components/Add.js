@@ -46,8 +46,10 @@ class MydateInput extends Component {
     }
 
     setDate(date){
-        this.setState({date: date, show: false});
-        this.props.onChange(date);
+        if (date != undefined){
+            this.setState({date: date, show: false});
+            this.props.onChange(date);
+        }
     }
 
     render() {
@@ -76,21 +78,9 @@ class MydateInput extends Component {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-/*const defaultState = {  //id: StorageManager.newId(),
-                        title: '',
-                        author: '',
-                        genre: 'unknown',
-                        editor: 'unknown',
-                        price: 0,
-                        nPages: 0,
-                        purchaseDate: new Date(Date.now()),
-                        readingDate: new Date(Date.now()),
-                        comment: '' };*/
-
 export default class Add extends Component {
     constructor(props){
         super(props);
-        //this.state = defaultState;
     }
 
 

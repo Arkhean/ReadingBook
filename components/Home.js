@@ -19,6 +19,7 @@ export default class Home extends Component {
 
     async loadKeys(){
         let listOfKeys = await StorageManager.loadKeys();
+        console.log(listOfKeys);
         this.setState({listOfKeys: listOfKeys});
     }
 

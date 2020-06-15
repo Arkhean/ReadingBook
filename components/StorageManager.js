@@ -58,6 +58,12 @@ export default class StorageManager {
         }
     }
 
+    static async removeMany(keyList){
+        for(let k of keyList){
+            await this.remove(k);
+        }
+    }
+
     static async loadLibrary(){
         let books = [];
         try {
@@ -101,7 +107,7 @@ export default class StorageManager {
                 let list = JSON.parse(jsonValue);
                 for(let key of list){
                     try {
-                        this.remove(key);
+                        await this.remove(key);
                     } catch(e) {
                         // error reading value
                         console.log('Erreur prune : '+e);

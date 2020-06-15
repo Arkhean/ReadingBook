@@ -27,15 +27,6 @@ export default class Month extends Component {
             title: 'Livres du mois',
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
-                    /*<TouchableOpacity
-                        style={styles.ButtonStyle}
-                        activeOpacity={0.5}
-                        onPress={() => this.setState({showPicker: !this.state.showPicker})}>
-                        <Image
-                         source={require('./icons/search.png')}
-                         style={styles.ImageIconStyle}
-                        />
-                    </TouchableOpacity>*/
                     <TouchableOpacity
                         style={styles.ButtonStyle}
                         activeOpacity={0.5}
@@ -114,8 +105,7 @@ export default class Month extends Component {
 
     async loadLibrary(){
         let books = await StorageManager.loadLibrary();
-        this.setState({books: books});
-        this.selectBooksToShow();
+        this.setState({books: books}, () => this.selectBooksToShow());
     }
 
     render() {
@@ -127,7 +117,7 @@ export default class Month extends Component {
                 <Text style={styles.text}> {this.state.nbRead+ ' livres lus'} </Text>
                 <Text style={styles.text}> {this.state.total+ ' € dépensés'} </Text>
                 <Divider style={styles.divider}/>
-                {this.state.booksToShow.map((book, i) => <Book key={i}
+                {this.state.booksToShow.length != 0 && this.state.booksToShow.map((book, i) => <Book key={i}
                                                             book={book}
                                                             onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>)}
             </View>

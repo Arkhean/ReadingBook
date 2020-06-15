@@ -19,18 +19,9 @@ const defaultBook = {   title: '',
 export default class BookScreen extends Component {
     constructor(props){
         super(props);
-        if (this.props.route.params.book != null){
-            this.state = {book: this.props.route.params.book,
-                            visualMode: this.props.route.params.visualMode,
-                            modificationMode: false};
-            this.props.navigation.setOptions({title: 'Détails du livre'});
-        }
-        else{
-            this.state = {book: defaultBook,
-                            visualMode: this.props.route.params.visualMode,
-                            modificationMode: false};
-            this.props.navigation.setOptions({title: 'Ajouter un livre'});
-        }
+        this.state = {  book: Object.assign({}, defaultBook), // copy de defaultBook
+                        visualMode: true,
+                        modificationMode: false };
         this.setField = this.setField.bind(this);
         this.listOfKeys = [];
         this.loadKeys();
@@ -47,6 +38,22 @@ export default class BookScreen extends Component {
                     />
                 </TouchableOpacity>
             ),
+        });
+
+        this.props.navigation.addListener('focus', () => {
+            this.loadKeys();
+            if (this.props.route.params.book != null){
+                this.setState({book: this.props.route.params.book,
+                                visualMode: this.props.route.params.visualMode,
+                                modificationMode: false});
+                this.props.navigation.setOptions({title: 'Détails du livre'});
+            }
+            else{
+                this.setState({book: Object.assign({}, defaultBook), // copy de defaultBook
+                                visualMode: this.props.route.params.visualMode,
+                                modificationMode: false});
+                this.props.navigation.setOptions({title: 'Ajouter un livre'});
+            }
         });
     }
 
