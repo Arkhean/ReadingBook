@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, Alert } from 'react-native';
 import StorageManager from './StorageManager';
 import { CommonActions } from '@react-navigation/native';
-import colors from './styles';
+import GlobalStyles from './styles';
+import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
+const AnimatableButton = createAnimatableComponent(TouchableOpacity);
 
 export default class Home extends Component {
     constructor(props){
@@ -28,6 +30,7 @@ export default class Home extends Component {
     }
 
   render() {
+    const animation = 'zoomIn';
     return (
         <View style={styles.view}>
             <Text style={styles.title}>Bienvenue dans ton Carnet de Lecture !</Text>
@@ -35,7 +38,10 @@ export default class Home extends Component {
             <Text style={styles.subTitle}>Il y a {this.state.listOfKeys.length} livres dans ta bibliothèque.</Text>
 
             <View style={{marginTop:30}}>
-                <TouchableOpacity
+                <AnimatableButton
+                    animation={animation}
+                    duration={1000}
+                    delay={100}
                     style={styles.ButtonStyle}
                     activeOpacity={0.5}
                     onPress={() => this.props.navigation.navigate('BookScreen', {book: null, visualMode: false})}>
@@ -44,9 +50,12 @@ export default class Home extends Component {
                      style={styles.ImageIconStyle}
                     />
                     <Text style={styles.TextStyle}> Ajouter un livre </Text>
-                </TouchableOpacity>
+                </AnimatableButton>
 
-                <TouchableOpacity
+                <AnimatableButton
+                    animation={animation}
+                    duration={1000}
+                    delay={300}
                     style={styles.ButtonStyle}
                     activeOpacity={0.5}
                     onPress={() => this.props.navigation.navigate('Bibliothèque', {books: this.state.books})}>
@@ -55,9 +64,12 @@ export default class Home extends Component {
                      style={styles.ImageIconStyle}
                     />
                     <Text style={styles.TextStyle}> Voir la Bibliothèque </Text>
-                </TouchableOpacity>
+                </AnimatableButton>
 
-                <TouchableOpacity
+                <AnimatableButton
+                    animation={animation}
+                    duration={1000}
+                    delay={500}
                     style={styles.ButtonStyle}
                     activeOpacity={0.5}
                     onPress={() => this.props.navigation.navigate('Month')}>
@@ -66,7 +78,7 @@ export default class Home extends Component {
                      style={styles.ImageIconStyle}
                     />
                     <Text style={styles.TextStyle}> Livres du mois </Text>
-                </TouchableOpacity>
+                </AnimatableButton>
             </View>
         </View>
     );
@@ -90,9 +102,9 @@ const styles = StyleSheet.create({
     ButtonStyle: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: colors.mainColor,
+        backgroundColor: GlobalStyles.colors.mainColor,
         borderWidth: 0.5,
-        borderColor: colors.mainColor,
+        borderColor: GlobalStyles.colors.mainColor,
         height: 50,
         marginHorizontal: 20,
         marginVertical: 10,
@@ -106,7 +118,7 @@ const styles = StyleSheet.create({
         resizeMode: 'stretch',
     },
     TextStyle: {
-        color: colors.textColor,
+        color: GlobalStyles.colors.textColor,
         marginBottom: 4,
         marginRight: 20,
         fontSize: 25

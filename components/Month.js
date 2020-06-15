@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import StorageManager from './StorageManager';
 import Book from './book';
 import { Divider } from 'react-native-elements';
-import colors from './styles';
+import GlobalStyles from './styles';
 
 const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
@@ -118,9 +118,15 @@ export default class Month extends Component {
                 <Text style={styles.text}> {this.state.nbRead+ ' livres lus'} </Text>
                 <Text style={styles.text}> {this.state.total+ ' € dépensés'} </Text>
                 <Divider style={styles.divider}/>
-                {this.state.booksToShow.length != 0 && this.state.booksToShow.map((book, i) => <Book key={i}
-                                                            book={book}
-                                                            onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>)}
+                <ScrollView>
+                    {this.state.booksToShow.length != 0
+                        && this.state.booksToShow.map((book, i) =>
+                            <Book
+                                style={GlobalStyles.bookStyle}
+                                key={i}
+                                book={book}
+                                onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>)}
+                </ScrollView>
             </View>
         );
     }
@@ -146,14 +152,14 @@ const styles = StyleSheet.create({
         fontSize: 25,
     },
     divider: {
-        backgroundColor: colors.dividerColor,
+        backgroundColor: GlobalStyles.colors.dividerColor,
         height: 2,
         marginVertical: 15,
     },
     ButtonStyle: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: colors.buttonColor,
+        backgroundColor: GlobalStyles.colors.buttonColor,
         marginHorizontal: 5,
         marginVertical: 10,
         borderRadius: 15,

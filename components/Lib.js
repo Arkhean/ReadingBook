@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, ScrollView, TextInput, Dimensions, BackHandler } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import Book from './book';
 import StorageManager from './StorageManager';
-import colors from './styles';
+import GlobalStyles from './styles';
+import { createAnimatableComponent, View, Text } from 'react-native-animatable';
+
+const AnimatableView = createAnimatableComponent(View);
+const AnimatableBook = createAnimatableComponent(Book);
 
 export default class Lib extends Component {
     constructor(props){
@@ -15,6 +19,7 @@ export default class Lib extends Component {
                         removeMode: false,
                         checkBoxes: [] };
         this.onCheckBoxChange = this.onCheckBoxChange.bind(this);
+        this.deactivateRemoveMode = this.deactivateRemoveMode.bind(this);
         this.loadLibrary();
         this.props.navigation.addListener('focus', () => {
             this.loadLibrary();
@@ -63,8 +68,7 @@ export default class Lib extends Component {
                 }
             }
         }
-        let checkBoxes = booksToShow.map(() => false);
-        this.setState({books: books, booksToShow: books, checkBoxes: checkBoxes, removeMode: false});
+        this.setState({books: books, booksToShow: books, checkBoxes: booksToShow.map(() => false), removeMode: false});
     }
 
     onCheckBoxChange(i){
@@ -74,7 +78,7 @@ export default class Lib extends Component {
     }
 
     activateRemoveMode(){
-        this.setState({removeMode: !this.state.removeMode});
+        this.setState({removeMode: true});
         this.props.navigation.setOptions({
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
@@ -90,9 +94,23 @@ export default class Lib extends Component {
                 </View>
             ),
         });
+        BackHandler.addEventListener("hardwareBackPress", this.deactivateRemoveMode);
     }
 
     applyRemove(){
+        this.deactivateRemoveMode();
+        let toRemove = []
+        for(let i in this.state.checkBoxes){
+            if (this.state.checkBoxes[i]){
+                toRemove.push(this.state.booksToShow[i].title+this.state.booksToShow[i].author);
+            }
+        }
+        StorageManager.removeMany(toRemove);
+        this.loadLibrary();
+    }
+
+    deactivateRemoveMode(){
+        this.setState({checkBoxes: booksToShow.map(() => false), removeMode: false});
         this.props.navigation.setOptions({
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
@@ -117,36 +135,53 @@ export default class Lib extends Component {
                 </View>
             ),
         });
-        let toRemove = []
-        for(let i in this.state.checkBoxes){
-            if (this.state.checkBoxes[i]){
-                toRemove.push(this.state.booksToShow[i].title+this.state.booksToShow[i].author);
-            }
-        }
-        StorageManager.removeMany(toRemove);
-        this.loadLibrary();
+        BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+        return true;
+    }
+
+    chooseAnimation() {
+        const animations = ['bounceIn', 'bounceInDown', 'bounceInUp', 'bounceInLeft', 'bounceInRight'];
+        let index = Math.floor(Math.random() * animations.length);
+        return animations[index];
     }
 
     render() {
+        const translation = {
+            from: { marginLeft: -20 },
+            to: { marginLeft: 0 },
+        };
+        const noAnimation = {
+            from:{}, to:{}
+        }
         return (
-            <View>
+            <View >
                 {this.state.showFilter && <TextInput
                     style={styles.input}
                     value={this.state.filter}
                     onChangeText={text => this.setState({filter: text})}
                     />}
-                <ScrollView style={styles.view}>
-                    {this.state.booksToShow.map((book,i) => <View key={i} style={styles.view}>
-                        {this.state.removeMode &&
-                        <CheckBox
-                            disabled={false}
-                            value={this.state.checkBoxes[i]}
-                            onValueChange={() => this.onCheckBoxChange(i)}
-                         />}
-                        <Book
-                            book={book}
-                            onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>
-                    </View>)}
+                <ScrollView>
+                    {this.state.booksToShow.map((book,i) =>
+                        <AnimatableView
+                            key={i}
+                            style={styles.view}
+                            animation={this.state.removeMode ? noAnimation : this.chooseAnimation()}
+                            duration={1500}
+                            delay={100}>
+                            {this.state.removeMode &&
+                            <CheckBox
+                                style={styles.checkbox}
+                                value={this.state.checkBoxes[i]}
+                                onValueChange={() => this.onCheckBoxChange(i)}
+                             />}
+                            <AnimatableBook
+                                style={GlobalStyles.bookStyle}
+                                animation={this.state.removeMode ? translation : noAnimation}
+                                duration={500}
+                                delay={0}
+                                book={book}
+                                onClick={this.state.removeMode ? () => this.onCheckBoxChange(i) : () => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>
+                        </AnimatableView>)}
                 </ScrollView>
             </View>
         );
@@ -156,7 +191,10 @@ export default class Lib extends Component {
 const styles = StyleSheet.create({
     view: {
         flexDirection: 'row',
-        borderWidth: 1
+    },
+    checkbox: {
+        alignSelf: 'center',
+        margin: 5,
     },
     title: {
         marginHorizontal: 40,
@@ -182,7 +220,7 @@ const styles = StyleSheet.create({
         resizeMode: 'stretch',
     },
     TextStyle: {
-        color: colors.textColor,
+        color: GlobalStyles.colors.textColor,
         marginBottom: 4,
         marginRight: 20,
         fontSize: 25

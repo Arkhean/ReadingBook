@@ -8,7 +8,7 @@ import Month from './components/Month';
 import BookScreen from './components/BookScreen';
 import Lib from './components/Lib';
 import AsyncStorage from '@react-native-community/async-storage';
-import colors from './components/styles';
+import GlobalStyles from './components/styles';
 
 /* pile d'écran de navigation */
 const Stack = createStackNavigator();
@@ -16,9 +16,9 @@ const Stack = createStackNavigator();
 /* options pour chaque écran */
 const options = {
     headerStyle: {
-        backgroundColor: colors.mainColor,
+        backgroundColor: GlobalStyles.colors.mainColor,
     },
-    headerTintColor: colors.textColor,
+    headerTintColor: GlobalStyles.colors.textColor,
     headerTitleStyle: {
         fontWeight: 'bold',
     },

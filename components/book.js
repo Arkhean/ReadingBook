@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-
+import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import colors from './styles';
 
 export default class Book extends Component {
     constructor(props){
@@ -10,7 +10,7 @@ export default class Book extends Component {
     render(){
         return (
             <TouchableOpacity
-                style={styles.view}
+                style={this.props.style}
                 activeOpacity={0.5}
                 onPress={this.props.onClick}>
                 <Text style={styles.title}>{this.props.book.title}</Text>
@@ -21,10 +21,6 @@ export default class Book extends Component {
 }
 
 const styles = StyleSheet.create({
-    view: {
-        justifyContent: 'center',
-        //borderWidth: 1,
-    },
     title: {
         marginBottom: 4,
         marginLeft: 20,
