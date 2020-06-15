@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, Alert } from 'react-native';
 import StorageManager from './StorageManager';
 import { CommonActions } from '@react-navigation/native';
+import colors from './styles';
 
 
 export default class Home extends Component {
@@ -19,7 +20,6 @@ export default class Home extends Component {
 
     async loadKeys(){
         let listOfKeys = await StorageManager.loadKeys();
-        console.log(listOfKeys);
         this.setState({listOfKeys: listOfKeys});
     }
 
@@ -75,10 +75,8 @@ export default class Home extends Component {
 
 const styles = StyleSheet.create({
     view: {
-        //margin: 20,
         flex: 1,
         justifyContent: 'center',
-        //backgroundColor: '#ffcc99',
     },
     title: {
         marginHorizontal: 40,
@@ -92,9 +90,9 @@ const styles = StyleSheet.create({
     ButtonStyle: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#3399ff',
+        backgroundColor: colors.mainColor,
         borderWidth: 0.5,
-        borderColor: '#ffcc99',
+        borderColor: colors.mainColor,
         height: 50,
         marginHorizontal: 20,
         marginVertical: 10,
@@ -108,7 +106,7 @@ const styles = StyleSheet.create({
         resizeMode: 'stretch',
     },
     TextStyle: {
-        color: '#fff',
+        color: colors.textColor,
         marginBottom: 4,
         marginRight: 20,
         fontSize: 25

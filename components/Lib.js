@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput 
 import CheckBox from '@react-native-community/checkbox';
 import Book from './book';
 import StorageManager from './StorageManager';
+import colors from './styles';
 
 export default class Lib extends Component {
     constructor(props){
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
         resizeMode: 'stretch',
     },
     TextStyle: {
-        color: '#fff',
+        color: colors.textColor,
         marginBottom: 4,
         marginRight: 20,
         fontSize: 25

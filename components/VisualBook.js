@@ -2,6 +2,7 @@ import React, { Component, useState } from 'react';
 import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import Book from './book';
 import { Divider } from 'react-native-elements';
+import colors from './styles';
 
 export default class VisualBook extends Component {
     constructor(props){
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     divider: {
-        backgroundColor: 'gray',
+        backgroundColor: colors.dividerColor,
         height: 2,
         marginVertical: 15,
     },

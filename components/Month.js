@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity }
 import StorageManager from './StorageManager';
 import Book from './book';
 import { Divider } from 'react-native-elements';
+import colors from './styles';
 
 const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
@@ -145,14 +146,14 @@ const styles = StyleSheet.create({
         fontSize: 25,
     },
     divider: {
-        backgroundColor: 'gray',
+        backgroundColor: colors.dividerColor,
         height: 2,
         marginVertical: 15,
     },
     ButtonStyle: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#33bbff',
+        backgroundColor: colors.buttonColor,
         marginHorizontal: 5,
         marginVertical: 10,
         borderRadius: 15,
