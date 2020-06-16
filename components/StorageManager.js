@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import RNFS from 'react-native-fs';
 
 export default class StorageManager {
 
@@ -120,12 +121,34 @@ export default class StorageManager {
         }
     }
 
-    /*static newId() {
-        if( typeof newId.counter == 'undefined' ) {
-            newId.counter = 0;
+    static async export(){
+        let books = await this.loadLibrary();
+
+        let path = RNFS.DocumentDirectoryPath + '/exportLibrary.json';
+
+        // write the file
+        RNFS.writeFile(path, JSON.stringify(books), 'utf8')
+            .then((success) => {
+                console.log(path);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }
+
+    static async storeLibrary(books){
+        await this.prune();
+        for(let book of books){
+            await this.store(book.title+book.author, book);
         }
-        newId.counter += 1;
-        return newId.counter;
-    }*/
+    }
+
+    static async import(){
+        let path = RNFS.DocumentDirectoryPath + '/exportLibrary.json';
+        await RNFS.readFile(path, 'utf8').then(async (content) => {
+            let books = JSON.parse(content);
+            await this.storeLibrary(books);
+        });
+    }
 
 }

@@ -9,6 +9,7 @@ import BookScreen from './components/BookScreen';
 import Lib from './components/Lib';
 import AsyncStorage from '@react-native-community/async-storage';
 import GlobalStyles from './components/styles';
+import { MenuProvider } from 'react-native-popup-menu';
 
 /* pile d'écran de navigation */
 const Stack = createStackNavigator();
@@ -27,26 +28,28 @@ const options = {
 export default class App extends Component {
     render() {
       return (
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen
-                name="Home"
-                component={Home}
-                options={options}/>
-            <Stack.Screen
-                name="Month"
-                component={Month}
-                options={options}/>
-            <Stack.Screen
-                name="BookScreen"
-                component={BookScreen}
-                options={options}/>
-            <Stack.Screen
-                name="Bibliothèque"
-                component={Lib}
-                options={options}/>
-          </Stack.Navigator>
-        </NavigationContainer>
+        <MenuProvider>
+            <NavigationContainer>
+              <Stack.Navigator>
+                <Stack.Screen
+                    name="Home"
+                    component={Home}
+                    options={options}/>
+                <Stack.Screen
+                    name="Month"
+                    component={Month}
+                    options={options}/>
+                <Stack.Screen
+                    name="BookScreen"
+                    component={BookScreen}
+                    options={options}/>
+                <Stack.Screen
+                    name="Bibliothèque"
+                    component={Lib}
+                    options={options}/>
+              </Stack.Navigator>
+            </NavigationContainer>
+        </MenuProvider>
       );
     }
 }

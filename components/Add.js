@@ -2,6 +2,7 @@ import React, { Component, useState } from 'react';
 import { Text, View, StyleSheet, TextInput, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import StorageManager from './StorageManager';
+import GlobalStyles from './styles';
 
 /* textinput custom avec un titre au dessus */
 class MyTextInput extends Component {
@@ -22,7 +23,7 @@ class MyTextInput extends Component {
             <View style={styles.view}>
                 <Text style={styles.text}>{this.props.title}</Text>
                 <TextInput
-                    style={styles.input}
+                    style={GlobalStyles.input}
                     value={this.state.text.toString()}
                     keyboardType={this.props.type}
                     maxLength={this.state.max}
@@ -66,7 +67,7 @@ class MydateInput extends Component {
                     onChange={(event, selectedDate) => this.setDate(selectedDate)} />
                 }
                 <TouchableOpacity
-                    style={styles.input}
+                    style={GlobalStyles.input}
                     activeOpacity={0.5}
                     onPress={() => this.setState({show: true})}>
                     <Text style={styles.text}> {pad(this.state.date.getDate())+"/"+pad(this.state.date.getMonth()+1)+"/"+this.state.date.getFullYear()} </Text>
@@ -107,20 +108,5 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        paddingHorizontal: 10,
-        alignItems: 'center',
-    },
-    ImageIconStyle: {
-        padding: 10,
-        marginRight: 15,
-        margin: 5,
-        height: 30,
-        width: 30,
-        resizeMode: 'stretch',
     },
 });

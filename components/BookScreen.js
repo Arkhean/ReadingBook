@@ -4,6 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import StorageManager from './StorageManager';
 import VisualBook from './VisualBook';
 import Add from './Add';
+import GlobalStyles from './styles';
 
 const defaultBook = {   title: '',
                         author: '',
@@ -25,20 +26,6 @@ export default class BookScreen extends Component {
         this.setField = this.setField.bind(this);
         this.listOfKeys = [];
         this.loadKeys();
-
-        this.props.navigation.setOptions({
-            headerRight: () => (
-                <TouchableOpacity
-                    style={styles.ButtonStyle}
-                    activeOpacity={0.5}
-                    onPress={() => this.save()} >
-                    <Image
-                     source={require('./icons/done.png')}
-                     style={styles.ImageIconStyle}
-                    />
-                </TouchableOpacity>
-            ),
-        });
 
         this.props.navigation.addListener('focus', () => {
             this.loadKeys();
@@ -99,10 +86,10 @@ export default class BookScreen extends Component {
             this.props.navigation.setOptions({
                 headerRight: () => (
                     <TouchableOpacity
-                        style={styles.ButtonStyle}
+                        style={GlobalStyles.HeaderButtonText}
                         activeOpacity={0.5}
                         onPress={() => this.enterModifyMode()}>
-                        <Text style={styles.TextStyle}>Modifier</Text>
+                        <Text style={{color: GlobalStyles.colors.textColor}}>Modifier</Text>
                     </TouchableOpacity>
                 ),
             });
@@ -114,12 +101,12 @@ export default class BookScreen extends Component {
             this.props.navigation.setOptions({
                 headerRight: () => (
                     <TouchableOpacity
-                        //style={styles.ButtonStyle}
+                        style={GlobalStyles.HeaderButton}
                         activeOpacity={0.5}
                         onPress={() => this.save()} >
                         <Image
                          source={require('./icons/done.png')}
-                         style={styles.ImageIconStyle}
+                         style={GlobalStyles.ImageIconStyle}
                         />
                     </TouchableOpacity>
                 ),
@@ -130,26 +117,3 @@ export default class BookScreen extends Component {
         }
     }
 }
-
-const styles = StyleSheet.create({
-    ButtonStyle: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#33bbff',
-        padding: 10,
-        marginHorizontal: 10,
-        marginVertical: 10,
-        borderRadius: 20,
-    },
-    TextStyle: {
-        color: '#fff',
-    },
-    ImageIconStyle: {
-        padding: 10,
-        marginRight: 15,
-        margin: 5,
-        height: 30,
-        width: 30,
-        resizeMode: 'stretch',
-    },
-});

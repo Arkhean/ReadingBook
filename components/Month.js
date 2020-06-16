@@ -29,21 +29,21 @@ export default class Month extends Component {
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <TouchableOpacity
-                        style={styles.ButtonStyle}
+                        style={GlobalStyles.HeaderButton}
                         activeOpacity={0.5}
                         onPress={() => this.previousMonth()}>
                         <Image
                          source={require('./icons/back.png')}
-                         style={styles.ImageIconStyle}
+                         style={GlobalStyles.ImageIconStyle}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.ButtonStyle}
+                        style={GlobalStyles.HeaderButton}
                         activeOpacity={0.5}
                         onPress={() => this.nextMonth()}>
                         <Image
                          source={require('./icons/forward.png')}
-                         style={styles.ImageIconStyle}
+                         style={GlobalStyles.ImageIconStyle}
                         />
                     </TouchableOpacity>
                 </View>
@@ -113,16 +113,17 @@ export default class Month extends Component {
         return (
             <View style={styles.view}>
                 <Text style={styles.title}>{months[this.state.month]+" "+this.state.year}</Text>
-                <Divider style={styles.divider}/>
+                <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}> {this.state.nbBought+ ' livres achetés'} </Text>
                 <Text style={styles.text}> {this.state.nbRead+ ' livres lus'} </Text>
                 <Text style={styles.text}> {this.state.total+ ' € dépensés'} </Text>
-                <Divider style={styles.divider}/>
+                <Divider style={GlobalStyles.divider}/>
                 <ScrollView>
                     {this.state.booksToShow.length != 0
                         && this.state.booksToShow.map((book, i) =>
                             <Book
                                 style={GlobalStyles.bookStyle}
+                                animation={'bounceIn'}
                                 key={i}
                                 book={book}
                                 onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>)}
@@ -134,9 +135,7 @@ export default class Month extends Component {
 
 const styles = StyleSheet.create({
     view: {
-        //alignItems: "center",
         flex: 1,
-        //justifyContent: "center",
         marginTop: 20
     },
     title: {
@@ -150,25 +149,5 @@ const styles = StyleSheet.create({
         marginBottom: 4,
         marginLeft: 20,
         fontSize: 25,
-    },
-    divider: {
-        backgroundColor: GlobalStyles.colors.dividerColor,
-        height: 2,
-        marginVertical: 15,
-    },
-    ButtonStyle: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: GlobalStyles.colors.buttonColor,
-        marginHorizontal: 5,
-        marginVertical: 10,
-        borderRadius: 15,
-    },
-    ImageIconStyle: {
-        padding: 10,
-        margin: 5,
-        height: 30,
-        width: 30,
-        resizeMode: 'stretch',
     },
 });

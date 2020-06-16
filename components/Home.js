@@ -3,6 +3,7 @@ import { StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, Alert } from
 import StorageManager from './StorageManager';
 import { CommonActions } from '@react-navigation/native';
 import GlobalStyles from './styles';
+import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
 const AnimatableButton = createAnimatableComponent(TouchableOpacity);
@@ -11,22 +12,38 @@ export default class Home extends Component {
     constructor(props){
         super(props);
         this.state = { listOfKeys: [] };
-        //StorageManager.prune();
 
         this.loadKeys();
 
         this.props.navigation.addListener('focus', () => {
             this.loadKeys();
         });
+
+        this.props.navigation.setOptions({
+            headerRight: () => (
+                    <Menu>
+                        <MenuTrigger style={styles.OptionStyle}>
+                            <Image source={require('./icons/menu.png')}
+                                   style={GlobalStyles.ImageIconStyle}/>
+                        </MenuTrigger>
+                        <MenuOptions>
+                            <MenuOption onSelect={() => StorageManager.export()}>
+                                <Text style={{fontSize: 16}}>Exporter la bibliothèque</Text>
+                            </MenuOption>
+                            <MenuOption onSelect={() => {
+                                StorageManager.import().then(() => this.loadKeys());
+                            }}>
+                                <Text style={{fontSize: 16}}>Importer une bibliothèque</Text>
+                            </MenuOption>
+                        </MenuOptions>
+                    </Menu>
+            ),
+        });
     }
 
     async loadKeys(){
         let listOfKeys = await StorageManager.loadKeys();
         this.setState({listOfKeys: listOfKeys});
-    }
-
-    showToast(){
-        ToastAndroid.show("toujours pas fait", ToastAndroid.SHORT);
     }
 
   render() {
@@ -47,7 +64,7 @@ export default class Home extends Component {
                     onPress={() => this.props.navigation.navigate('BookScreen', {book: null, visualMode: false})}>
                     <Image
                      source={require('./icons/books.png')}
-                     style={styles.ImageIconStyle}
+                     style={GlobalStyles.ImageIconStyle}
                     />
                     <Text style={styles.TextStyle}> Ajouter un livre </Text>
                 </AnimatableButton>
@@ -61,7 +78,7 @@ export default class Home extends Component {
                     onPress={() => this.props.navigation.navigate('Bibliothèque', {books: this.state.books})}>
                     <Image
                      source={require('./icons/books.png')}
-                     style={styles.ImageIconStyle}
+                     style={GlobalStyles.ImageIconStyle}
                     />
                     <Text style={styles.TextStyle}> Voir la Bibliothèque </Text>
                 </AnimatableButton>
@@ -75,7 +92,7 @@ export default class Home extends Component {
                     onPress={() => this.props.navigation.navigate('Month')}>
                     <Image
                      source={require('./icons/calendar.png')}
-                     style={styles.ImageIconStyle}
+                     style={GlobalStyles.ImageIconStyle}
                     />
                     <Text style={styles.TextStyle}> Livres du mois </Text>
                 </AnimatableButton>
@@ -92,7 +109,7 @@ const styles = StyleSheet.create({
     },
     title: {
         marginHorizontal: 40,
-        marginBottom: 60,
+        marginBottom: 100,
         fontSize: 30
     },
     subTitle: {
@@ -103,24 +120,22 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: GlobalStyles.colors.mainColor,
-        borderWidth: 0.5,
         borderColor: GlobalStyles.colors.mainColor,
-        height: 50,
         marginHorizontal: 20,
         marginVertical: 10,
         borderRadius: 5,
-    },
-    ImageIconStyle: {
-        padding: 10,
-        margin: 5,
-        height: 30,
-        width: 30,
-        resizeMode: 'stretch',
     },
     TextStyle: {
         color: GlobalStyles.colors.textColor,
         marginBottom: 4,
         marginRight: 20,
         fontSize: 25
+    },
+    OptionStyle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginHorizontal: 10,
+        marginVertical: 10,
+        borderRadius: 20,
     },
 });

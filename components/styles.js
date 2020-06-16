@@ -3,7 +3,6 @@ export default styles = {
         mainColor: '#6600ff',
         textColor: '#fff',
         buttonColor: '#33bbff',
-        dividerColor: 'gray',
     },
     bookStyle: {
         flex: 1,
@@ -11,4 +10,37 @@ export default styles = {
         backgroundColor: '#33cc33',
         borderRadius: 10,
     },
+    ImageIconStyle: {
+        padding: 10,
+        margin: 5,
+        height: 30,
+        width: 30,
+        resizeMode: 'stretch',
+    },
+    input: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        paddingHorizontal: 10,
+        alignItems: 'center',
+    },
+    divider: {
+        backgroundColor: 'gray',
+        height: 2,
+        marginVertical: 15,
+    },
+    HeaderButtonText: {
+        marginHorizontal: 10,
+        marginVertical: 10,
+        borderRadius: 15,
+        padding: 7,
+        backgroundColor: '#33bbff',
+    },
+    HeaderButton: {
+        alignSelf: 'center',
+        marginHorizontal: 10,
+        marginVertical: 10,
+        borderRadius: 15,
+        backgroundColor: '#33bbff',
+    }
 }

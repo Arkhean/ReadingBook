@@ -6,8 +6,6 @@ import StorageManager from './StorageManager';
 import GlobalStyles from './styles';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
-const AnimatableView = createAnimatableComponent(View);
-const AnimatableBook = createAnimatableComponent(Book);
 
 export default class Lib extends Component {
     constructor(props){
@@ -29,21 +27,21 @@ export default class Lib extends Component {
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <TouchableOpacity
-                        style={styles.ButtonStyle}
+                        style={GlobalStyles.HeaderButton}
                         activeOpacity={0.5}
                         onPress={() => this.activateRemoveMode()}>
                         <Image
                          source={require('./icons/trash.png')}
-                         style={styles.ImageIconStyle}
+                         style={GlobalStyles.ImageIconStyle}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.ButtonStyle}
+                        style={GlobalStyles.HeaderButton}
                         activeOpacity={0.5}
                         onPress={() => this.setState({showFilter: !this.state.showFilter })}>
                         <Image
                          source={require('./icons/search.png')}
-                         style={styles.ImageIconStyle}
+                         style={GlobalStyles.ImageIconStyle}
                         />
                     </TouchableOpacity>
                 </View>
@@ -83,12 +81,12 @@ export default class Lib extends Component {
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <TouchableOpacity
-                        style={styles.ButtonStyle}
+                        style={GlobalStyles.HeaderButton}
                         activeOpacity={0.5}
                         onPress={() => this.applyRemove()}>
                         <Image
                          source={require('./icons/trash_forever.png')}
-                         style={styles.ImageIconStyle}
+                         style={GlobalStyles.ImageIconStyle}
                         />
                     </TouchableOpacity>
                 </View>
@@ -105,8 +103,7 @@ export default class Lib extends Component {
                 toRemove.push(this.state.booksToShow[i].title+this.state.booksToShow[i].author);
             }
         }
-        StorageManager.removeMany(toRemove);
-        this.loadLibrary();
+        StorageManager.removeMany(toRemove).then(() => this.loadLibrary());
     }
 
     deactivateRemoveMode(){
@@ -115,21 +112,21 @@ export default class Lib extends Component {
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <TouchableOpacity
-                        style={styles.ButtonStyle}
+                        style={GlobalStyles.HeaderButton}
                         activeOpacity={0.5}
                         onPress={() => this.activateRemoveMode()}>
                         <Image
                          source={require('./icons/trash.png')}
-                         style={styles.ImageIconStyle}
+                         style={GlobalStyles.ImageIconStyle}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.ButtonStyle}
+                        style={GlobalStyles.HeaderButton}
                         activeOpacity={0.5}
                         onPress={() => this.setState({showFilter: !this.state.showFilter })}>
                         <Image
                          source={require('./icons/search.png')}
-                         style={styles.ImageIconStyle}
+                         style={GlobalStyles.ImageIconStyle}
                         />
                     </TouchableOpacity>
                 </View>
@@ -156,32 +153,27 @@ export default class Lib extends Component {
         return (
             <View >
                 {this.state.showFilter && <TextInput
-                    style={styles.input}
+                    style={GlobalStyles.input}
                     value={this.state.filter}
                     onChangeText={text => this.setState({filter: text})}
                     />}
                 <ScrollView>
                     {this.state.booksToShow.map((book,i) =>
-                        <AnimatableView
+                        <View
                             key={i}
-                            style={styles.view}
-                            animation={this.state.removeMode ? noAnimation : this.chooseAnimation()}
-                            duration={1500}
-                            delay={100}>
+                            style={styles.view}>
                             {this.state.removeMode &&
                             <CheckBox
                                 style={styles.checkbox}
                                 value={this.state.checkBoxes[i]}
                                 onValueChange={() => this.onCheckBoxChange(i)}
                              />}
-                            <AnimatableBook
+                            <Book
                                 style={GlobalStyles.bookStyle}
-                                animation={this.state.removeMode ? translation : noAnimation}
-                                duration={500}
-                                delay={0}
+                                animation={this.state.removeMode ? translation : this.chooseAnimation()}
                                 book={book}
                                 onClick={this.state.removeMode ? () => this.onCheckBoxChange(i) : () => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>
-                        </AnimatableView>)}
+                        </View>)}
                 </ScrollView>
             </View>
         );
@@ -195,41 +187,5 @@ const styles = StyleSheet.create({
     checkbox: {
         alignSelf: 'center',
         margin: 5,
-    },
-    title: {
-        marginHorizontal: 40,
-        marginBottom: 60,
-        fontSize: 30
-    },
-    subTitle: {
-        marginHorizontal: 40,
-        fontSize: 15
-    },
-    ButtonStyle: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginHorizontal: 10,
-        marginVertical: 10,
-        borderRadius: 20,
-    },
-    ImageIconStyle: {
-        padding: 10,
-        margin: 5,
-        height: 30,
-        width: 30,
-        resizeMode: 'stretch',
-    },
-    TextStyle: {
-        color: GlobalStyles.colors.textColor,
-        marginBottom: 4,
-        marginRight: 20,
-        fontSize: 25
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        paddingHorizontal: 10,
-        alignItems: 'center',
     },
 });

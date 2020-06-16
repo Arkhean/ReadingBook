@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import colors from './styles';
+import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
 export default class Book extends Component {
     constructor(props){
@@ -9,13 +9,19 @@ export default class Book extends Component {
 
     render(){
         return (
-            <TouchableOpacity
+            <View
                 style={this.props.style}
-                activeOpacity={0.5}
-                onPress={this.props.onClick}>
-                <Text style={styles.title}>{this.props.book.title}</Text>
-                <Text style={styles.author}>{this.props.book.author}</Text>
-            </TouchableOpacity>
+                animation={this.props.animation}
+                delay={100}
+                duration={1500}>
+                <TouchableOpacity
+                    //style={this.props.style}
+                    activeOpacity={0.5}
+                    onPress={this.props.onClick}>
+                    <Text style={styles.title}>{this.props.book.title}</Text>
+                    <Text style={styles.author}>{this.props.book.author}</Text>
+                </TouchableOpacity>
+            </View>
         );
     }
 }
