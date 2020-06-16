@@ -93,7 +93,7 @@ export default class StorageManager {
     static async loadKeys(){
         try {
             const jsonValue = await AsyncStorage.getItem('listOfKeys');
-            return jsonValue != null ? JSON.parse(jsonValue) : null;
+            return jsonValue != null ? JSON.parse(jsonValue) : [];
         } catch(e) {
             // error reading value
             console.log('Erreur loadKeys : '+e);

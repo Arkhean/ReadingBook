@@ -11,8 +11,6 @@ export default class Home extends Component {
         super(props);
         this.state = { listOfKeys: [] };
 
-        this.loadKeys();
-
         this.props.navigation.addListener('focus', () => {
             this.loadKeys();
         });
@@ -41,7 +39,9 @@ export default class Home extends Component {
 
     async loadKeys(){
         let listOfKeys = await StorageManager.loadKeys();
-        this.setState({listOfKeys: listOfKeys});
+        if (listOfKeys != null){
+            this.setState({listOfKeys: listOfKeys});
+        }
     }
 
   render() {

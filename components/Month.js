@@ -89,7 +89,7 @@ export default class Month extends Component {
             let done = false; // pour éviter d'ajouter deux fois un même livre
             if (p.getMonth() == this.state.month && p.getFullYear() == this.state.year){
                 nbBought += 1;
-                total += parseInt(book.price);
+                total += parseFloat(book.price);
                 booksToShow.push(book);
                 done = true;
             }
