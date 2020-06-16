@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
+// TODO : ajouter un indicateur si le livre est lu ou non
+// TODO : afficher saga ?
+
+
 export default class Book extends Component {
     constructor(props){
         super(props);

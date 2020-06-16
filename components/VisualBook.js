@@ -4,6 +4,8 @@ import Book from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
 
+// TODO : afficher les champs nouveaux
+
 export default class VisualBook extends Component {
     constructor(props){
         super(props);

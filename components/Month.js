@@ -5,6 +5,9 @@ import Book from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
 
+// TODO : gérer les nouveaux champs de date de lectures !
+
+
 const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
 export default class Month extends Component {
@@ -19,7 +22,6 @@ export default class Month extends Component {
                         total: 0,
                         booksToShow: [],
                         showPicker: false };
-        this.loadLibrary();
         this.props.navigation.addListener('focus', () => {
             this.loadLibrary();
         });
@@ -85,7 +87,7 @@ export default class Month extends Component {
         let total = 0;
         for(let book of books){
             let p = new Date(book.purchaseDate);
-            let r = new Date(book.purchaseDate);
+            let r = new Date(book.readingDate);
             let done = false; // pour éviter d'ajouter deux fois un même livre
             if (p.getMonth() == this.state.month && p.getFullYear() == this.state.year){
                 nbBought += 1;
@@ -100,7 +102,7 @@ export default class Month extends Component {
                 }
             }
         }
-        this.setState({nbBought: nbBought, nbRead: nbRead, total: total,
+        this.setState({nbBought: nbBought, nbRead: nbRead, total: total.toFixed(2),
                                                 booksToShow: booksToShow});
     }
 

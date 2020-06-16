@@ -4,16 +4,17 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import StorageManager from './StorageManager';
 import GlobalStyles from './styles';
 
+// TODO : gérer les nouveaux champs + liste déroulantes pour genre/format
+
 /* textinput custom avec un titre au dessus */
 class MyTextInput extends Component {
     constructor(props){
         super(props);
         this.state = { text: this.props.value === 'unknown' ? '' : this.props.value,
                         max: this.props.maxLength === undefined ? 40 : this.props.maxLength };
-        this.setText = this.setText.bind(this);
     }
 
-    setText(text){
+    setText = (text) => {
         this.setState({text});
         this.props.onChange(text);
     }
@@ -24,7 +25,7 @@ class MyTextInput extends Component {
                 <Text style={styles.text}>{this.props.title}</Text>
                 <TextInput
                     style={GlobalStyles.input}
-                    value={this.state.text.toString()}
+                    placeholder={this.props.type == 'numeric' ? '0' : ''}
                     keyboardType={this.props.type}
                     maxLength={this.state.max}
                     onChangeText={text => this.setText(text)}/>
@@ -83,7 +84,6 @@ export default class Add extends Component {
     constructor(props){
         super(props);
     }
-
 
     render() {
         return (

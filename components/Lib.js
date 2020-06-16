@@ -6,6 +6,8 @@ import StorageManager from './StorageManager';
 import GlobalStyles from './styles';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
+// TODO: corriger le bug de l'onglet search qui remonte pas toujours
+
 const AnimatableScroll = createAnimatableComponent(ScrollView);
 
 class HeaderButton extends Component {

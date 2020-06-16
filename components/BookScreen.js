@@ -6,14 +6,20 @@ import VisualBook from './VisualBook';
 import Add from './Add';
 import GlobalStyles from './styles';
 
+// TODO : ajouter les champs dans Add et Visual
+
 const defaultBook = {   title: '',
                         author: '',
+                        saga: '', // TODO facultatif
+                        nTome: 1, // TODO si sage != ''
                         genre: 'unknown',
                         editor: 'unknown',
+                        format: '', // poche, grand format TODO
                         price: 0,
                         nPages: 0,
                         purchaseDate: new Date(Date.now()),
                         readingDate: new Date(Date.now()),
+                        readingDates: [], // liste de couple début/fin TODO
                         comment: '', };
 
 /* requiert 2 params : book et visualMode : true/false */
