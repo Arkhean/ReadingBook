@@ -6,8 +6,6 @@ import GlobalStyles from './styles';
 import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
-const AnimatableButton = createAnimatableComponent(TouchableOpacity);
-
 export default class Home extends Component {
     constructor(props){
         super(props);
@@ -55,47 +53,50 @@ export default class Home extends Component {
             <Text style={styles.subTitle}>Il y a {this.state.listOfKeys.length} livres dans ta bibliothèque.</Text>
 
             <View style={{marginTop:30}}>
-                <AnimatableButton
-                    animation={animation}
-                    duration={1000}
-                    delay={100}
-                    style={styles.ButtonStyle}
-                    activeOpacity={0.5}
-                    onPress={() => this.props.navigation.navigate('BookScreen', {book: null, visualMode: false})}>
-                    <Image
-                     source={require('./icons/books.png')}
-                     style={GlobalStyles.ImageIconStyle}
-                    />
-                    <Text style={styles.TextStyle}> Ajouter un livre </Text>
-                </AnimatableButton>
+                <View animation={animation}
+                      duration={1000}
+                      delay={100}>
+                    <TouchableOpacity
+                        style={styles.ButtonStyle}
+                        activeOpacity={0.5}
+                        onPress={() => this.props.navigation.navigate('BookScreen', {book: null, visualMode: false})}>
+                        <Image
+                         source={require('./icons/books.png')}
+                         style={GlobalStyles.ImageIconStyle}
+                        />
+                        <Text style={styles.TextStyle}> Ajouter un livre </Text>
+                    </TouchableOpacity>
+                </View>
 
-                <AnimatableButton
-                    animation={animation}
-                    duration={1000}
-                    delay={300}
-                    style={styles.ButtonStyle}
-                    activeOpacity={0.5}
-                    onPress={() => this.props.navigation.navigate('Bibliothèque', {books: this.state.books})}>
-                    <Image
-                     source={require('./icons/books.png')}
-                     style={GlobalStyles.ImageIconStyle}
-                    />
-                    <Text style={styles.TextStyle}> Voir la Bibliothèque </Text>
-                </AnimatableButton>
+                <View animation={animation}
+                      duration={1000}
+                      delay={300}>
+                    <TouchableOpacity
+                        style={styles.ButtonStyle}
+                        activeOpacity={0.5}
+                        onPress={() => this.props.navigation.navigate('Bibliothèque', {books: this.state.books})}>
+                        <Image
+                         source={require('./icons/books.png')}
+                         style={GlobalStyles.ImageIconStyle}
+                        />
+                        <Text style={styles.TextStyle}> Voir la Bibliothèque </Text>
+                    </TouchableOpacity>
+                </View>
 
-                <AnimatableButton
-                    animation={animation}
-                    duration={1000}
-                    delay={500}
-                    style={styles.ButtonStyle}
-                    activeOpacity={0.5}
-                    onPress={() => this.props.navigation.navigate('Month')}>
-                    <Image
-                     source={require('./icons/calendar.png')}
-                     style={GlobalStyles.ImageIconStyle}
-                    />
-                    <Text style={styles.TextStyle}> Livres du mois </Text>
-                </AnimatableButton>
+                <View animation={animation}
+                      duration={1000}
+                      delay={500}>
+                    <TouchableOpacity
+                        style={styles.ButtonStyle}
+                        activeOpacity={0.5}
+                        onPress={() => this.props.navigation.navigate('Month')}>
+                        <Image
+                         source={require('./icons/calendar.png')}
+                         style={GlobalStyles.ImageIconStyle}
+                        />
+                        <Text style={styles.TextStyle}> Livres du mois </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
