@@ -4,7 +4,7 @@ import Book from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
 
-// TODO : afficher les champs nouveaux
+// TODO : afficher les dates de lectures !
 
 export default class VisualBook extends Component {
     constructor(props){
@@ -18,6 +18,7 @@ export default class VisualBook extends Component {
         return (
             <View style={styles.view}>
                 <Text style={styles.title}>{book.title}</Text>
+                {book.saga != '' && <Text style={styles.subtitle}>{book.saga+", tome "+book.nTome}</Text>}
                 <Text style={styles.author}>{"de "+book.author}</Text>
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>{"Genre: "}
@@ -25,6 +26,9 @@ export default class VisualBook extends Component {
                 </Text>
                 <Text style={styles.text}>{"Publié par: "}
                     <Text style={styles.innerText}>{book.editor}</Text>
+                </Text>
+                <Text style={styles.text}>{"Format: "}
+                    <Text style={styles.innerText}>{book.format}</Text>
                 </Text>
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>{"Acheté le "+date1.toLocaleDateString('fr-FR')+" pour "+book.price+" €."}</Text>
@@ -44,22 +48,27 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     text: {
-        fontSize: 20,
+        fontSize: 18,
     },
     innerText: {
-        fontSize: 20,
+        fontSize: 18,
         fontStyle: 'italic',
     },
     title: {
         marginBottom: 4,
         marginLeft: 20,
-        fontSize: 25
+        fontSize: 25,
+        fontWeight: 'bold'
+    },
+    subtitle: {
+        marginBottom: 4,
+        marginLeft: 20,
+        fontSize: 20
     },
     author: {
         fontSize: 20,
         marginBottom: 4,
         marginRight: 20,
-        fontSize: 15,
         fontStyle: 'italic',
         textAlign: 'right'
     },

@@ -86,6 +86,7 @@ export default class Month extends Component {
         let nbRead = 0;
         let total = 0;
         for(let book of books){
+            /* TODO changement : parcourir la liste readingDates ...*/
             let p = new Date(book.purchaseDate);
             let r = new Date(book.readingDate);
             let done = false; // pour éviter d'ajouter deux fois un même livre

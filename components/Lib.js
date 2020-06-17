@@ -6,8 +6,6 @@ import StorageManager from './StorageManager';
 import GlobalStyles from './styles';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
-// TODO: corriger le bug de l'onglet search qui remonte pas toujours
-
 const AnimatableScroll = createAnimatableComponent(ScrollView);
 
 class HeaderButton extends Component {
@@ -59,7 +57,7 @@ export default class Lib extends Component {
 
     async loadLibrary(){
         let books = await StorageManager.loadLibrary();
-        this.setState({books: books, booksToShow: books, checkBoxes: books.map(() => false), removeMode: false});
+        this.setState({books: books, booksToShow: books, checkBoxes: books.map(() => false), removeMode: false, showFilter: false});
     }
 
     applyFilter = () => {
@@ -108,10 +106,10 @@ export default class Lib extends Component {
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <HeaderButton
-                        onPress={() => this.activateRemoveMode()}
+                        onPress={this.activateRemoveMode}
                         icon={require('./icons/trash.png')}/>
                     <HeaderButton
-                        onPress={this.deactivateShowFilter}
+                        onPress={this.myGoBack}
                         icon={require('./icons/search.png')}/>
                 </View>
             ),
@@ -124,7 +122,7 @@ export default class Lib extends Component {
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <HeaderButton
-                        onPress={() => this.activateRemoveMode()}
+                        onPress={this.activateRemoveMode}
                         icon={require('./icons/trash.png')}/>
                     <HeaderButton
                         onPress={this.activateShowFilter}
@@ -143,7 +141,7 @@ export default class Lib extends Component {
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <HeaderButton
-                        onPress={() => this.applyRemove()}
+                        onPress={this.applyRemove}
                         icon={require('./icons/trash_forever.png')}/>
                 </View>
             ),
@@ -168,7 +166,7 @@ export default class Lib extends Component {
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <HeaderButton
-                        onPress={() => this.activateRemoveMode()}
+                        onPress={this.activateRemoveMode}
                         icon={require('./icons/trash.png')}/>
                     <HeaderButton
                         onPress={this.state.showFilter ? this.deactivateShowFilter : this.activateShowFilter}
@@ -249,7 +247,8 @@ export default class Lib extends Component {
                                 style={GlobalStyles.bookStyle}
                                 animation={bookAnim}
                                 book={book}
-                                onClick={this.state.removeMode ? () => this.onCheckBoxChange(i) : () => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>
+                                onClick={this.state.removeMode ? () => this.onCheckBoxChange(i)
+                                                               : () => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>
                         </View>)
                     }
                 </AnimatableScroll>

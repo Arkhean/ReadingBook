@@ -1,26 +1,46 @@
 import React, { Component, useState } from 'react';
-import { Text, View, StyleSheet, TextInput, ScrollView, TouchableOpacity, Button, Image, Alert } from 'react-native';
+import { Text, View, StyleSheet, TextInput, ScrollView, TouchableOpacity, BackHandler, Image, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import StorageManager from './StorageManager';
 import VisualBook from './VisualBook';
 import Add from './Add';
 import GlobalStyles from './styles';
 
-// TODO : ajouter les champs dans Add et Visual
+// TODO : backhandler modificationMode -> visual
 
 const defaultBook = {   title: '',
                         author: '',
-                        saga: '', // TODO facultatif
-                        nTome: 1, // TODO si sage != ''
-                        genre: 'unknown',
-                        editor: 'unknown',
-                        format: '', // poche, grand format TODO
+                        saga: '',
+                        nTome: 1, // si sage != ''
+                        genre: '',
+                        editor: '',
+                        format: '', // poche, grand format
                         price: 0,
                         nPages: 0,
                         purchaseDate: new Date(Date.now()),
-                        readingDate: new Date(Date.now()),
-                        readingDates: [], // liste de couple début/fin TODO
+                        readingDate: new Date(Date.now()), // TODO à retirer
+                        readingDates: [], // liste de couple début/fin
                         comment: '', };
+
+/* pour assurer la retro-compatibilité, du fait de l'ajout de champs à Book */
+const getBook = (book) => {
+    return {
+        title: book.title,
+        author: book.author,
+        saga: 'saga' in book ? book.saga : '',
+        nTome: 'nTome' in book ? book.nTome : 1,
+        genre: book.genre,
+        editor: book.editor,
+        format: 'format' in book ? book.format : '',
+        price: book.price,
+        nPages: book.nPages,
+        purchaseDate: book.purchaseDate,
+        readingDate: book.readingDate,
+        readingDates: 'readingDates' in book ? book.readingDates : [],
+        comment: book.comment,
+
+    };
+}
 
 /* requiert 2 params : book et visualMode : true/false */
 export default class BookScreen extends Component {
@@ -29,14 +49,13 @@ export default class BookScreen extends Component {
         this.state = {  book: Object.assign({}, defaultBook), // copy de defaultBook
                         visualMode: true,
                         modificationMode: false };
-        this.setField = this.setField.bind(this);
         this.listOfKeys = [];
-        this.loadKeys();
+        this.modified = false;
 
         this.props.navigation.addListener('focus', () => {
             this.loadKeys();
             if (this.props.route.params.book != null){
-                this.setState({book: this.props.route.params.book,
+                this.setState({book: getBook(this.props.route.params.book),
                                 visualMode: this.props.route.params.visualMode,
                                 modificationMode: false});
                 this.props.navigation.setOptions({title: 'Détails du livre'});
@@ -68,7 +87,10 @@ export default class BookScreen extends Component {
                     }
                 }
             }
-            StorageManager.store(newK, book).then(() => this.setState({visualMode: true, modificationMode: false}));
+            StorageManager.store(newK, book).then(() => {
+                this.setState({visualMode: true, modificationMode: false});
+                BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
+            });
             this.props.navigation.setOptions({title: 'Détails du livre'});
         }
         else{
@@ -76,12 +98,32 @@ export default class BookScreen extends Component {
         }
     }
 
-    enterModifyMode(){
-        this.setState({visualMode: false, modificationMode: true});
-        this.props.navigation.setOptions({title: 'Modification'});
+    alertCancel = () => {
+        // TODO annuler les modifs
+        this.setState({visualMode: true, modificationMode: false});
+        BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
     }
 
-    setField(target, value){
+    myGoBack = async () => {
+        if (this.modified){
+            await Alert.alert('Attention !', 'Quitter sans sauvegarder ?' ,[{text: 'sauvegarder', onPress: this.save},
+                                                        {text: 'annuler', onPress: this.alertCancel}]);
+        }
+        else{
+            this.setState({visualMode: true, modificationMode: false});
+            BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
+        }
+        return true;
+    }
+
+    enterModifyMode = () => {
+        this.setState({visualMode: false, modificationMode: true});
+        this.props.navigation.setOptions({title: 'Modification'});
+        BackHandler.addEventListener("hardwareBackPress", this.myGoBack);
+    }
+
+    setField = (target, value) => {
+        this.modified = true;
         let book = this.state.book;
         book[target] = value;
         this.setState({book});
