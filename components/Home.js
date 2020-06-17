@@ -6,6 +6,8 @@ import GlobalStyles from './styles';
 import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
+// TODO : bouton pile à lire
+
 export default class Home extends Component {
     constructor(props){
         super(props);
