@@ -6,6 +6,12 @@ import GlobalStyles from './styles';
 
 // TODO : afficher les dates de lectures !
 
+function pad(n) {return n < 10 ? "0"+n : n;}
+
+function displayDate(date){
+    return pad(date.getDate())+"/"+pad(date.getMonth()+1)+"/"+date.getFullYear();
+}
+
 export default class VisualBook extends Component {
     constructor(props){
         super(props);
@@ -31,9 +37,9 @@ export default class VisualBook extends Component {
                     <Text style={styles.innerText}>{book.format}</Text>
                 </Text>
                 <Divider style={GlobalStyles.divider}/>
-                <Text style={styles.text}>{"Acheté le "+date1.toLocaleDateString('fr-FR')+" pour "+book.price+" €."}</Text>
+                <Text style={styles.text}>{"Acheté le "+displayDate(date1)+" pour "+book.price+" €."}</Text>
                 <Text style={styles.text}>{"Le livre contient "+book.nPages+" pages."}</Text>
-                <Text style={styles.text}>{"Lecture terminée le "+date2.toLocaleDateString('fr-FR')+"."}</Text>
+                <Text style={styles.text}>{"Lecture terminée le "+displayDate(date2)+"."}</Text>
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>{"Commentaires: "}
                     <Text style={styles.innerText}>{book.comment}</Text>

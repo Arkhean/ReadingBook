@@ -1,23 +1,17 @@
 import React, { Component, useState } from 'react';
 import { Text, View, StyleSheet, TextInput, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-community/picker';
 import StorageManager from './StorageManager';
 import GlobalStyles from './styles';
 
-// TODO : liste déroulantes pour genre/format
 // TODO : mettre en ligne
 
 /* textinput custom avec un titre au dessus */
 class MyTextInput extends Component {
     constructor(props){
         super(props);
-        this.state = { text: this.props.value === 'unknown' ? '' : this.props.value,
-                        max: this.props.maxLength === undefined ? 40 : this.props.maxLength };
-    }
-
-    setText = (text) => {
-        this.setState({text});
-        this.props.onChange(text);
+        this.state = { max: this.props.maxLength === undefined ? 40 : this.props.maxLength };
     }
 
     render() {
@@ -31,7 +25,7 @@ class MyTextInput extends Component {
                     value={this.props.value == 0 ? '' : this.props.value.toString()}
                     keyboardType={this.props.type}
                     maxLength={this.state.max}
-                    onChangeText={text => this.setText(text)}/>
+                    onChangeText={text => this.props.onChange(text)}/>
             </View>
         );
     }
@@ -40,6 +34,10 @@ class MyTextInput extends Component {
 ////////////////////////////////////////////////////////////////////////////////
 
 function pad(n) {return n < 10 ? "0"+n : n;}
+
+function displayDate(date){
+    return pad(date.getDate())+"/"+pad(date.getMonth()+1)+"/"+date.getFullYear();
+}
 
 /* date custom avec un titre au dessus */
 class MydateInput extends Component {
@@ -75,8 +73,30 @@ class MydateInput extends Component {
                     editable={this.props.editable}
                     activeOpacity={0.5}
                     onPress={() => this.setState({show: true})}>
-                    <Text style={styles.text}> {pad(this.state.date.getDate())+"/"+pad(this.state.date.getMonth()+1)+"/"+this.state.date.getFullYear()} </Text>
+                    <Text style={styles.text}> {displayDate(this.state.date)} </Text>
                 </TouchableOpacity>
+            </View>
+        );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+/* picker custom avec un titre au dessus */
+class MyPicker extends Component {
+    constructor(props){
+        super(props);
+    }
+
+    render() {
+        return (
+            <View style={styles.view}>
+                <Text style={styles.text}>{this.props.title}</Text>
+                <Picker
+                    selectedValue={this.props.value}
+                    onValueChange={(itemValue, itemIndex) => this.props.onChange(itemValue)}>
+                    {this.props.data.map((item, i) => <Picker.Item key={i} label={item} value={item} />)}
+                </Picker>
             </View>
         );
     }
@@ -90,6 +110,11 @@ export default class Add extends Component {
     }
 
     render() {
+        const genres = ['Aventure', 'Policier', 'Science-Fiction',
+                    'Fantastique', 'Horreur', 'Biographie', 'Nouvelle', 'Conte',
+                    'Fantasy', 'Romance', 'Comtemporain', 'Classique', 'Théâtre',
+                    'Poésie'];
+        const formats = ['Poche', 'Semi-Poche', 'Grand Format'];
         return (
             <ScrollView >
                 <MyTextInput
@@ -105,15 +130,17 @@ export default class Add extends Component {
                     title='Tome' value={this.props.book.nTome} type='numeric'
                     editable={this.props.book.saga != ''}
                     onChange={text => this.props.onChange('nTome', text)}/>
-                <MyTextInput
-                    title='Genre' value={this.props.book.genre} type='default'
-                    onChange={text => this.props.onChange('genre', text)}/>
+                <MyPicker
+                    title='Genre' value={this.props.book.genre}
+                    data={genres}
+                    onChange={value => this.props.onChange('genre', value)}/>
                 <MyTextInput
                     title='Editeur' value={this.props.book.editor} type='default'
                     onChange={text => this.props.onChange('editor', text)}/>
-                <MyTextInput
-                    title='Format' value={this.props.book.format} type='default'
-                    onChange={text => this.props.onChange('format', text)}/>
+                <MyPicker
+                    title='Format' value={this.props.book.format}
+                    data={formats}
+                    onChange={value => this.props.onChange('format', value)}/>
                 <MyTextInput
                     title='Prix' value={this.props.book.price} type='numeric'
                     onChange={text => this.props.onChange('price', text)}/>
