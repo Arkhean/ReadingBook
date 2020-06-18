@@ -5,8 +5,6 @@ import { Picker } from '@react-native-community/picker';
 import StorageManager from './StorageManager';
 import GlobalStyles from './styles';
 
-// TODO : mettre en ligne
-
 /* textinput custom avec un titre au dessus */
 class MyTextInput extends Component {
     constructor(props){
@@ -36,6 +34,7 @@ class MyTextInput extends Component {
 function pad(n) {return n < 10 ? "0"+n : n;}
 
 function displayDate(date){
+    date = new Date(date);
     return pad(date.getDate())+"/"+pad(date.getMonth()+1)+"/"+date.getFullYear();
 }
 
@@ -75,6 +74,104 @@ class MydateInput extends Component {
                     onPress={() => this.setState({show: true})}>
                     <Text style={styles.text}> {displayDate(this.state.date)} </Text>
                 </TouchableOpacity>
+            </View>
+        );
+    }
+}
+
+/* multi date avec un titre au dessus */
+class MultiDateInput extends Component {
+    constructor(props){
+        super(props);
+        this.state = { dates: this.props.value,
+                       show: false,
+                       inputNum: 0 }; // 0 pour date début, 1 date de fin
+        this.cursor = 0;
+    }
+
+    setDate = (date) => {
+        if (date != undefined){
+            let dates = this.state.dates;
+            if (this.state.inputNum === 0){
+                if (date > dates[this.cursor].end){
+                    Alert.alert('La date de début doit être inférieure à la date de fin !');
+                    return;
+                }
+                else{
+                    dates[this.cursor].start = date;
+                }
+            }
+            else{
+                if (date < dates[this.cursor].start){
+                    Alert.alert('La date de fin doit être supérieure à la date de début !');
+                    return;
+                }
+                dates[this.cursor].end = date;
+            }
+            this.setState({dates: dates, show: false});
+            this.props.onChange(this.state.dates);
+        }
+    }
+
+    newDates = () => {
+        let dates = this.state.dates;
+        dates.push({start: new Date(Date.now()), end: new Date(Date.now())});
+        this.setState({dates: dates});
+    }
+
+    removeDate = (i) => {
+        let dates = this.state.dates;
+        dates.splice(i, 1);
+        this.setState({dates: dates});
+    }
+
+    render() {
+        return (
+            <View style={styles.view}>
+                <View style={{flexDirection: 'row', margin: 5}}>
+                    <Text style={styles.text}>{this.props.title}</Text>
+                    <TouchableOpacity
+                        style={GlobalStyles.GreenButton}
+                        activeOpacity={0.5}
+                        onPress={this.newDates}>
+                        <Image source={require('./icons/add.png')}
+                               style={GlobalStyles.LittleImageIconStyle} />
+                    </TouchableOpacity>
+                </View>
+                {this.state.show &&
+                    <DateTimePicker
+                    testID="dateTimePicker"
+                    value={this.state.inputNum === 0 ? this.state.dates[this.cursor].start : this.state.dates[this.cursor].end}
+                    mode="date"
+                    is24Hour={true}
+                    display="default"
+                    onChange={(event, selectedDate) => this.setDate(selectedDate)} />
+                }
+                {this.state.dates.map((item, i) =>
+                    <View key={i} style={{flexDirection: 'row', marginBottom: 5}}>
+                        <TouchableOpacity
+                            style={GlobalStyles.input}
+                            editable={this.props.editable}
+                            activeOpacity={0.5}
+                            onPress={() => { this.setState({show: true, inputNum: 0}); this.cursor = i; }}>
+                            <Text style={styles.text}> {displayDate(this.state.dates[i].start)} </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={GlobalStyles.input}
+                            editable={this.props.editable}
+                            activeOpacity={0.5}
+                            onPress={() => { this.setState({show: true, inputNum: 1}); this.cursor = i; }}>
+                            <Text style={styles.text}> {displayDate(this.state.dates[i].end)} </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={GlobalStyles.RedButton}
+                            activeOpacity={0.5}
+                            onPress={() => this.removeDate(i)}>
+                            <Image source={require('./icons/clear.png')}
+                                   style={GlobalStyles.LittleImageIconStyle} />
+                        </TouchableOpacity>
+                    </View>)
+                }
             </View>
         );
     }
@@ -150,9 +247,9 @@ export default class Add extends Component {
                 <MydateInput
                     title="Date d'achat" value={this.props.book.purchaseDate}
                     onChange={text => this.props.onChange('purchaseDate', text)}/>
-                <MydateInput
-                    title='Date de lecture' value={this.props.book.readingDate}
-                    onChange={text => this.props.onChange('readingDate', text)}/>
+                <MultiDateInput
+                    title='Dates de lecture' value={this.props.book.readingDates}
+                    onChange={text => this.props.onChange('readingDates', text)}/>
                 <MyTextInput
                     title='Commentaires' value={this.props.book.comment} type='default'
                     maxLength={200} onChange={text => this.props.onChange('comment', text)}/>
@@ -164,9 +261,9 @@ export default class Add extends Component {
 const styles = StyleSheet.create({
     view: {
         margin: 10,
-        //flexDirection: 'row'
     },
     text: {
         fontSize: 20,
+        marginRight: 10,
     },
 });

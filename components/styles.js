@@ -17,6 +17,13 @@ export default styles = {
         width: 30,
         resizeMode: 'stretch',
     },
+    LittleImageIconStyle: {
+        padding: 15,
+        //margin: 5,
+        height: 10,
+        width: 10,
+        resizeMode: 'stretch',
+    },
     input: {
         height: 40,
         borderColor: 'gray',
@@ -42,5 +49,16 @@ export default styles = {
         marginVertical: 10,
         borderRadius: 15,
         backgroundColor: '#33bbff',
-    }
+    },
+    GreenButton: {
+        alignSelf: 'center',
+        borderRadius: 15,
+        backgroundColor: 'green',
+    },
+    RedButton: {
+        alignSelf: 'center',
+        borderRadius: 15,
+        backgroundColor: 'red',
+        margin: 5
+    },
 }

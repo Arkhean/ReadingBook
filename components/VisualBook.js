@@ -4,8 +4,6 @@ import Book from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
 
-// TODO : afficher les dates de lectures !
-
 function pad(n) {return n < 10 ? "0"+n : n;}
 
 function displayDate(date){
@@ -20,7 +18,6 @@ export default class VisualBook extends Component {
     render() {
         const book = this.props.book;
         const date1 = new Date(book.purchaseDate);
-        const date2 = new Date(book.readingDate);
         return (
             <View style={styles.view}>
                 <Text style={styles.title}>{book.title}</Text>
@@ -39,7 +36,12 @@ export default class VisualBook extends Component {
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>{"Acheté le "+displayDate(date1)+" pour "+book.price+" €."}</Text>
                 <Text style={styles.text}>{"Le livre contient "+book.nPages+" pages."}</Text>
-                <Text style={styles.text}>{"Lecture terminée le "+displayDate(date2)+"."}</Text>
+                {book.readingDates == [] && <Text style={styles.text}>{"Le livre n'a pas été lu"}</Text>}
+                {book.readingDates.map((item, i) =>
+                    <Text key={i} style={styles.innerText}>
+                        {'Lu du '+displayDate(new Date(item.start))+' au '+displayDate(new Date(item.end))}
+                    </Text>)
+                }
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>{"Commentaires: "}
                     <Text style={styles.innerText}>{book.comment}</Text>

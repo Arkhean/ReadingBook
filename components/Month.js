@@ -86,9 +86,7 @@ export default class Month extends Component {
         let nbRead = 0;
         let total = 0;
         for(let book of books){
-            /* TODO changement : parcourir la liste readingDates ...*/
             let p = new Date(book.purchaseDate);
-            let r = new Date(book.readingDate);
             let done = false; // pour éviter d'ajouter deux fois un même livre
             if (p.getMonth() == this.state.month && p.getFullYear() == this.state.year){
                 nbBought += 1;
@@ -96,12 +94,13 @@ export default class Month extends Component {
                 booksToShow.push(book);
                 done = true;
             }
-            if (r.getMonth() == this.state.month && r.getFullYear() == this.state.year){
+            /* TODO changement : parcourir la liste readingDates ...*/
+            /*if (r.getMonth() == this.state.month && r.getFullYear() == this.state.year){
                 nbRead += 1;
                 if (!done){
                     booksToShow.push(book);
                 }
-            }
+            }*/
         }
         this.setState({nbBought: nbBought, nbRead: nbRead, total: total.toFixed(2),
                                                 booksToShow: booksToShow});

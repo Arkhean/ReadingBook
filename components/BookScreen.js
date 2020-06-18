@@ -1,5 +1,6 @@
 import React, { Component, useState } from 'react';
 import { Text, View, StyleSheet, TextInput, ScrollView, TouchableOpacity, BackHandler, Image, Alert } from 'react-native';
+import { HeaderBackButton } from '@react-navigation/stack';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import StorageManager from './StorageManager';
 import VisualBook from './VisualBook';
@@ -7,6 +8,7 @@ import Add from './Add';
 import GlobalStyles from './styles';
 
 // TODO : backhandler modificationMode -> visual
+// TODO : bug sauvegarder
 
 const defaultBook = {   title: '',
                         author: '',
@@ -18,7 +20,6 @@ const defaultBook = {   title: '',
                         price: 0,
                         nPages: 0,
                         purchaseDate: new Date(Date.now()),
-                        readingDate: new Date(Date.now()), // TODO à retirer
                         readingDates: [], // liste de couple début/fin
                         comment: '', };
 
@@ -35,7 +36,6 @@ const getBook = (book) => {
         price: book.price,
         nPages: book.nPages,
         purchaseDate: book.purchaseDate,
-        readingDate: book.readingDate,
         readingDates: 'readingDates' in book ? book.readingDates : [],
         comment: book.comment,
 
@@ -53,18 +53,31 @@ export default class BookScreen extends Component {
         this.modified = false;
 
         this.props.navigation.addListener('focus', () => {
+            BackHandler.addEventListener("hardwareBackPress", this.myGoBack);
             this.loadKeys();
             if (this.props.route.params.book != null){
                 this.setState({book: getBook(this.props.route.params.book),
                                 visualMode: this.props.route.params.visualMode,
                                 modificationMode: false});
-                this.props.navigation.setOptions({title: 'Détails du livre'});
+                this.props.navigation.setOptions({
+                    title: 'Détails du livre',
+                    headerLeft: () =>
+                        <HeaderBackButton
+                            onPress={this.myGoBack}
+                            tintColor={'white'}/>
+                });
             }
             else{
                 this.setState({book: Object.assign({}, defaultBook), // copy de defaultBook
                                 visualMode: this.props.route.params.visualMode,
                                 modificationMode: false});
-                this.props.navigation.setOptions({title: 'Ajouter un livre'});
+                this.props.navigation.setOptions({
+                    title: 'Ajouter un livre',
+                    headerLeft: () =>
+                        <HeaderBackButton
+                            onPress={this.myGoBack}
+                            tintColor={'white'} />
+                });
             }
         });
     }
@@ -89,9 +102,8 @@ export default class BookScreen extends Component {
             }
             StorageManager.store(newK, book).then(() => {
                 this.setState({visualMode: true, modificationMode: false});
-                BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
             });
-            this.props.navigation.setOptions({title: 'Détails du livre'});
+            this.props.navigation.setOptions({ title: 'Détails du livre' });
         }
         else{
             Alert.alert('Il faut au minimum renseigner le titre et l\'auteur !');
@@ -101,25 +113,27 @@ export default class BookScreen extends Component {
     alertCancel = () => {
         // TODO annuler les modifs
         this.setState({visualMode: true, modificationMode: false});
-        BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
     }
 
     myGoBack = async () => {
-        if (this.modified){
-            await Alert.alert('Attention !', 'Quitter sans sauvegarder ?' ,[{text: 'sauvegarder', onPress: this.save},
-                                                        {text: 'annuler', onPress: this.alertCancel}]);
+        if (this.state.modificationMode){
+            console.log('modif');
+            if (this.modified){
+                await Alert.alert('Attention !', 'Quitter sans sauvegarder ?' ,[{text: 'sauvegarder', onPress: this.save},
+                                                            {text: 'annuler', onPress: this.alertCancel}]);
+            }
+            else{
+                this.setState({visualMode: true, modificationMode: false});
+            }
+            return true;
         }
-        else{
-            this.setState({visualMode: true, modificationMode: false});
-            BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
-        }
-        return true;
+        BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
+        this.props.navigation.goBack();
     }
 
     enterModifyMode = () => {
         this.setState({visualMode: false, modificationMode: true});
         this.props.navigation.setOptions({title: 'Modification'});
-        BackHandler.addEventListener("hardwareBackPress", this.myGoBack);
     }
 
     setField = (target, value) => {
