@@ -7,7 +7,6 @@ import VisualBook from './VisualBook';
 import Add from './Add';
 import GlobalStyles from './styles';
 
-// TODO : backhandler modificationMode -> visual
 // TODO : bug sauvegarder
 
 const defaultBook = {   title: '',

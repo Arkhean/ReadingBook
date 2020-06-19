@@ -5,10 +5,8 @@ import Book from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
 
-// TODO : gérer les nouveaux champs de date de lectures !
-
-
-const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
+                        'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
 export default class Month extends Component {
     constructor(props){
@@ -87,20 +85,30 @@ export default class Month extends Component {
         let total = 0;
         for(let book of books){
             let p = new Date(book.purchaseDate);
-            let done = false; // pour éviter d'ajouter deux fois un même livre
+            let read = false;
+            let bought = false;
             if (p.getMonth() == this.state.month && p.getFullYear() == this.state.year){
-                nbBought += 1;
                 total += parseFloat(book.price);
-                booksToShow.push(book);
-                done = true;
+                bought = true;
+                nbBought += 1;
             }
-            /* TODO changement : parcourir la liste readingDates ...*/
-            /*if (r.getMonth() == this.state.month && r.getFullYear() == this.state.year){
-                nbRead += 1;
-                if (!done){
-                    booksToShow.push(book);
+            // on parcours les dates de lectures
+            for(let dates of book.readingDates){
+                let start = new Date(dates.start);
+                let end = new Date(dates.end);
+                if (start.getMonth() == this.state.month && start.getFullYear() == this.state.year){
+                    read = true;
                 }
-            }*/
+                if (end.getMonth() == this.state.month && end.getFullYear() == this.state.year){
+                    read = true;
+                }
+            }
+            if (read){
+                nbRead += 1;
+            }
+            if (read || bought){
+                booksToShow.push(book);
+            }
         }
         this.setState({nbBought: nbBought, nbRead: nbRead, total: total.toFixed(2),
                                                 booksToShow: booksToShow});
