@@ -46,14 +46,16 @@ export default class BookScreen extends Component {
     constructor(props){
         super(props);
         this.state = {  book: Object.assign({}, defaultBook), // copy de defaultBook
-                        visualMode: true,
-                        modificationMode: false };
+                        visualMode: true,           // pour afficher un livre
+                        modificationMode: false };  // quand on modifie (!= créer)
         this.listOfKeys = [];
         this.modified = false;
+        this.backup = null; // en cas de modifications annulées
 
         this.props.navigation.addListener('focus', () => {
             BackHandler.addEventListener("hardwareBackPress", this.myGoBack);
             this.loadKeys();
+            /* on visualise le contenu du livre */
             if (this.props.route.params.book != null){
                 this.setState({book: getBook(this.props.route.params.book),
                                 visualMode: this.props.route.params.visualMode,
@@ -66,6 +68,7 @@ export default class BookScreen extends Component {
                             tintColor={'white'}/>
                 });
             }
+            /* on va créer un nouveau livre */
             else{
                 this.setState({book: Object.assign({}, defaultBook), // copy de defaultBook
                                 visualMode: this.props.route.params.visualMode,
@@ -85,7 +88,7 @@ export default class BookScreen extends Component {
         this.listOfKeys = await StorageManager.loadKeys();
     }
 
-    save(){
+    save = (callback) => {
         const book = this.state.book;
         let newK = book.title+book.author;
         if (book.title !== "" && book.author !== ""){
@@ -100,7 +103,10 @@ export default class BookScreen extends Component {
                 }
             }
             StorageManager.store(newK, book).then(() => {
-                this.setState({visualMode: true, modificationMode: false});
+                this.modified = false;
+                if (callback != undefined){
+                    callback();
+                }
             });
             this.props.navigation.setOptions({ title: 'Détails du livre' });
         }
@@ -110,27 +116,53 @@ export default class BookScreen extends Component {
     }
 
     alertCancel = () => {
-        // TODO annuler les modifs
-        this.setState({visualMode: true, modificationMode: false});
+        // annuler les modifs avec le backup
+        this.modified = false;
+        this.setState({book: this.backup, visualMode: true, modificationMode: false});
     }
 
     myGoBack = async () => {
         if (this.state.modificationMode){
-            console.log('modif');
+            // si on modifie un livre
             if (this.modified){
-                await Alert.alert('Attention !', 'Quitter sans sauvegarder ?' ,[{text: 'sauvegarder', onPress: this.save},
-                                                            {text: 'annuler', onPress: this.alertCancel}]);
+                // s'il a été modifié
+                Alert.alert('Attention !', 'Quitter sans sauvegarder ?' ,
+                        [{text: 'sauvegarder', onPress: () => this.save(() => {
+                            this.setState({visualMode: true, modificationMode: false});
+                        })},
+                            {text: 'annuler', onPress: this.alertCancel}]);
             }
             else{
+                // s'il n'a pas été modifié, on revient en visual
                 this.setState({visualMode: true, modificationMode: false});
             }
-            return true;
         }
-        BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
-        this.props.navigation.goBack();
+        else{
+            // si on crée un livre
+            if (this.modified){
+                // on a entrée des trucs, mais pas enregistré
+                Alert.alert('Attention !', 'Quitter sans sauvegarder ?' ,
+                        [{text: 'sauvegarder', onPress: () => {
+                                this.save(() => {
+                                    BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
+                                    this.props.navigation.goBack();
+                                });
+                            }},
+                            {text: 'annuler', onPress: () => {
+                                BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
+                                this.props.navigation.goBack();
+                            }}]);
+            }
+            else{
+                // si on a rien touché, on peut quitter
+                BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
+                this.props.navigation.goBack();
+            }
+        }
     }
 
     enterModifyMode = () => {
+        this.backup = Object.assign({}, this.state.book); // en cas d'annulation
         this.setState({visualMode: false, modificationMode: true});
         this.props.navigation.setOptions({title: 'Modification'});
     }
@@ -164,7 +196,7 @@ export default class BookScreen extends Component {
                     <TouchableOpacity
                         style={GlobalStyles.HeaderButton}
                         activeOpacity={0.5}
-                        onPress={() => this.save()} >
+                        onPress={() => this.save(this.myGoBack)} >
                         <Image
                          source={require('./icons/done.png')}
                          style={GlobalStyles.ImageIconStyle}
