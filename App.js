@@ -10,6 +10,8 @@ import Lib from './components/Lib';
 import AsyncStorage from '@react-native-community/async-storage';
 import GlobalStyles from './components/styles';
 import { MenuProvider } from 'react-native-popup-menu';
+import BarCodeScan from './components/BarCodeScan';
+
 
 /* pile d'écran de navigation */
 const Stack = createStackNavigator();
@@ -46,6 +48,10 @@ export default class App extends Component {
                 <Stack.Screen
                     name="Bibliothèque"
                     component={Lib}
+                    options={options}/>
+                <Stack.Screen
+                    name="Scan"
+                    component={BarCodeScan}
                     options={options}/>
               </Stack.Navigator>
             </NavigationContainer>

@@ -79,6 +79,8 @@ target 'ReadingBook' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
   target 'ReadingBookTests' do
     inherit! :complete
     # Pods for testing

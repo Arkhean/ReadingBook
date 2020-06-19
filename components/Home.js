@@ -99,6 +99,21 @@ export default class Home extends Component {
                         <Text style={styles.TextStyle}> Livres du mois </Text>
                     </TouchableOpacity>
                 </View>
+
+                <View animation={animation}
+                      duration={1000}
+                      delay={700}>
+                    <TouchableOpacity
+                        style={styles.ButtonStyle}
+                        activeOpacity={0.5}
+                        onPress={() => this.props.navigation.navigate('Scan')}>
+                        <Image
+                         source={require('./icons/add_camera.png')}
+                         style={GlobalStyles.ImageIconStyle}
+                        />
+                        <Text style={styles.TextStyle}> Scanner ISBN </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
