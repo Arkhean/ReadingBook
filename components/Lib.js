@@ -183,7 +183,6 @@ export default class Lib extends Component {
     /* render */
     render() {
         /* Etape 1 : choisir les bonnes animations */
-        const animations = ['bounceIn', 'bounceInDown', 'bounceInUp', 'bounceInLeft', 'bounceInRight'];
         const noAnimation = { from:{}, to:{} };
         const rTranslation = { from: { marginLeft: -30 },
                               to: { marginLeft: 0 } };
@@ -218,7 +217,7 @@ export default class Lib extends Component {
         }
         else{
             scrollAnim = noAnimation;
-            bookAnim = animations[Math.floor(Math.random() * animations.length)];
+            bookAnim = 'bounceIn';
         }
 
         /* maintenant on peut render */

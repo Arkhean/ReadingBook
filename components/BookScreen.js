@@ -7,8 +7,6 @@ import VisualBook from './VisualBook';
 import Add from './Add';
 import GlobalStyles from './styles';
 
-// TODO : bug sauvegarder
-
 const defaultBook = {   title: '',
                         author: '',
                         saga: '',
@@ -55,6 +53,12 @@ export default class BookScreen extends Component {
         this.props.navigation.addListener('focus', () => {
             BackHandler.addEventListener("hardwareBackPress", this.myGoBack);
             this.loadKeys();
+            if ('fromCamera' in this.props.route.params){
+                if (this.props.route.params.fromCamera){
+                    this.modified = true;
+                }
+            }
+
             /* on visualise le contenu du livre */
             if (this.props.route.params.book != null){
                 this.setState({book: getBook(this.props.route.params.book),

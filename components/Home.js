@@ -63,10 +63,10 @@ export default class Home extends Component {
                         activeOpacity={0.5}
                         onPress={() => this.props.navigation.navigate('BookScreen', {book: null, visualMode: false})}>
                         <Image
-                         source={require('./icons/books.png')}
+                         source={require('./icons/playlist_add.png')}
                          style={GlobalStyles.ImageIconStyle}
                         />
-                        <Text style={styles.TextStyle}> Ajouter un livre </Text>
+                        <Text style={styles.TextStyle}> Ajouter un Livre </Text>
                     </TouchableOpacity>
                 </View>
 
@@ -96,13 +96,28 @@ export default class Home extends Component {
                          source={require('./icons/calendar.png')}
                          style={GlobalStyles.ImageIconStyle}
                         />
-                        <Text style={styles.TextStyle}> Livres du mois </Text>
+                        <Text style={styles.TextStyle}> Livres du Mois </Text>
                     </TouchableOpacity>
                 </View>
 
                 <View animation={animation}
                       duration={1000}
                       delay={700}>
+                    <TouchableOpacity
+                        style={styles.ButtonStyle}
+                        activeOpacity={0.5}
+                        onPress={() => this.props.navigation.navigate('stack')}>
+                        <Image
+                         source={require('./icons/list.png')}
+                         style={GlobalStyles.ImageIconStyle}
+                        />
+                        <Text style={styles.TextStyle}> Pile à Lire </Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View animation={animation}
+                      duration={1000}
+                      delay={900}>
                     <TouchableOpacity
                         style={styles.ButtonStyle}
                         activeOpacity={0.5}
@@ -114,6 +129,8 @@ export default class Home extends Component {
                         <Text style={styles.TextStyle}> Scanner ISBN </Text>
                     </TouchableOpacity>
                 </View>
+
+
             </View>
         </View>
     );
@@ -127,7 +144,7 @@ const styles = StyleSheet.create({
     },
     title: {
         marginHorizontal: 40,
-        marginBottom: 100,
+        marginBottom: 30,
         fontSize: 30
     },
     subTitle: {
