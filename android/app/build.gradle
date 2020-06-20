@@ -217,7 +217,7 @@ dependencies {
         implementation jscFlavor
     }
 
-    compile project(':react-native-fs')
+    implementation project(':react-native-fs')
 
     //implementation 'com.android.support:multidex:1.0.3'
 
