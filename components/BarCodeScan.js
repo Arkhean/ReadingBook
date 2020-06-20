@@ -15,6 +15,7 @@ const defaultBook = {   title: '',
                         nPages: 0,
                         purchaseDate: new Date(Date.now()),
                         readingDates: [], // liste de couple début/fin
+                        imageUrl: '',
                         comment: '', };
 
 export default class BarcodeScan extends Component {
@@ -23,7 +24,7 @@ export default class BarcodeScan extends Component {
     }
 
     onBarCodeRead = (e) => {
-        // TODO retransmettre les données vers add et faire la requête
+        // retransmettre les données vers add et faire la requête
         const value = e.data;
         const url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:';
         fetch(url+value)
@@ -44,7 +45,9 @@ export default class BarcodeScan extends Component {
                             book.author = info.authors[0]; // TODO si plusieurs auteurs
                             book.nPages = info.pageCount;
                             book.editor = info.publisher;
-                            // image : info.imageLinks.thumbnail
+                            if ('imageLinks' in info){
+                                book.imageUrl = info.imageLinks.thumbnail;
+                            }
                             // date publication : info.publishedDate
                             // description : info.description
 

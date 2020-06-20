@@ -27,5 +27,3 @@ Ajouter des livres à votre bibliothèque en renseignant :
 - navigation
 - sauvegarde asynchrone
 - ...
-
-https://www.googleapis.com/books/v1/volumes?q=isbn:9782290019436

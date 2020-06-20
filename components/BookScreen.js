@@ -18,6 +18,7 @@ const defaultBook = {   title: '',
                         nPages: 0,
                         purchaseDate: new Date(Date.now()),
                         readingDates: [], // liste de couple début/fin
+                        imageUrl: '',
                         comment: '', };
 
 /* pour assurer la retro-compatibilité, du fait de l'ajout de champs à Book */
@@ -34,8 +35,8 @@ const getBook = (book) => {
         nPages: book.nPages,
         purchaseDate: book.purchaseDate,
         readingDates: 'readingDates' in book ? book.readingDates : [],
+        imageUrl: 'imageUrl' in book ? book.imageUrl : '',
         comment: book.comment,
-
     };
 }
 

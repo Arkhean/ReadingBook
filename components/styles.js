@@ -7,7 +7,7 @@ export default styles = {
     bookStyle: {
         flex: 1,
         margin: 5,
-        backgroundColor: '#33cc33',
+        backgroundColor: '#009999',
         borderRadius: 10,
     },
     ImageIconStyle: {
@@ -16,6 +16,14 @@ export default styles = {
         height: 30,
         width: 30,
         resizeMode: 'stretch',
+    },
+    ImageStyle: {
+        marginVertical: 5,
+        marginLeft: 5,
+        height: 50,
+        width: 50,
+        resizeMode: 'stretch',
+        alignSelf: 'center'
     },
     LittleImageIconStyle: {
         padding: 15,
