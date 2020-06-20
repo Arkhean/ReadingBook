@@ -20,8 +20,20 @@ export default styles = {
     ImageStyle: {
         marginVertical: 5,
         marginLeft: 5,
+        marginRight: 5,
+        padding: 5,
         height: 50,
-        width: 50,
+        width: 40,
+        resizeMode: 'stretch',
+        alignSelf: 'center'
+    },
+    BigImageStyle: {
+        marginVertical: 5,
+        marginLeft: 5,
+        marginRight: 5,
+        padding: 5,
+        height: 100,
+        width: 80,
         resizeMode: 'stretch',
         alignSelf: 'center'
     },

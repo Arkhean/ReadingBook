@@ -149,6 +149,7 @@ class MultiDateInput extends Component {
                 }
                 {this.state.dates.map((item, i) =>
                     <View key={i} style={{flexDirection: 'row', marginBottom: 5}}>
+                        <Text>{'du'}</Text>
                         <TouchableOpacity
                             style={GlobalStyles.input}
                             editable={this.props.editable}
@@ -156,6 +157,7 @@ class MultiDateInput extends Component {
                             onPress={() => { this.setState({show: true, inputNum: 0}); this.cursor = i; }}>
                             <Text style={styles.text}> {displayDate(this.state.dates[i].start)} </Text>
                         </TouchableOpacity>
+                        <Text>{'au'}</Text>
                         <TouchableOpacity
                             style={GlobalStyles.input}
                             editable={this.props.editable}
@@ -207,11 +209,11 @@ export default class Add extends Component {
     }
 
     render() {
-        const genres = ['Aventure', 'Policier', 'Science-Fiction',
+        const genres = ['<non renseigné>', 'Aventure', 'Policier', 'Science-Fiction',
                     'Fantastique', 'Horreur', 'Biographie', 'Nouvelle', 'Conte',
                     'Fantasy', 'Romance', 'Comtemporain', 'Classique', 'Théâtre',
                     'Poésie'];
-        const formats = ['Poche', 'Semi-Poche', 'Grand Format'];
+        const formats = ['<non renseigné', 'Poche', 'Semi-Poche', 'Grand Format'];
         return (
             <ScrollView >
                 <MyTextInput
@@ -242,7 +244,7 @@ export default class Add extends Component {
                     title='Prix' value={this.props.book.price} type='numeric'
                     onChange={text => this.props.onChange('price', text)}/>
                 <MyTextInput
-                    title='Nombres de pages' value={this.props.book.nPages} type='numeric'
+                    title='Nombre de pages' value={this.props.book.nPages} type='numeric'
                     onChange={text => this.props.onChange('nPages', text)}/>
                 <MydateInput
                     title="Date d'achat" value={this.props.book.purchaseDate}

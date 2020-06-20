@@ -10,6 +10,15 @@ function displayDate(date){
     return pad(date.getDate())+"/"+pad(date.getMonth()+1)+"/"+date.getFullYear();
 }
 
+const getImage = (book) => {
+    if (!('imageUrl' in book) || book.imageUrl === ''){
+        return require('./icons/book.png');
+    }
+    else{
+        return {uri: book.imageUrl};
+    }
+}
+
 export default class VisualBook extends Component {
     constructor(props){
         super(props);
@@ -20,9 +29,16 @@ export default class VisualBook extends Component {
         const date1 = new Date(book.purchaseDate);
         return (
             <View style={styles.view}>
-                <Text style={styles.title}>{book.title}</Text>
-                {book.saga != '' && <Text style={styles.subtitle}>{book.saga+", tome "+book.nTome}</Text>}
-                <Text style={styles.author}>{"de "+book.author}</Text>
+                <View style={{flexDirection: 'row'}}>
+                    <Image source={getImage(this.props.book)}
+                           style={GlobalStyles.BigImageStyle}/>
+                    <View style={{flex:1}}>
+                        <Text style={styles.title}>{book.title}</Text>
+                        {book.saga != '' && <Text style={styles.subtitle}>{book.saga+", tome "+book.nTome}</Text>}
+                        <Text style={styles.author}>{"de "+book.author}</Text>
+                    </View>
+                </View>
+
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>{"Genre: "}
                     <Text style={styles.innerText}>{book.genre}</Text>

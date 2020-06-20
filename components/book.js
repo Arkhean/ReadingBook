@@ -10,14 +10,7 @@ const getImage = (book) => {
         return require('./icons/book.png');
     }
     else{
-        return fetch(book.imageUrl).then((response) => {
-            if (response.status == 200){
-                return response.blob();
-            }
-            else{
-                return require('./icons/book.png');
-            }
-        });
+        return {uri: book.imageUrl};
     }
 }
 

@@ -8,9 +8,9 @@ const defaultBook = {   title: '',
                         author: '',
                         saga: '',
                         nTome: 1, // si sage != ''
-                        genre: '',
+                        genre: '<non rensigné>',
                         editor: '',
-                        format: '', // poche, grand format
+                        format: '<non rensigné>', // poche, grand format
                         price: 0,
                         nPages: 0,
                         purchaseDate: new Date(Date.now()),
