@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import StorageManager from './StorageManager';
 import Book from './book';
 import { Divider } from 'react-native-elements';

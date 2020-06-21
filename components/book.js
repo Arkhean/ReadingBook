@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { createAnimatableComponent, View, Text } from 'react-native-animatable';
+import { View, Text } from 'react-native-animatable';
 import GlobalStyles from './styles';
 
-// TODO : ajouter un indicateur si le livre est lu ou non (couleur ?)
 
-const getImage = (book) => {
+export const getImage = (book) => {
     if (!('imageUrl' in book) || book.imageUrl === ''){
         return require('./icons/book.png');
     }
@@ -14,7 +13,40 @@ const getImage = (book) => {
     }
 }
 
-export default class Book extends Component {
+export const defaultBook = {   title: '',
+                        author: '',
+                        saga: '',
+                        nTome: 1, // si sage != ''
+                        genre: '<non rensigné>',
+                        editor: '',
+                        format: '<non rensigné>', // poche, grand format
+                        price: 0,
+                        nPages: 0,
+                        purchaseDate: new Date(Date.now()),
+                        readingDates: [], // liste de couple début/fin
+                        imageUrl: '',
+                        comment: '', };
+
+/* pour assurer la retro-compatibilité, du fait de l'ajout de champs à Book */
+export const getBook = (book) => {
+    return {
+        title: book.title,
+        author: book.author,
+        saga: 'saga' in book ? book.saga : '',
+        nTome: 'nTome' in book ? book.nTome : 1,
+        genre: book.genre,
+        editor: book.editor,
+        format: 'format' in book ? book.format : '',
+        price: book.price,
+        nPages: book.nPages,
+        purchaseDate: book.purchaseDate,
+        readingDates: 'readingDates' in book ? book.readingDates : [],
+        imageUrl: 'imageUrl' in book ? book.imageUrl : '',
+        comment: book.comment,
+    };
+}
+
+export default class BookRow extends Component {
     constructor(props){
         super(props);
     }

@@ -1,21 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Alert, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Alert, Image } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import GlobalStyles from './styles';
-
-const defaultBook = {   title: '',
-                        author: '',
-                        saga: '',
-                        nTome: 1, // si sage != ''
-                        genre: '<non rensigné>',
-                        editor: '',
-                        format: '<non rensigné>', // poche, grand format
-                        price: 0,
-                        nPages: 0,
-                        purchaseDate: new Date(Date.now()),
-                        readingDates: [], // liste de couple début/fin
-                        imageUrl: '',
-                        comment: '', };
+import defaultBook from './book';
+import { HeaderButton } from './Buttons';
 
 export default class BarcodeScan extends Component {
     constructor(props) {
@@ -26,14 +14,9 @@ export default class BarcodeScan extends Component {
 
         this.props.navigation.setOptions({
             headerRight: () => (
-                <TouchableOpacity
-                    style={GlobalStyles.HeaderButton}
-                    activeOpacity={0.5}
-                    onPress={() => this.handleTourch(this.state.torchOn)}>
-                    <Image
-                        style={GlobalStyles.ImageIconStyle}
-                        source={this.state.torchOn === true ? require('./icons/flash_on.png') : require('./icons/flash_off.png')} />
-                </TouchableOpacity>
+                <HeaderButton
+                    onPress={() => this.handleTourch(this.state.torchOn)}
+                    icon={this.state.torchOn ? require('./icons/flash_on.png') : require('./icons/flash_off.png')}/>
             ),
         });
     }
@@ -95,14 +78,9 @@ export default class BarcodeScan extends Component {
         }
         this.props.navigation.setOptions({
             headerRight: () => (
-                <TouchableOpacity
-                    style={GlobalStyles.HeaderButton}
-                    activeOpacity={0.5}
-                    onPress={() => this.handleTourch(this.state.torchOn)}>
-                    <Image
-                        style={GlobalStyles.ImageIconStyle}
-                        source={this.state.torchOn === true ? require('./icons/flash_on.png') : require('./icons/flash_off.png')} />
-                </TouchableOpacity>
+                <HeaderButton
+                    onPress={() => this.handleTourch(this.state.torchOn)}
+                    icon={this.state.torchOn ? require('./icons/flash_on.png') : require('./icons/flash_off.png')}/>
             ),
         });
     }

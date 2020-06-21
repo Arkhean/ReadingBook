@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react';
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import Book from './book';
+import React, { Component } from 'react';
+import { Text, View, StyleSheet, Image } from 'react-native';
+import Book, { getImage } from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
 
@@ -8,15 +8,6 @@ function pad(n) {return n < 10 ? "0"+n : n;}
 
 function displayDate(date){
     return pad(date.getDate())+"/"+pad(date.getMonth()+1)+"/"+date.getFullYear();
-}
-
-const getImage = (book) => {
-    if (!('imageUrl' in book) || book.imageUrl === ''){
-        return require('./icons/book.png');
-    }
-    else{
-        return {uri: book.imageUrl};
-    }
 }
 
 export default class VisualBook extends Component {

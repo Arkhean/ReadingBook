@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import StorageManager from './StorageManager';
-import { CommonActions } from '@react-navigation/native';
 import GlobalStyles from './styles';
 import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
-import { createAnimatableComponent, View, Text } from 'react-native-animatable';
+import { View, Text } from 'react-native-animatable';
 
 
 export default class Home extends Component {

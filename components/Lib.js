@@ -1,28 +1,13 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, TouchableOpacity, ScrollView, TextInput, BackHandler } from 'react-native';
+import { StyleSheet, ScrollView, TextInput, BackHandler } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import Book from './book';
+import BookRow from './book';
 import StorageManager from './StorageManager';
 import GlobalStyles from './styles';
-import { createAnimatableComponent, View, Text } from 'react-native-animatable';
+import { createAnimatableComponent, View } from 'react-native-animatable';
+import { HeaderButton } from './Buttons';
 
 const AnimatableScroll = createAnimatableComponent(ScrollView);
-
-class HeaderButton extends Component {
-    render(){
-        return (
-            <TouchableOpacity
-                style={GlobalStyles.HeaderButton}
-                activeOpacity={0.5}
-                onPress={() => this.props.onPress()}>
-                <Image
-                 source={this.props.icon}
-                 style={GlobalStyles.ImageIconStyle}
-                />
-            </TouchableOpacity>
-        );
-    }
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -242,7 +227,7 @@ export default class Lib extends Component {
                                 value={this.state.checkBoxes[i]}
                                 onValueChange={() => this.onCheckBoxChange(i)}/>
                             }
-                            <Book
+                            <BookRow
                                 style={GlobalStyles.bookStyle}
                                 animation={bookAnim}
                                 book={book}

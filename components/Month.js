@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Button, ToastAndroid, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, ScrollView } from 'react-native';
 import StorageManager from './StorageManager';
-import Book from './book';
+import BookRow from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
+import { HeaderButton } from './Buttons';
 
 const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
                         'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
@@ -28,24 +29,12 @@ export default class Month extends Component {
             title: 'Livres du mois',
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
-                    <TouchableOpacity
-                        style={GlobalStyles.HeaderButton}
-                        activeOpacity={0.5}
-                        onPress={() => this.previousMonth()}>
-                        <Image
-                         source={require('./icons/back.png')}
-                         style={GlobalStyles.ImageIconStyle}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={GlobalStyles.HeaderButton}
-                        activeOpacity={0.5}
-                        onPress={() => this.nextMonth()}>
-                        <Image
-                         source={require('./icons/forward.png')}
-                         style={GlobalStyles.ImageIconStyle}
-                        />
-                    </TouchableOpacity>
+                    <HeaderButton
+                        onPress={this.previousMonth}
+                        icon={require('./icons/back.png')}/>
+                    <HeaderButton
+                        onPress={this.nextMonth}
+                        icon={require('./icons/forward.png')}/>
                 </View>
             ),
         });
@@ -131,7 +120,7 @@ export default class Month extends Component {
                 <ScrollView>
                     {this.state.booksToShow.length != 0
                         && this.state.booksToShow.map((book, i) =>
-                            <Book
+                            <BookRow
                                 style={GlobalStyles.bookStyle}
                                 animation={'bounceIn'}
                                 key={i}

@@ -1,44 +1,14 @@
-import React, { Component, useState } from 'react';
-import { Text, View, StyleSheet, TextInput, ScrollView, TouchableOpacity, BackHandler, Image, Alert } from 'react-native';
+import React, { Component } from 'react';
+import { Text, View, BackHandler, Alert } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/stack';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import StorageManager from './StorageManager';
 import VisualBook from './VisualBook';
 import Add from './Add';
 import GlobalStyles from './styles';
+import { defaultBook, getBook } from './book';
+import { HeaderButton } from './Buttons';
 
-const defaultBook = {   title: '',
-                        author: '',
-                        saga: '',
-                        nTome: 1, // si sage != ''
-                        genre: '<non rensigné>',
-                        editor: '',
-                        format: '<non rensigné>', // poche, grand format
-                        price: 0,
-                        nPages: 0,
-                        purchaseDate: new Date(Date.now()),
-                        readingDates: [], // liste de couple début/fin
-                        imageUrl: '',
-                        comment: '', };
-
-/* pour assurer la retro-compatibilité, du fait de l'ajout de champs à Book */
-const getBook = (book) => {
-    return {
-        title: book.title,
-        author: book.author,
-        saga: 'saga' in book ? book.saga : '',
-        nTome: 'nTome' in book ? book.nTome : 1,
-        genre: book.genre,
-        editor: book.editor,
-        format: 'format' in book ? book.format : '',
-        price: book.price,
-        nPages: book.nPages,
-        purchaseDate: book.purchaseDate,
-        readingDates: 'readingDates' in book ? book.readingDates : [],
-        imageUrl: 'imageUrl' in book ? book.imageUrl : '',
-        comment: book.comment,
-    };
-}
 
 /* requiert 2 params : book et visualMode : true/false */
 export default class BookScreen extends Component {
@@ -194,24 +164,12 @@ export default class BookScreen extends Component {
             this.props.navigation.setOptions({
                 headerRight: () => (
                     <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity
-                            style={GlobalStyles.HeaderButton}
-                            activeOpacity={0.5}
-                            onPress={this.delete} >
-                            <Image
-                             source={require('./icons/trash.png')}
-                             style={GlobalStyles.ImageIconStyle}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={GlobalStyles.HeaderButton}
-                            activeOpacity={0.5}
-                            onPress={() => this.enterModifyMode()}>
-                            <Image
-                             source={require('./icons/edit.png')}
-                             style={GlobalStyles.ImageIconStyle}
-                            />
-                        </TouchableOpacity>
+                        <HeaderButton
+                            icon={require('./icons/trash.png')}
+                            onPress={this.delete}/>
+                        <HeaderButton
+                            icon={require('./icons/edit.png')}
+                            onPress={this.enterModifyMode}/>
                     </View>
                 ),
             });
@@ -222,15 +180,9 @@ export default class BookScreen extends Component {
         else{
             this.props.navigation.setOptions({
                 headerRight: () => (
-                    <TouchableOpacity
-                        style={GlobalStyles.HeaderButton}
-                        activeOpacity={0.5}
-                        onPress={() => this.save(this.myGoBack)} >
-                        <Image
-                         source={require('./icons/done.png')}
-                         style={GlobalStyles.ImageIconStyle}
-                        />
-                    </TouchableOpacity>
+                    <HeaderButton
+                        icon={require('./icons/done.png')}
+                        onPress={() => this.save(this.myGoBack)}/>
                 ),
             });
             return (
