@@ -102,7 +102,7 @@ export default class BookScreen extends Component {
                 // donc il faut vérifier qu'il n'existe pas déjà
                 for(let k of this.listOfKeys){
                     if (k == newK){
-                        Alert.alert('Erreur : '+book.title+' de '+book.author+' est déjà dans la bibliothèque !');
+                        Alert.alert('Erreur', book.title+' de '+book.author+' est déjà dans la bibliothèque !');
                         return;
                     }
                 }
@@ -124,6 +124,16 @@ export default class BookScreen extends Component {
         // annuler les modifs avec le backup
         this.modified = false;
         this.setState({book: this.backup, visualMode: true, modificationMode: false});
+    }
+
+    delete = () => {
+        Alert.alert('Supprimer ce livre?', this.state.book.title,
+                [{text: 'Supprimer', onPress: () => {
+                    StorageManager.remove(this.state.book.title+this.state.book.author)
+                                .then(() => this.myGoBack());
+                }},
+                    {text: 'Annuler', onPress: () => {}}]
+        );
     }
 
     myGoBack = async () => {
@@ -183,12 +193,26 @@ export default class BookScreen extends Component {
         if (this.state.visualMode){
             this.props.navigation.setOptions({
                 headerRight: () => (
-                    <TouchableOpacity
-                        style={GlobalStyles.HeaderButtonText}
-                        activeOpacity={0.5}
-                        onPress={() => this.enterModifyMode()}>
-                        <Text style={{color: GlobalStyles.colors.textColor}}>Modifier</Text>
-                    </TouchableOpacity>
+                    <View style={{flexDirection: 'row'}}>
+                        <TouchableOpacity
+                            style={GlobalStyles.HeaderButton}
+                            activeOpacity={0.5}
+                            onPress={this.delete} >
+                            <Image
+                             source={require('./icons/trash.png')}
+                             style={GlobalStyles.ImageIconStyle}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={GlobalStyles.HeaderButton}
+                            activeOpacity={0.5}
+                            onPress={() => this.enterModifyMode()}>
+                            <Image
+                             source={require('./icons/edit.png')}
+                             style={GlobalStyles.ImageIconStyle}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 ),
             });
             return (

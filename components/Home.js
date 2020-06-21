@@ -6,7 +6,6 @@ import GlobalStyles from './styles';
 import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
-// TODO : bouton pile à lire
 
 export default class Home extends Component {
     constructor(props){
@@ -25,18 +24,21 @@ export default class Home extends Component {
                                    style={GlobalStyles.ImageIconStyle}/>
                         </MenuTrigger>
                         <MenuOptions>
-                            <MenuOption onSelect={() => StorageManager.export()}>
-                                <Text style={{fontSize: 16}}>Exporter la bibliothèque</Text>
-                            </MenuOption>
-                            <MenuOption onSelect={() => {
-                                StorageManager.import().then(() => this.loadKeys());
-                            }}>
-                                <Text style={{fontSize: 16}}>Importer une bibliothèque</Text>
+                            <MenuOption onSelect={() => this.reset().then(() => this.loadKeys())}>
+                                <Text style={{fontSize: 16}}>Vider la bibliothèque</Text>
                             </MenuOption>
                         </MenuOptions>
                     </Menu>
             ),
         });
+    }
+
+    reset = async () => {
+        Alert.alert('Attention',
+                    'Etes-vous sûr de vouloir supprimer tous vos livres ?',
+                    [{text: 'Supprimer', onPress: () => StorageManager.prune()},
+                    {text: 'Annuler', onPress: () => {}}]
+        );
     }
 
     async loadKeys(){

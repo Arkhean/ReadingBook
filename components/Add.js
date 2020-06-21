@@ -15,7 +15,7 @@ class MyTextInput extends Component {
     render() {
         return (
             <View style={styles.view}>
-                <Text style={styles.text}>{this.props.title}</Text>
+                <Text style={styles.title}>{this.props.title}</Text>
                 <TextInput
                     style={GlobalStyles.input}
                     editable={this.props.editable}
@@ -57,7 +57,7 @@ class MydateInput extends Component {
     render() {
         return (
             <View style={styles.view}>
-                <Text style={styles.text}>{this.props.title}</Text>
+                <Text style={styles.title}>{this.props.title}</Text>
                 {this.state.show &&
                     <DateTimePicker
                     testID="dateTimePicker"
@@ -72,7 +72,7 @@ class MydateInput extends Component {
                     editable={this.props.editable}
                     activeOpacity={0.5}
                     onPress={() => this.setState({show: true})}>
-                    <Text style={styles.text}> {displayDate(this.state.date)} </Text>
+                    <Text style={{fontSize: 18, marginTop: 5}}> {displayDate(this.state.date)} </Text>
                 </TouchableOpacity>
             </View>
         );
@@ -128,8 +128,8 @@ class MultiDateInput extends Component {
     render() {
         return (
             <View style={styles.view}>
-                <View style={{flexDirection: 'row', margin: 5}}>
-                    <Text style={styles.text}>{this.props.title}</Text>
+                <View style={{flexDirection: 'row', marginBottom: 5}}>
+                    <Text style={styles.title}>{this.props.title}</Text>
                     <TouchableOpacity
                         style={GlobalStyles.GreenButton}
                         activeOpacity={0.5}
@@ -149,21 +149,21 @@ class MultiDateInput extends Component {
                 }
                 {this.state.dates.map((item, i) =>
                     <View key={i} style={{flexDirection: 'row', marginBottom: 5}}>
-                        <Text>{'du'}</Text>
+                        <Text style={{fontSize: 18, marginRight: 5, alignSelf: 'center'}}>{'du'}</Text>
                         <TouchableOpacity
                             style={GlobalStyles.input}
                             editable={this.props.editable}
                             activeOpacity={0.5}
                             onPress={() => { this.setState({show: true, inputNum: 0}); this.cursor = i; }}>
-                            <Text style={styles.text}> {displayDate(this.state.dates[i].start)} </Text>
+                            <Text style={{fontSize: 18, marginTop: 5}}> {displayDate(this.state.dates[i].start)} </Text>
                         </TouchableOpacity>
-                        <Text>{'au'}</Text>
+                        <Text style={{marginHorizontal: 5, fontSize: 18, alignSelf: 'center'}}>{'au'}</Text>
                         <TouchableOpacity
                             style={GlobalStyles.input}
                             editable={this.props.editable}
                             activeOpacity={0.5}
                             onPress={() => { this.setState({show: true, inputNum: 1}); this.cursor = i; }}>
-                            <Text style={styles.text}> {displayDate(this.state.dates[i].end)} </Text>
+                            <Text style={{fontSize: 18, marginTop: 5}}> {displayDate(this.state.dates[i].end)} </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={GlobalStyles.RedButton}
@@ -190,7 +190,7 @@ class MyPicker extends Component {
     render() {
         return (
             <View style={styles.view}>
-                <Text style={styles.text}>{this.props.title}</Text>
+                <Text style={styles.title}>{this.props.title}</Text>
                 <Picker
                     selectedValue={this.props.value}
                     onValueChange={(itemValue, itemIndex) => this.props.onChange(itemValue)}>
@@ -213,7 +213,7 @@ export default class Add extends Component {
                     'Fantastique', 'Horreur', 'Biographie', 'Nouvelle', 'Conte',
                     'Fantasy', 'Romance', 'Comtemporain', 'Classique', 'Théâtre',
                     'Poésie'];
-        const formats = ['<non renseigné', 'Poche', 'Semi-Poche', 'Grand Format'];
+        const formats = ['<non renseigné>', 'Poche', 'Semi-Poche', 'Grand Format'];
         return (
             <ScrollView >
                 <MyTextInput
@@ -265,7 +265,11 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     text: {
-        fontSize: 20,
-        marginRight: 10,
+        fontSize: 18,
     },
+    title: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        paddingRight: 10
+    }
 });
