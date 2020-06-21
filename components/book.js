@@ -1,9 +1,16 @@
+/*
+ * author: Julien Miens
+ * date: june 2020
+ * description: éléments de base à la gestion des livres, notamment l'objet vide
+ * ou encore l'affichage simplifié "en ligne d'une liste".
+ */
+
 import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { View, Text } from 'react-native-animatable';
 import GlobalStyles from './styles';
 
-
+// permet d'obtenir l'image pour un libre en prenant celle par défaut ou par url
 export const getImage = (book) => {
     if (!('imageUrl' in book) || book.imageUrl === ''){
         return require('./icons/book.png');
@@ -27,25 +34,7 @@ export const defaultBook = {   title: '',
                         imageUrl: '',
                         comment: '', };
 
-/* pour assurer la retro-compatibilité, du fait de l'ajout de champs à Book */
-export const getBook = (book) => {
-    return {
-        title: book.title,
-        author: book.author,
-        saga: 'saga' in book ? book.saga : '',
-        nTome: 'nTome' in book ? book.nTome : 1,
-        genre: book.genre,
-        editor: book.editor,
-        format: 'format' in book ? book.format : '',
-        price: book.price,
-        nPages: book.nPages,
-        purchaseDate: book.purchaseDate,
-        readingDates: 'readingDates' in book ? book.readingDates : [],
-        imageUrl: 'imageUrl' in book ? book.imageUrl : '',
-        comment: book.comment,
-    };
-}
-
+// affichage pour liste, cliquable pour plus de détails
 export default class BookRow extends Component {
     constructor(props){
         super(props);

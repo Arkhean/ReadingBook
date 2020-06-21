@@ -1,3 +1,9 @@
+/*
+ * author: Julien Miens
+ * date: june 2020
+ * description: abstraction gérant la base de données de l'application
+ */
+
 import AsyncStorage from '@react-native-community/async-storage';
 
 export default class StorageManager {

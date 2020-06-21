@@ -1,3 +1,9 @@
+/*
+ * author: Julien Miens
+ * date: june 2020
+ * description: pile à lire: ensemble des livres non lus
+ */
+
 import React, { Component } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import StorageManager from './StorageManager';

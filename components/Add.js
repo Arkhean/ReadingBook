@@ -1,3 +1,9 @@
+/*
+ * author: Julien Miens
+ * date: june 2020
+ * description: permet l'ajout de nouveau livre dans la bibliothèque
+ */
+
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TextInput, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -31,6 +37,7 @@ class MyTextInput extends Component {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+// permet d'avoir un date à deux chiffres, e.g. 1/2 -> 01/02
 function pad(n) {return n < 10 ? "0"+n : n;}
 
 function displayDate(date){
@@ -79,7 +86,7 @@ class MydateInput extends Component {
     }
 }
 
-/* multi date avec un titre au dessus */
+/* permet l'ajout d'une liste de dates de lectures */
 class MultiDateInput extends Component {
     constructor(props){
         super(props);
@@ -181,7 +188,7 @@ class MultiDateInput extends Component {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-/* picker custom avec un titre au dessus */
+/* picker de liste custom avec un titre au dessus */
 class MyPicker extends Component {
     constructor(props){
         super(props);

@@ -1,3 +1,11 @@
+/*
+ * author: Julien Miens
+ * date: june 2020
+ * description: composant pour la manipulation d'un livre
+ * il permet ou de le visualiser via le composant BookRow ou de le modifier en
+ * passant par le composant Add (qui a servi à sa création à l'origine).
+ */
+
 import React, { Component } from 'react';
 import { Text, View, BackHandler, Alert } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/stack';
@@ -6,7 +14,7 @@ import StorageManager from './StorageManager';
 import VisualBook from './VisualBook';
 import Add from './Add';
 import GlobalStyles from './styles';
-import { defaultBook, getBook } from './book';
+import { defaultBook } from './book';
 import { HeaderButton } from './Buttons';
 
 
@@ -32,7 +40,7 @@ export default class BookScreen extends Component {
 
             /* on visualise le contenu du livre */
             if (this.props.route.params.book != null){
-                this.setState({book: getBook(this.props.route.params.book),
+                this.setState({book: this.props.route.params.book,
                                 visualMode: this.props.route.params.visualMode,
                                 modificationMode: false});
                 this.props.navigation.setOptions({
@@ -66,6 +74,8 @@ export default class BookScreen extends Component {
     save = (callback) => {
         const book = this.state.book;
         let newK = book.title+book.author;
+        // la clé d'un livre correspond à la concaténation de son titre et de
+        // son auteur (couple unique)
         if (book.title !== "" && book.author !== ""){
             if (!this.state.modificationMode){
                 // on ajoute un nouveau
@@ -96,6 +106,7 @@ export default class BookScreen extends Component {
         this.setState({book: this.backup, visualMode: true, modificationMode: false});
     }
 
+    // pour supprimer ce livre
     delete = () => {
         Alert.alert('Supprimer ce livre?', this.state.book.title,
                 [{text: 'Supprimer', onPress: () => {
@@ -106,6 +117,8 @@ export default class BookScreen extends Component {
         );
     }
 
+    // on gère le retour arrière pour revenir en mode visuel si on était en
+    // modification, on vérifie au passage les modifications sont enregistrées
     myGoBack = async () => {
         if (this.state.modificationMode){
             // si on modifie un livre

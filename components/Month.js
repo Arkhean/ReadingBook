@@ -1,3 +1,10 @@
+/*
+ * author: Julien Miens
+ * date: june 2020
+ * description: composant affichant la liste des livres lus et achetés ce mois-ci
+ * avec possibilité de visualiser les mois précédents.
+ */
+
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, ScrollView } from 'react-native';
 import StorageManager from './StorageManager';
@@ -66,6 +73,8 @@ export default class Month extends Component {
         this.setState({month: month, year: year}, () => this.selectBooksToShow());
     }
 
+    /* cette méhode parcours la liste des livres à la recherche des livres du
+    mois */
     selectBooksToShow(){
         let books = this.state.books;
         let booksToShow = [];
@@ -76,6 +85,7 @@ export default class Month extends Component {
             let p = new Date(book.purchaseDate);
             let read = false;
             let bought = false;
+            // on compare la date d'achat
             if (p.getMonth() == this.state.month && p.getFullYear() == this.state.year){
                 total += parseFloat(book.price);
                 bought = true;

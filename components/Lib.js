@@ -1,3 +1,11 @@
+/*
+ * author: Julien Miens
+ * date: june 2020
+ * description: composant affichant la liste entière de tous les livres contenus
+ * dans la bibliothèque, il propose la suppression et redirige vers un affichage
+ * détaillé au besoin (pour consultation ou modification).
+ */
+
 import React, { Component } from 'react';
 import { StyleSheet, ScrollView, TextInput, BackHandler } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
@@ -20,6 +28,7 @@ export default class Lib extends Component {
                         showFilter: false,
                         removeMode: false,
                         checkBoxes: [] };
+        // on retient la valeur de ces bouléens pour gérer les animations
         this.showFilterWasTrue = false;
         this.removeModeWasTrue = false;
         this.props.navigation.addListener('focus', () => {
@@ -30,10 +39,10 @@ export default class Lib extends Component {
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <HeaderButton
-                        onPress={() => this.activateRemoveMode()}
+                        onPress={this.activateRemoveMode}
                         icon={require('./icons/trash.png')}/>
                     <HeaderButton
-                        onPress={() => this.activateShowFilter()}
+                        onPress={this.activateShowFilter}
                         icon={require('./icons/search.png')}/>
                 </View>
             ),
@@ -45,6 +54,7 @@ export default class Lib extends Component {
         this.setState({books: books, booksToShow: books, checkBoxes: books.map(() => false), removeMode: false, showFilter: false});
     }
 
+    /* réduit la liste à afficher aux éléments correspond au filtre entré */
     applyFilter = () => {
         const filter = this.state.filter;
         let booksToShow = []
@@ -54,10 +64,12 @@ export default class Lib extends Component {
         else{
             booksToShow = [];
             for(let book of this.state.books){
+                // on vérifie la présence du filtre dans ces termes:
                 if ( book.title.includes(filter) ||
                      book.author.includes(filter) ||
-                     (book.genre != 'unknown' && book.genre.includes(filter)) ||
-                     (book.editor != 'unknown' && book.editor.includes(filter)) ){
+                     book.saga.includes(filter) ||
+                     (book.genre != '<non renseigné>' && book.genre.includes(filter)) ||
+                     (book.editor.includes(filter)) ){
                         booksToShow.push(book);
                 }
             }
@@ -65,12 +77,15 @@ export default class Lib extends Component {
         this.setState({booksToShow: booksToShow, checkBoxes: booksToShow.map(() => false)});
     }
 
+    // les checkbox servent à savoir qui est à supprimer
     onCheckBoxChange = (i) => {
         let checkBoxes = this.state.checkBoxes;
         checkBoxes[i] = !checkBoxes[i];
         this.setState({checkBoxes});
     }
 
+    // on gère soit même le retour arrière dans les cas où l'onglet de recherche
+    // ou que la sélection soient ouverts
     myGoBack = () => {
         if (this.state.removeMode){
             this.deactivateRemoveMode();
@@ -84,9 +99,10 @@ export default class Lib extends Component {
     }
 
 
-    /* méthode pour la gestion de la recherche dans la liste */
+    /* méthodes pour la gestion de la recherche dans la liste */
     activateShowFilter = () => {
         this.setState({showFilter: true});
+        // on change les boutons pour gérer le goBack
         this.props.navigation.setOptions({
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
@@ -103,6 +119,7 @@ export default class Lib extends Component {
     }
 
     deactivateShowFilter = () => {
+        // on rétablit les boutons
         this.props.navigation.setOptions({
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
@@ -122,6 +139,7 @@ export default class Lib extends Component {
     /* méthode pour la suppression d'élément dans la liste */
     activateRemoveMode = () => {
         this.setState({removeMode: true});
+        // il faut mettre le bouton de suppression définitive
         this.props.navigation.setOptions({
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
@@ -142,11 +160,14 @@ export default class Lib extends Component {
                 toRemove.push(this.state.booksToShow[i].title+this.state.booksToShow[i].author);
             }
         }
+        // il est plus efficace d'envoyer la liste des éléments à supprimer
+        // plutôt qu'un par un
         StorageManager.removeMany(toRemove).then(() => this.loadLibrary());
     }
 
     deactivateRemoveMode = () => {
         this.removeModeWasTrue = true;
+        // on rétablit les boutons
         this.props.navigation.setOptions({
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>

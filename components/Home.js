@@ -1,9 +1,17 @@
+/*
+ * author: Julien Miens
+ * date: june 2020
+ * description: composant d'accueil affichant le nombre de livres dans la
+ * biblothèque ainsi que les boutons vers les autres pages.
+ */
+
 import React, { Component } from 'react';
 import { StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import StorageManager from './StorageManager';
 import GlobalStyles from './styles';
 import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { View, Text } from 'react-native-animatable';
+import { HomeButton } from './Buttons';
 
 
 export default class Home extends Component {
@@ -12,22 +20,24 @@ export default class Home extends Component {
         this.state = { listOfKeys: [] };
 
         this.props.navigation.addListener('focus', () => {
+            // on importe la liste des clés pour avoir le nombre de livres
             this.loadKeys();
         });
 
         this.props.navigation.setOptions({
+            // le menu permet de vider la bibliothèque
             headerRight: () => (
-                    <Menu>
-                        <MenuTrigger style={styles.OptionStyle}>
-                            <Image source={require('./icons/menu.png')}
-                                   style={GlobalStyles.ImageIconStyle}/>
-                        </MenuTrigger>
-                        <MenuOptions>
-                            <MenuOption onSelect={() => this.reset().then(() => this.loadKeys())}>
-                                <Text style={{fontSize: 16}}>Vider la bibliothèque</Text>
-                            </MenuOption>
-                        </MenuOptions>
-                    </Menu>
+                <Menu>
+                    <MenuTrigger style={styles.OptionStyle}>
+                        <Image source={require('./icons/menu.png')}
+                               style={GlobalStyles.ImageIconStyle}/>
+                    </MenuTrigger>
+                    <MenuOptions>
+                        <MenuOption onSelect={() => this.reset().then(() => this.loadKeys())}>
+                            <Text style={{fontSize: 16}}>Vider la bibliothèque</Text>
+                        </MenuOption>
+                    </MenuOptions>
+                </Menu>
             ),
         });
     }
@@ -47,95 +57,49 @@ export default class Home extends Component {
         }
     }
 
-  render() {
-    const animation = 'zoomIn';
-    return (
-        <View style={styles.view}>
-            <Text style={styles.title}>Bienvenue dans ton Carnet de Lecture !</Text>
+    render() {
+        return (
+            <View style={styles.view}>
+                <Text style={styles.title}>
+                    {'Bienvenue dans ton Carnet de Lecture !'}
+                </Text>
 
-            <Text style={styles.subTitle}>Il y a {this.state.listOfKeys.length} livres dans ta bibliothèque.</Text>
+                <Text style={styles.subTitle}>
+                    {'Il y a '+this.state.listOfKeys.length+' livres dans ta bibliothèque.'}
+                </Text>
 
-            <View style={{marginTop:30}}>
-                <View animation={animation}
-                      duration={1000}
-                      delay={100}>
-                    <TouchableOpacity
-                        style={styles.ButtonStyle}
-                        activeOpacity={0.5}
-                        onPress={() => this.props.navigation.navigate('BookScreen', {book: null, visualMode: false})}>
-                        <Image
-                         source={require('./icons/playlist_add.png')}
-                         style={GlobalStyles.ImageIconStyle}
-                        />
-                        <Text style={styles.TextStyle}> Ajouter un Livre </Text>
-                    </TouchableOpacity>
+                <View style={{marginTop:30}}>
+                    <HomeButton
+                        delay={100}
+                        onPress={() => this.props.navigation.navigate('BookScreen',
+                                                {book: null, visualMode: false})}
+                        icon={require('./icons/playlist_add.png')}
+                        text={'Ajouter un Livre'} />
+                    <HomeButton
+                        delay={300}
+                        onPress={() => this.props.navigation.navigate('Bibliothèque',
+                                                {books: this.state.books})}
+                        icon={require('./icons/books.png')}
+                        text={'Voir la Bibliothèque'} />
+                    <HomeButton
+                        delay={500}
+                        onPress={() => this.props.navigation.navigate('Month')}
+                        icon={require('./icons/calendar.png')}
+                        text={'Livres du mois'} />
+                    <HomeButton
+                        delay={700}
+                        onPress={() => this.props.navigation.navigate('stack')}
+                        icon={require('./icons/list.png')}
+                        text={'Pile à Lire'} />
+                    <HomeButton
+                        delay={900}
+                        onPress={() => this.props.navigation.navigate('Scan')}
+                        icon={require('./icons/add_camera.png')}
+                        text={'Scanner ISBN'} />
                 </View>
-
-                <View animation={animation}
-                      duration={1000}
-                      delay={300}>
-                    <TouchableOpacity
-                        style={styles.ButtonStyle}
-                        activeOpacity={0.5}
-                        onPress={() => this.props.navigation.navigate('Bibliothèque', {books: this.state.books})}>
-                        <Image
-                         source={require('./icons/books.png')}
-                         style={GlobalStyles.ImageIconStyle}
-                        />
-                        <Text style={styles.TextStyle}> Voir la Bibliothèque </Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View animation={animation}
-                      duration={1000}
-                      delay={500}>
-                    <TouchableOpacity
-                        style={styles.ButtonStyle}
-                        activeOpacity={0.5}
-                        onPress={() => this.props.navigation.navigate('Month')}>
-                        <Image
-                         source={require('./icons/calendar.png')}
-                         style={GlobalStyles.ImageIconStyle}
-                        />
-                        <Text style={styles.TextStyle}> Livres du Mois </Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View animation={animation}
-                      duration={1000}
-                      delay={700}>
-                    <TouchableOpacity
-                        style={styles.ButtonStyle}
-                        activeOpacity={0.5}
-                        onPress={() => this.props.navigation.navigate('stack')}>
-                        <Image
-                         source={require('./icons/list.png')}
-                         style={GlobalStyles.ImageIconStyle}
-                        />
-                        <Text style={styles.TextStyle}> Pile à Lire </Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View animation={animation}
-                      duration={1000}
-                      delay={900}>
-                    <TouchableOpacity
-                        style={styles.ButtonStyle}
-                        activeOpacity={0.5}
-                        onPress={() => this.props.navigation.navigate('Scan')}>
-                        <Image
-                         source={require('./icons/add_camera.png')}
-                         style={GlobalStyles.ImageIconStyle}
-                        />
-                        <Text style={styles.TextStyle}> Scanner ISBN </Text>
-                    </TouchableOpacity>
-                </View>
-
-
             </View>
-        </View>
-    );
-  }
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -151,21 +115,6 @@ const styles = StyleSheet.create({
     subTitle: {
         marginHorizontal: 40,
         fontSize: 15
-    },
-    ButtonStyle: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: GlobalStyles.colors.mainColor,
-        borderColor: GlobalStyles.colors.mainColor,
-        marginHorizontal: 20,
-        marginVertical: 10,
-        borderRadius: 5,
-    },
-    TextStyle: {
-        color: GlobalStyles.colors.textColor,
-        marginBottom: 4,
-        marginRight: 20,
-        fontSize: 25
     },
     OptionStyle: {
         flexDirection: 'row',

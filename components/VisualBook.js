@@ -1,8 +1,16 @@
+/*
+ * author: Julien Miens
+ * date: june 2020
+ * description: composant affichant le détails d'un livre,
+ * utilisé dans BookScreen
+ */
+
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Image } from 'react-native';
 import Book, { getImage } from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
+
 
 function pad(n) {return n < 10 ? "0"+n : n;}
 

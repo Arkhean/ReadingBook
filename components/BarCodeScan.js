@@ -1,3 +1,13 @@
+/*
+ * author: Julien Miens
+ * date: june 2020
+ * description: utilise l'appareil photo pour lire un code bar sur le dos d'un
+ * livre, celui-ci correspondant souvent à l'ISBN de celui-ci
+ * ensuite, une requête est envoyé à l'API google books pour obtenir des infos
+ * sur le livre et remplir automatiquement la page d'ajout.
+ * NB : google ne connait pas beacoup de livres...
+ */
+
 import React, { Component } from 'react';
 import { View, StyleSheet, Alert, Image } from 'react-native';
 import { RNCamera } from 'react-native-camera';
@@ -70,6 +80,7 @@ export default class BarcodeScan extends Component {
             .catch((e) => Alert.alert('Erreur de connexion internet.'));
     }
 
+    /* allumer la lampe peut aider à la prise de vue */
     handleTourch = (value) => {
         if (value === true) {
             this.setState({ torchOn: false });
