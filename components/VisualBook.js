@@ -52,7 +52,7 @@ export default class VisualBook extends Component {
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>{"Acheté le "+displayDate(date1)+" pour "+book.price+" €."}</Text>
                 <Text style={styles.text}>{"Le livre contient "+book.nPages+" pages."}</Text>
-                {book.readingDates.length == 0 && <Text style={styles.text}>{"Le livre n'a pas été lu"}</Text>}
+                {book.readingDates.length == 0 && <Text style={styles.text}>{"Le livre n'a pas été lu."}</Text>}
                 {book.readingDates.map((item, i) =>
                     <Text key={i} style={styles.innerText}>
                         {'Lu du '+displayDate(new Date(item.start))+' au '+displayDate(new Date(item.end))}
