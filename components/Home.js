@@ -33,8 +33,8 @@ export default class Home extends Component {
                                style={GlobalStyles.ImageIconStyle}/>
                     </MenuTrigger>
                     <MenuOptions>
-                        <MenuOption onSelect={() => this.reset().then(() => this.loadKeys())}>
-                            <Text style={{fontSize: 16}}>Vider la bibliothèque</Text>
+                        <MenuOption onSelect={() => this.reset()}>
+                            <Text style={{fontSize: 16}}>{'Vider la bibliothèque'}</Text>
                         </MenuOption>
                     </MenuOptions>
                 </Menu>
@@ -45,12 +45,12 @@ export default class Home extends Component {
     reset = async () => {
         Alert.alert('Attention',
                     'Etes-vous sûr de vouloir supprimer tous vos livres ?',
-                    [{text: 'Supprimer', onPress: () => StorageManager.prune()},
+                    [{text: 'Supprimer', onPress: () => StorageManager.prune().then(this.loadKeys)},
                     {text: 'Annuler', onPress: () => {}}]
         );
     }
 
-    async loadKeys(){
+    loadKeys = async () => {
         let listOfKeys = await StorageManager.loadKeys();
         if (listOfKeys != null){
             this.setState({listOfKeys: listOfKeys});
@@ -77,8 +77,7 @@ export default class Home extends Component {
                         text={'Ajouter un Livre'} />
                     <HomeButton
                         delay={300}
-                        onPress={() => this.props.navigation.navigate('Bibliothèque',
-                                                {books: this.state.books})}
+                        onPress={() => this.props.navigation.navigate('Bibliothèque')}
                         icon={require('./icons/books.png')}
                         text={'Voir la Bibliothèque'} />
                     <HomeButton

@@ -24,9 +24,9 @@ export const defaultBook = {   title: '',
                         author: '',
                         saga: '',
                         nTome: 1, // si sage != ''
-                        genre: '<non rensigné>',
+                        genre: '<non renseigné>',
                         editor: '',
-                        format: '<non rensigné>', // poche, grand format
+                        format: '<non renseigné>', // poche, grand format
                         price: 0,
                         nPages: 0,
                         purchaseDate: new Date(Date.now()),

@@ -1,12 +1,12 @@
 /*
  * author: Julien Miens
  * date: june 2020
- * description: les boutons 
+ * description: les boutons
  */
 
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import GlobalStyles from './styles';
-import { TouchableOpacity, Image } from 'react-native';
+import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { View, Text } from 'react-native-animatable';
 
 export class HeaderButton extends Component {
@@ -27,22 +27,24 @@ export class HeaderButton extends Component {
 
 export class HomeButton extends Component {
     render(){
-        <View animation={'zoomIn'}
-              duration={1000}
-              delay={this.props.delay}>
-            <TouchableOpacity
-                style={styles.ButtonStyle}
-                activeOpacity={0.5}
-                onPress={this.props.onPress}>
-                <Image
-                    source={this.props.icon}
-                    style={GlobalStyles.ImageIconStyle}
-                />
-            <Text style={styles.TextStyle}>
-                {this.props.text}
-            </Text>
-            </TouchableOpacity>
-        </View>
+        return (
+            <View animation={'zoomIn'}
+                  duration={1000}
+                  delay={this.props.delay}>
+                <TouchableOpacity
+                    style={styles.ButtonStyle}
+                    activeOpacity={0.5}
+                    onPress={this.props.onPress}>
+                    <Image
+                        source={this.props.icon}
+                        style={GlobalStyles.ImageIconStyle}
+                    />
+                <Text style={styles.TextStyle}>
+                    {this.props.text}
+                </Text>
+                </TouchableOpacity>
+            </View>
+        );
     }
 }
 

@@ -47,7 +47,7 @@ export default class Month extends Component {
         });
     }
 
-    nextMonth(){
+    nextMonth = () => {
         let month = this.state.month;
         let year = this.state.year;
         let now = new Date(Date.now());
@@ -62,7 +62,7 @@ export default class Month extends Component {
         this.setState({month: month, year: year}, () => this.selectBooksToShow());
     }
 
-    previousMonth(){
+    previousMonth = () => {
         let month = this.state.month;
         let year = this.state.year;
         month -= 1;
@@ -75,7 +75,7 @@ export default class Month extends Component {
 
     /* cette méhode parcours la liste des livres à la recherche des livres du
     mois */
-    selectBooksToShow(){
+    selectBooksToShow = () => {
         let books = this.state.books;
         let booksToShow = [];
         let nbBought = 0;

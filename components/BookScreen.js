@@ -40,7 +40,10 @@ export default class BookScreen extends Component {
 
             /* on visualise le contenu du livre */
             if (this.props.route.params.book != null){
-                this.setState({book: this.props.route.params.book,
+                // petit hack pour retirer un warning
+                let book = 'fromCamera' in this.props.route.params ? JSON.parse(this.props.route.params.book)
+                                                                   : this.props.route.params.book;
+                this.setState({book: book,
                                 visualMode: this.props.route.params.visualMode,
                                 modificationMode: false});
                 this.props.navigation.setOptions({
