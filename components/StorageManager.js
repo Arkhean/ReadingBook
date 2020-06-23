@@ -39,7 +39,7 @@ export default class StorageManager {
             return jsonValue != null ? JSON.parse(jsonValue) : null;
         } catch(e) {
             // error reading value
-            console.log('Erreur laod : '+e);
+            console.log('Erreur load : '+e);
         }
     }
 
@@ -84,7 +84,7 @@ export default class StorageManager {
                         }
                     } catch(e) {
                         // error reading value
-                        console.log('Erreur loadLibrary : '+e);
+                        console.log('Erreur loadLibrary ('+key+'): '+e);
                     }
                 }
             }

@@ -232,7 +232,7 @@ class MyImageInput extends Component {
             console.log('User tapped custom button: ', response.customButton);
         }
         else {
-            const source = 'data:image/jpeg;base64,' + response.data;
+            const source = response.uri;
             this.setState({ image: source });
             this.props.onChange(source);
          }
