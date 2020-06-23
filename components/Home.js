@@ -11,7 +11,7 @@ import StorageManager from './StorageManager';
 import GlobalStyles from './styles';
 import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { View, Text } from 'react-native-animatable';
-import { HomeButton } from './Buttons';
+import { HomeButton, HeaderButton } from './Buttons';
 
 
 export default class Home extends Component {
@@ -27,7 +27,10 @@ export default class Home extends Component {
         this.props.navigation.setOptions({
             // le menu permet de vider la bibliothèque
             headerRight: () => (
-                <Menu>
+                <HeaderButton
+                    onPress={() => this.props.navigation.navigate('params')}
+                    icon={require('./icons/settings.png')}/>
+                /*<Menu>
                     <MenuTrigger style={styles.OptionStyle}>
                         <Image source={require('./icons/menu.png')}
                                style={GlobalStyles.ImageIconStyle}/>
@@ -37,7 +40,7 @@ export default class Home extends Component {
                             <Text style={{fontSize: 16}}>{'Vider la bibliothèque'}</Text>
                         </MenuOption>
                     </MenuOptions>
-                </Menu>
+                </Menu>*/
             ),
         });
     }

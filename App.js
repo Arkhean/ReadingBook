@@ -12,6 +12,7 @@ import GlobalStyles from './components/styles';
 import { MenuProvider } from 'react-native-popup-menu';
 import BarCodeScan from './components/BarCodeScan';
 import StackToRead from './components/StackToRead';
+import Params from './components/Parameters';
 
 /* pile d'écran de navigation */
 const Stack = createStackNavigator();
@@ -56,6 +57,10 @@ export default class App extends Component {
                 <Stack.Screen
                     name="stack"
                     component={StackToRead}
+                    options={options}/>
+                <Stack.Screen
+                    name="params"
+                    component={Params}
                     options={options}/>
               </Stack.Navigator>
             </NavigationContainer>

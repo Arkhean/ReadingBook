@@ -222,7 +222,8 @@ class MyImageInput extends Component {
     }
 
     onPress = () => ImagePicker.showImagePicker((response) => {
-         if (response.didCancel) {
+        // TODO mettre les options en français !
+        if (response.didCancel) {
             console.log('User cancelled image picker');
         }
         else if (response.error) {
