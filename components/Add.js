@@ -8,6 +8,8 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, TextInput, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-community/picker';
+import { Divider } from 'react-native-elements';
+import ImagePicker from 'react-native-image-picker';
 import StorageManager from './StorageManager';
 import GlobalStyles from './styles';
 
@@ -20,7 +22,7 @@ class MyTextInput extends Component {
 
     render() {
         return (
-            <View style={styles.view}>
+            <View style={this.props.style}>
                 <Text style={styles.title}>{this.props.title}</Text>
                 <TextInput
                     style={GlobalStyles.input}
@@ -63,7 +65,7 @@ class MydateInput extends Component {
 
     render() {
         return (
-            <View style={styles.view}>
+            <View style={this.props.style}>
                 <Text style={styles.title}>{this.props.title}</Text>
                 {this.state.show &&
                     <DateTimePicker
@@ -134,7 +136,7 @@ class MultiDateInput extends Component {
 
     render() {
         return (
-            <View style={styles.view}>
+            <View style={this.props.style}>
                 <View style={{flexDirection: 'row', marginBottom: 5}}>
                     <Text style={styles.title}>{this.props.title}</Text>
                     <TouchableOpacity
@@ -196,14 +198,57 @@ class MyPicker extends Component {
 
     render() {
         return (
-            <View style={styles.view}>
+            <View style={{margin: 10, flexDirection: 'row'}}>
                 <Text style={styles.title}>{this.props.title}</Text>
-                <Picker
-                    selectedValue={this.props.value}
-                    onValueChange={(itemValue, itemIndex) => this.props.onChange(itemValue)}>
-                    {this.props.data.map((item, i) => <Picker.Item key={i} label={item} value={item} />)}
-                </Picker>
+                <View style={{flex: 1, borderWidth: 1, borderColor: 'gray', borderRadius: 10}}>
+                    <Picker
+                        style={{flex: 1}}
+                        selectedValue={this.props.value}
+                        onValueChange={(itemValue, itemIndex) => this.props.onChange(itemValue)}>
+                        {this.props.data.map((item, i) => <Picker.Item key={i} label={item} value={item} />)}
+                    </Picker>
+                </View>
             </View>
+        );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+class MyImageInput extends Component {
+    constructor(props){
+        super(props);
+        this.state = { image: this.props.value === '' ? null : this.props.value };
+    }
+
+    onPress = () => ImagePicker.showImagePicker((response) => {
+         if (response.didCancel) {
+            console.log('User cancelled image picker');
+        }
+        else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+        }
+        else if (response.customButton) {
+            console.log('User tapped custom button: ', response.customButton);
+        }
+        else {
+            const source = 'data:image/jpeg;base64,' + response.data;
+            this.setState({ image: source });
+            this.props.onChange(source);
+         }
+    });
+
+    render(){
+        return (
+            <TouchableOpacity
+                style={styles.image}
+                onPress={this.onPress}>
+                {this.state.image != null &&
+                    <Image
+                        source={{uri: this.state.image}}
+                        style={{width: 98, height: 148, borderRadius: 9}}/>
+                }
+            </TouchableOpacity>
         );
     }
 }
@@ -223,24 +268,43 @@ export default class Add extends Component {
         const formats = ['<non renseigné>', 'Poche', 'Semi-Poche', 'Grand Format'];
         return (
             <ScrollView >
+                <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 1}}>
+                        <MyTextInput
+                            title='Titre' value={this.props.book.title} type='default'
+                            style={styles.viewVertical}
+                            onChange={text => this.props.onChange('title', text)}/>
+                        <MyTextInput
+                            style={styles.viewVertical}
+                            title='Auteur' value={this.props.book.author} type='default'
+                            onChange={text => this.props.onChange('author', text)}/>
+                    </View>
+                    <MyImageInput
+                        value={this.props.book.imageUri}
+                        onChange={text => this.props.onChange('imageUri', text)}/>
+                </View>
+
+                <Divider style={GlobalStyles.divider}/>
+
                 <MyTextInput
-                    title='Titre' value={this.props.book.title} type='default'
-                    onChange={text => this.props.onChange('title', text)}/>
-                <MyTextInput
-                    title='Auteur' value={this.props.book.author} type='default'
-                    onChange={text => this.props.onChange('author', text)}/>
-                <MyTextInput
+                    style={styles.viewHorizontal}
                     title='Saga' value={this.props.book.saga} type='default'
                     onChange={text => this.props.onChange('saga', text)}/>
                 <MyTextInput
+                    style={styles.viewHorizontal}
                     title='Tome' value={this.props.book.nTome} type='numeric'
                     editable={this.props.book.saga != ''}
                     onChange={text => this.props.onChange('nTome', text)}/>
+
+                <Divider style={GlobalStyles.divider}/>
+
                 <MyPicker
+                    style={styles.viewHorizontal}
                     title='Genre' value={this.props.book.genre}
                     data={genres}
                     onChange={value => this.props.onChange('genre', value)}/>
                 <MyTextInput
+                    style={styles.viewHorizontal}
                     title='Editeur' value={this.props.book.editor} type='default'
                     onChange={text => this.props.onChange('editor', text)}/>
                 <MyPicker
@@ -248,18 +312,26 @@ export default class Add extends Component {
                     data={formats}
                     onChange={value => this.props.onChange('format', value)}/>
                 <MyTextInput
+                    style={styles.viewHorizontal}
                     title='Prix' value={this.props.book.price} type='numeric'
                     onChange={text => this.props.onChange('price', text)}/>
                 <MyTextInput
+                    style={styles.viewHorizontal}
                     title='Nombre de pages' value={this.props.book.nPages} type='numeric'
                     onChange={text => this.props.onChange('nPages', text)}/>
+
+                <Divider style={GlobalStyles.divider}/>
+
                 <MydateInput
+                    style={styles.viewHorizontal}
                     title="Date d'achat" value={this.props.book.purchaseDate}
                     onChange={text => this.props.onChange('purchaseDate', text)}/>
                 <MultiDateInput
+                    style={styles.viewVertical}
                     title='Dates de lecture' value={this.props.book.readingDates}
                     onChange={text => this.props.onChange('readingDates', text)}/>
                 <MyTextInput
+                    style={styles.viewVertical}
                     title='Commentaires' value={this.props.book.comment} type='default'
                     maxLength={200} onChange={text => this.props.onChange('comment', text)}/>
             </ScrollView>
@@ -268,7 +340,11 @@ export default class Add extends Component {
 }
 
 const styles = StyleSheet.create({
-    view: {
+    viewHorizontal: {
+        margin: 10,
+        flexDirection: 'row'
+    },
+    viewVertical: {
         margin: 10,
     },
     text: {
@@ -277,6 +353,15 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         fontSize: 18,
-        paddingRight: 10
+        paddingRight: 10,
+        alignSelf: 'center'
+    },
+    image: {
+        borderWidth: 1,
+        width: 100,
+        height: 150,
+        margin: 10,
+        borderColor: 'gray',
+        borderRadius: 10
     }
 });

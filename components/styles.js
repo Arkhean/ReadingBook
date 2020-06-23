@@ -50,11 +50,14 @@ export default styles = {
         borderWidth: 1,
         paddingHorizontal: 10,
         alignItems: 'center',
+        flex: 1,
+        borderRadius: 10
     },
     divider: {
         backgroundColor: 'gray',
-        height: 2,
+        height: 1,
         marginVertical: 15,
+        marginHorizontal: 10,
     },
     HeaderButtonText: {
         marginHorizontal: 10,

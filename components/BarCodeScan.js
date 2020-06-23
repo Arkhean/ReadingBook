@@ -61,7 +61,7 @@ export default class BarcodeScan extends Component {
                                                 book.nPages = info.pageCount;
                                                 book.editor = info.publisher;
                                                 if ('imageLinks' in info){
-                                                    book.imageUrl = info.imageLinks.thumbnail;
+                                                    book.imageUri = info.imageLinks.thumbnail;
                                                 }
                                                 // date publication : info.publishedDate
                                                 // description : info.description

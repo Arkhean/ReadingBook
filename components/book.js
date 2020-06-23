@@ -12,11 +12,11 @@ import GlobalStyles from './styles';
 
 // permet d'obtenir l'image pour un libre en prenant celle par défaut ou par url
 export const getImage = (book) => {
-    if (!('imageUrl' in book) || book.imageUrl === ''){
+    if (!('imageUri' in book) || book.imageUri === ''){
         return require('./icons/book.png');
     }
     else{
-        return {uri: book.imageUrl};
+        return { uri: book.imageUri };
     }
 }
 
@@ -31,7 +31,7 @@ export const defaultBook = {   title: '',
                         nPages: 0,
                         purchaseDate: new Date(Date.now()),
                         readingDates: [], // liste de couple début/fin
-                        imageUrl: '',
+                        imageUri: '',
                         comment: '', };
 
 // affichage pour liste, cliquable pour plus de détails

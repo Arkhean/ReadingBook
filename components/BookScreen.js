@@ -92,9 +92,7 @@ export default class BookScreen extends Component {
             }
             StorageManager.store(newK, book).then(() => {
                 this.modified = false;
-                if (callback != undefined){
-                    callback();
-                }
+                callback();
             });
             this.props.navigation.setOptions({ title: 'Détails du livre' });
         }
