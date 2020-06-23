@@ -34,6 +34,10 @@ export const defaultBook = {   title: '',
                         imageUri: '',
                         comment: '', };
 
+const isRead = (book) => {
+    return book.readingDates.length > 0;
+}
+
 // affichage pour liste, cliquable pour plus de détails
 export default class BookRow extends Component {
     constructor(props){
@@ -43,7 +47,12 @@ export default class BookRow extends Component {
     render(){
         return (
             <View
-                style={this.props.style}
+                style={{
+                    flex: 1,
+                    margin: 5,
+                    borderRadius: 10,
+                    backgroundColor: isRead(this.props.book) ? '#009999' : '#cc0066',
+                }}
                 animation={this.props.animation}
                 delay={100}
                 duration={1500}>

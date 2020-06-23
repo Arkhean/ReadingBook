@@ -4,12 +4,6 @@ export default styles = {
         textColor: '#fff',
         buttonColor: '#33bbff',
     },
-    bookStyle: {
-        flex: 1,
-        margin: 5,
-        backgroundColor: '#009999',
-        borderRadius: 10,
-    },
     ImageIconStyle: {
         padding: 10,
         margin: 5,

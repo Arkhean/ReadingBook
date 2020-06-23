@@ -9,18 +9,20 @@
  */
 
 import React, { Component } from 'react';
-import { View, StyleSheet, Alert, Image } from 'react-native';
+import { View, StyleSheet, Alert, Image, ActivityIndicator } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import GlobalStyles from './styles';
 import { defaultBook } from './book';
 import { HeaderButton } from './Buttons';
 import { StackActions } from '@react-navigation/native';
+import NetInfo from '@react-native-community/netinfo';
 
 export default class BarcodeScan extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            torchOn: false
+            torchOn: false,
+            loading: false
         }
         this.stopPreview = false;
 
@@ -31,11 +33,26 @@ export default class BarcodeScan extends Component {
                     icon={this.state.torchOn ? require('./icons/flash_on.png') : require('./icons/flash_off.png')}/>
             ),
         });
+
+        this.props.navigation.addListener('focus', this.detectInternet);
+
     }
+
+    detectInternet = () => {
+        NetInfo.fetch().then(state => {
+            if (!state.isConnected){
+                Alert.alert('Attention', 'Une connexion internet est requise pour utiliser cette option',
+                [ {text: 'retour', onPress: () => this.props.navigation.goBack()},
+                {text: "c'est fait", onPress: this.detectInternet} ]);
+            }
+        });
+    }
+
 
     onBarCodeRead = (e) => {
         if(!this.stopPreview) {
             this.stopPreview = true;
+            this.setState({loading: true});
             // faire la requête et retransmettre les données vers add
             const value = e.data;
             const url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:';
@@ -123,6 +140,11 @@ export default class BarcodeScan extends Component {
                     onBarCodeRead={this.onBarCodeRead}
                     ref={cam => this.RNCamera = cam}
                     captureAudio={false}>
+                    <ActivityIndicator
+                        size={100}
+                        color={GlobalStyles.colors.buttonColor}
+                        animating={this.state.loading}
+                        style={{flex: 1, alignSelf: 'center'}}/>
                 </RNCamera>
             </View>)
     }
