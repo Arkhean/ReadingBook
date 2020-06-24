@@ -7,10 +7,10 @@ import
 from './actions.js';
 
 const initialState = {
-    mainColor: 'green', //'#6600ff',
-    secondaryColor: '#33bbff',
-    readColor: '#009999',
-    unreadColor: '#cc0066'
+    mainColor: 'purple', 
+    secondaryColor: 'cyan',
+    readColor: 'green',
+    unreadColor: 'red'
 };
 
 const reducer = (state = initialState, action) => {

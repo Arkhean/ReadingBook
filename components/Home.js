@@ -9,7 +9,6 @@ import React, { Component } from 'react';
 import { StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import StorageManager from '../storage/StorageManager';
 import GlobalStyles from './styles';
-import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { View, Text } from 'react-native-animatable';
 import { ConnectedHomeButton as HomeButton, ConnectedHeaderButton as HeaderButton } from './Buttons';
 

@@ -5,17 +5,18 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Alert } from 'react-native';
 import StorageManager from '../storage/StorageManager';
 import { Divider } from 'react-native-elements';
+import ColorPicker from './ColorPicker';
 import GlobalStyles from './styles';
 import { ConnectedTextButton as TextButton } from './Buttons';
+import { connect } from "react-redux";
+import { setMainColor, setSecondaryColor, setReadColor, setUnreadColor } from '../storage/actions';
 
-
-export default class Params extends Component {
+class Params extends Component {
     constructor(props){
         super(props);
-        this.state = { };
         this.props.navigation.setOptions({
             title: 'Paramètres',
         });
@@ -29,22 +30,43 @@ export default class Params extends Component {
         );
     }
 
-    // TODO : choisir couleurs lu/non-lu (thèmes ?)
-
     render() {
         return (
-            <View>
+            <ScrollView>
                 <Text style={styles.title}>{'Application de Carnet de Lecture permettant d\'enregistrer sa collection personnelle de livres.'}</Text>
-                <Text style={styles.text}>{'Version 1.0.0'}</Text>
-                <Text style={styles.subtext}>{'Développée par Julien Miens, Juin 2020'}</Text>
+
+                <Divider style={GlobalStyles.divider}/>
+                <Text style={styles.text}>{'Couleur principale'}</Text>
+                <ColorPicker
+                    color={this.props.colors.mainColor}
+                    onChange={(color) => this.props.setMainColor(color)} />
+                <Text style={styles.text}>{'Couleur secondaire'}</Text>
+                <ColorPicker
+                    color={this.props.colors.secondaryColor}
+                    onChange={(color) => this.props.setSecondaryColor(color)} />
+                <Text style={styles.text}>{'Couleur des livres lus'}</Text>
+                <ColorPicker
+                    color={this.props.colors.readColor}
+                    onChange={(color) => this.props.setReadColor(color)} />
+                <Text style={styles.text}>{'Couleur des livres non-lus'}</Text>
+                <ColorPicker
+                    color={this.props.colors.unreadColor}
+                    onChange={(color) => this.props.setUnreadColor(color)} />
+
                 <Divider style={GlobalStyles.divider}/>
                 <TextButton
                     onPress={this.reset}
                     text={'Réinitialiser l\'application'}/>
+
                 <Divider style={GlobalStyles.divider}/>
-                <Text style={styles.text}>{'Crédits:'}</Text>
-                <Text style={styles.subtext}>{'Icones de material.io'}</Text>
-            </View>
+                <Text style={styles.text}>{'Version 1.0.0'}</Text>
+                <Text style={styles.subtext}>{'Développée par Julien Miens, Juin 2020'}</Text>
+                <View style={{marginVertical: 30}}>
+                    <Text style={styles.text}>{'Crédits:'}</Text>
+                    <Text style={styles.subtext}>{'Icones de material.io'}</Text>
+                </View>
+
+            </ScrollView>
         );
     }
 }
@@ -54,7 +76,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: "center",
-        marginVertical: 50
+        marginVertical: 30
     },
     text: {
         fontSize: 20,
@@ -65,3 +87,19 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 });
+
+/* pour donner accès au store redux pour ce composant */
+const mapStateToProps = state => ({
+	colors: state.colors,
+});
+
+const mapDispatchToProps = dispatch => {
+	return {
+		setMainColor: color => dispatch(setMainColor(color)),
+        setSecondaryColor: color => dispatch(setSecondaryColor(color)),
+        setReadColor: color => dispatch(setReadColor(color)),
+        setUnreadColor: color => dispatch(setUnreadColor(color)),
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Params);
