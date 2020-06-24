@@ -25,6 +25,23 @@ export class HeaderButton extends Component {
     }
 }
 
+export class TextButton extends Component {
+    render(){
+        return (
+            <TouchableOpacity
+                style={GlobalStyles.HeaderButton}
+                activeOpacity={0.5}
+                onPress={this.props.onPress}>
+                <Text style={{ color: GlobalStyles.colors.textColor,
+                               fontSize: 20,
+                               padding: 10 }}>
+                    {this.props.text}
+                </Text>
+            </TouchableOpacity>
+        );
+    }
+}
+
 export class HomeButton extends Component {
     render(){
         return (
@@ -61,7 +78,6 @@ const styles = StyleSheet.create({
     TextStyle: {
         color: GlobalStyles.colors.textColor,
         marginBottom: 4,
-        marginRight: 20,
-        fontSize: 25
+        fontSize: 25,
     },
 });

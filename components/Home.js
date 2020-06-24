@@ -30,27 +30,8 @@ export default class Home extends Component {
                 <HeaderButton
                     onPress={() => this.props.navigation.navigate('params')}
                     icon={require('./icons/settings.png')}/>
-                /*<Menu>
-                    <MenuTrigger style={styles.OptionStyle}>
-                        <Image source={require('./icons/menu.png')}
-                               style={GlobalStyles.ImageIconStyle}/>
-                    </MenuTrigger>
-                    <MenuOptions>
-                        <MenuOption onSelect={() => this.reset()}>
-                            <Text style={{fontSize: 16}}>{'Vider la bibliothèque'}</Text>
-                        </MenuOption>
-                    </MenuOptions>
-                </Menu>*/
             ),
         });
-    }
-
-    reset = async () => {
-        Alert.alert('Attention',
-                    'Etes-vous sûr de vouloir supprimer tous vos livres ?',
-                    [{text: 'Supprimer', onPress: () => StorageManager.prune().then(this.loadKeys)},
-                    {text: 'Annuler', onPress: () => {}}]
-        );
     }
 
     loadKeys = async () => {
