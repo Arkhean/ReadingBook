@@ -13,7 +13,7 @@ import { View, StyleSheet, Alert, Image, ActivityIndicator } from 'react-native'
 import { RNCamera } from 'react-native-camera';
 import GlobalStyles from './styles';
 import { defaultBook } from './book';
-import { HeaderButton } from './Buttons';
+import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { StackActions } from '@react-navigation/native';
 import NetInfo from '@react-native-community/netinfo';
 

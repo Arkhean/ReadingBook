@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { View, Text } from 'react-native-animatable';
 import GlobalStyles from './styles';
+import { connect } from "react-redux";
 
 // permet d'obtenir l'image pour un libre en prenant celle par défaut ou par url
 export const getImage = (book) => {
@@ -39,7 +40,7 @@ const isRead = (book) => {
 }
 
 // affichage pour liste, cliquable pour plus de détails
-export default class BookRow extends Component {
+class BookRow extends Component {
     constructor(props){
         super(props);
     }
@@ -51,7 +52,8 @@ export default class BookRow extends Component {
                     flex: 1,
                     margin: 5,
                     borderRadius: 10,
-                    backgroundColor: isRead(this.props.book) ? '#009999' : '#cc0066',
+                    backgroundColor: isRead(this.props.book) ? this.props.colors.readColor
+                                                             : this.props.colors.unreadColor,
                 }}
                 animation={this.props.animation}
                 delay={100}
@@ -102,3 +104,9 @@ const styles = StyleSheet.create({
         flex: 1
     }
 });
+
+const mapStateToProps = state => ({
+	colors: state.colors,
+});
+
+export default connect(mapStateToProps)(BookRow);

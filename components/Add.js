@@ -10,7 +10,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-community/picker';
 import { Divider } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
-import StorageManager from './StorageManager';
+import StorageManager from '../storage/StorageManager';
 import GlobalStyles from './styles';
 
 /* textinput custom avec un titre au dessus */

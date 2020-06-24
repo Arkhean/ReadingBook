@@ -7,11 +7,11 @@
 
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, ScrollView } from 'react-native';
-import StorageManager from './StorageManager';
+import StorageManager from '../storage/StorageManager';
 import BookRow from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
-import { HeaderButton } from './Buttons';
+import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 
 const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
                         'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];

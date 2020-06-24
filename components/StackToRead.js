@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
-import StorageManager from './StorageManager';
+import StorageManager from '../storage/StorageManager';
 import Book from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';

@@ -53,20 +53,6 @@ export default styles = {
         marginVertical: 15,
         marginHorizontal: 10,
     },
-    HeaderButtonText: {
-        marginHorizontal: 10,
-        marginVertical: 10,
-        borderRadius: 15,
-        padding: 7,
-        backgroundColor: '#33bbff',
-    },
-    HeaderButton: {
-        alignSelf: 'center',
-        marginHorizontal: 10,
-        marginVertical: 10,
-        borderRadius: 15,
-        backgroundColor: '#33bbff',
-    },
     GreenButton: {
         alignSelf: 'center',
         borderRadius: 15,

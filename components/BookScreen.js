@@ -10,12 +10,12 @@ import React, { Component } from 'react';
 import { Text, View, BackHandler, Alert } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/stack';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import StorageManager from './StorageManager';
+import StorageManager from '../storage/StorageManager';
 import VisualBook from './VisualBook';
 import Add from './Add';
 import GlobalStyles from './styles';
 import { defaultBook } from './book';
-import { HeaderButton } from './Buttons';
+import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 
 
 /* requiert 2 params : book et visualMode : true/false */

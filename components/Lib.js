@@ -10,10 +10,10 @@ import React, { Component } from 'react';
 import { StyleSheet, ScrollView, TextInput, BackHandler } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import BookRow from './book';
-import StorageManager from './StorageManager';
+import StorageManager from '../storage/StorageManager';
 import GlobalStyles from './styles';
 import { createAnimatableComponent, View } from 'react-native-animatable';
-import { HeaderButton } from './Buttons';
+import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 
 const AnimatableScroll = createAnimatableComponent(ScrollView);
 

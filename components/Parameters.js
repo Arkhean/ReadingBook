@@ -6,10 +6,10 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Alert } from 'react-native';
-import StorageManager from './StorageManager';
+import StorageManager from '../storage/StorageManager';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
-import { TextButton } from './Buttons';
+import { ConnectedTextButton as TextButton } from './Buttons';
 
 
 export default class Params extends Component {

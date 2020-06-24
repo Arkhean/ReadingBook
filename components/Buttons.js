@@ -8,12 +8,19 @@ import React, { Component } from 'react';
 import GlobalStyles from './styles';
 import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { View, Text } from 'react-native-animatable';
+import { connect } from "react-redux";
 
-export class HeaderButton extends Component {
+class HeaderButton extends Component {
     render(){
         return (
             <TouchableOpacity
-                style={GlobalStyles.HeaderButton}
+                style={{
+                    alignSelf: 'center',
+                    marginHorizontal: 10,
+                    marginVertical: 10,
+                    borderRadius: 15,
+                    backgroundColor: this.props.colors.secondaryColor,
+                }}
                 activeOpacity={0.5}
                 onPress={this.props.onPress}>
                 <Image
@@ -25,11 +32,17 @@ export class HeaderButton extends Component {
     }
 }
 
-export class TextButton extends Component {
+class TextButton extends Component {
     render(){
         return (
             <TouchableOpacity
-                style={GlobalStyles.HeaderButton}
+                style={{
+                    alignSelf: 'center',
+                    marginHorizontal: 10,
+                    marginVertical: 10,
+                    borderRadius: 15,
+                    backgroundColor: this.props.colors.secondaryColor,
+                }}
                 activeOpacity={0.5}
                 onPress={this.props.onPress}>
                 <Text style={{ color: GlobalStyles.colors.textColor,
@@ -42,14 +55,21 @@ export class TextButton extends Component {
     }
 }
 
-export class HomeButton extends Component {
+class HomeButton extends Component {
     render(){
         return (
             <View animation={'zoomIn'}
                   duration={1000}
                   delay={this.props.delay}>
                 <TouchableOpacity
-                    style={styles.ButtonStyle}
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        backgroundColor: this.props.colors.mainColor,
+                        marginHorizontal: 20,
+                        marginVertical: 10,
+                        borderRadius: 5,
+                    }}
                     activeOpacity={0.5}
                     onPress={this.props.onPress}>
                     <Image
@@ -66,18 +86,20 @@ export class HomeButton extends Component {
 }
 
 const styles = StyleSheet.create({
-    ButtonStyle: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: GlobalStyles.colors.mainColor,
-        borderColor: GlobalStyles.colors.mainColor,
-        marginHorizontal: 20,
-        marginVertical: 10,
-        borderRadius: 5,
-    },
     TextStyle: {
         color: GlobalStyles.colors.textColor,
         marginBottom: 4,
         fontSize: 25,
     },
 });
+
+const mapStateToProps = state => ({
+	colors: state.colors,
+});
+
+const ConnectedHeaderButton = connect(mapStateToProps)(HeaderButton);
+const ConnectedHomeButton = connect(mapStateToProps)(HomeButton);
+const ConnectedTextButton = connect(mapStateToProps)(TextButton);
+
+
+export { ConnectedHomeButton, ConnectedHeaderButton, ConnectedTextButton };
