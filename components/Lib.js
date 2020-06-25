@@ -9,31 +9,28 @@
 import React, { Component } from 'react';
 import { StyleSheet, ScrollView, TextInput, BackHandler } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import BookRow from './book';
-import StorageManager from '../storage/StorageManager';
+import BookRow, { getKey } from './book';
 import GlobalStyles from './styles';
 import { createAnimatableComponent, View } from 'react-native-animatable';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
+import { connect } from "react-redux";
+import { removeBooks } from '../storage/bookActions';
 
 const AnimatableScroll = createAnimatableComponent(ScrollView);
 
 ////////////////////////////////////////////////////////////////////////////////
 
-export default class Lib extends Component {
+class Lib extends Component {
     constructor(props){
         super(props);
-        this.state = {  books: [],
-                        booksToShow: [],
+        this.state = {  booksToShow: this.props.books,
                         filter: '',
                         showFilter: false,
                         removeMode: false,
-                        checkBoxes: [] };
+                        checkBoxes: this.props.books.map(() => false) };
         // on retient la valeur de ces bouléens pour gérer les animations
         this.showFilterWasTrue = false;
         this.removeModeWasTrue = false;
-        this.props.navigation.addListener('focus', () => {
-            this.loadLibrary();
-        });
 
         this.props.navigation.setOptions({
             headerRight: () => (
@@ -47,11 +44,10 @@ export default class Lib extends Component {
                 </View>
             ),
         });
-    }
 
-    async loadLibrary(){
-        let books = await StorageManager.loadLibrary();
-        this.setState({books: books, booksToShow: books, checkBoxes: books.map(() => false), removeMode: false, showFilter: false});
+        this.props.navigation.addListener('focus', () => {
+            this.applyFilter(); // force render ...
+        });
     }
 
     /* réduit la liste à afficher aux éléments correspond au filtre entré */
@@ -59,11 +55,11 @@ export default class Lib extends Component {
         const filter = this.state.filter;
         let booksToShow = []
         if (filter == ''){
-            booksToShow = this.state.books;
+            booksToShow = this.props.books;
         }
         else{
             booksToShow = [];
-            for(let book of this.state.books){
+            for(let book of this.props.books){
                 // on vérifie la présence du filtre dans ces termes:
                 if ( book.title.includes(filter) ||
                      book.author.includes(filter) ||
@@ -157,12 +153,17 @@ export default class Lib extends Component {
         let toRemove = []
         for(let i in this.state.checkBoxes){
             if (this.state.checkBoxes[i]){
-                toRemove.push(this.state.booksToShow[i].title+this.state.booksToShow[i].author);
+                toRemove.push(getKey(this.state.booksToShow[i]));
             }
         }
         // il est plus efficace d'envoyer la liste des éléments à supprimer
         // plutôt qu'un par un
-        StorageManager.removeMany(toRemove).then(() => this.loadLibrary());
+        this.props.removeBooks(toRemove);
+        // actualiser la base de données locales...
+        // il faudrait remettre à jour booksToShow après la fin du remove
+        // mais on ne peut pas faire .then() ici...
+        const newBooks = this.state.booksToShow.filter(book => !toRemove.includes(getKey(book)));
+        this.setState({booksToShow: newBooks, checkBoxes: newBooks.map(() => false), removeMode: false});
     }
 
     deactivateRemoveMode = () => {
@@ -233,7 +234,13 @@ export default class Lib extends Component {
                 duration={1000}>
                 {this.state.showFilter &&
                     <TextInput
-                        style={GlobalStyles.input}
+                        style={{
+                            height: 40,
+                            borderColor: 'gray',
+                            borderWidth: 1,
+                            paddingHorizontal: 10,
+                            alignItems: 'center',
+                        }}
                         value={this.state.filter}
                         onChangeText={text => this.setState({filter: text}, () => this.applyFilter())}/>
                 }
@@ -271,3 +278,15 @@ const styles = StyleSheet.create({
         margin: 5,
     },
 });
+
+const mapStateToProps = state => ({
+	books: state.books,
+});
+
+const mapDispatchToProps = dispatch => {
+	return {
+        removeBooks: keys => dispatch(removeBooks(keys)),
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Lib);

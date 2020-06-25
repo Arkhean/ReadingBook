@@ -7,30 +7,23 @@
 
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, ScrollView } from 'react-native';
-import StorageManager from '../storage/StorageManager';
 import BookRow from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
+import { connect } from "react-redux";
 
 const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
                         'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
-export default class Month extends Component {
+class Month extends Component {
     constructor(props){
         super(props);
         let now = new Date(Date.now());
-        this.state = { books: [],
-                        month: now.getMonth(),
-                        year: now.getFullYear(),
-                        nbBought: 0,
-                        nbRead: 0,
-                        total: 0,
-                        booksToShow: [],
-                        showPicker: false };
-        this.props.navigation.addListener('focus', () => {
-            this.loadLibrary();
-        });
+        this.state = {
+            ...this.selectBooksToShow(now.getMonth(), now.getFullYear()),
+            showPicker: false,
+        };
 
         this.props.navigation.setOptions({
             title: 'Livres du mois',
@@ -44,6 +37,10 @@ export default class Month extends Component {
                         icon={require('./icons/forward.png')}/>
                 </View>
             ),
+        });
+
+        this.props.navigation.addListener('focus', () => {
+            this.setState(this.selectBooksToShow(this.state.month, this.state.year));
         });
     }
 
@@ -59,7 +56,7 @@ export default class Month extends Component {
             month = 0;
             year += 1;
         }
-        this.setState({month: month, year: year}, () => this.selectBooksToShow());
+        this.setState(this.selectBooksToShow(month, year));
     }
 
     previousMonth = () => {
@@ -70,13 +67,13 @@ export default class Month extends Component {
             month = 11;
             year -= 1;
         }
-        this.setState({month: month, year: year}, () => this.selectBooksToShow());
+        this.setState(this.selectBooksToShow(month, year));
     }
 
     /* cette méhode parcours la liste des livres à la recherche des livres du
     mois */
-    selectBooksToShow = () => {
-        let books = this.state.books;
+    selectBooksToShow = (month, year) => {
+        let books = this.props.books;
         let booksToShow = [];
         let nbBought = 0;
         let nbRead = 0;
@@ -86,7 +83,7 @@ export default class Month extends Component {
             let read = false;
             let bought = false;
             // on compare la date d'achat
-            if (p.getMonth() == this.state.month && p.getFullYear() == this.state.year){
+            if (p.getMonth() == month && p.getFullYear() == year){
                 total += parseFloat(book.price);
                 bought = true;
                 nbBought += 1;
@@ -95,10 +92,10 @@ export default class Month extends Component {
             for(let dates of book.readingDates){
                 let start = new Date(dates.start);
                 let end = new Date(dates.end);
-                if (start.getMonth() == this.state.month && start.getFullYear() == this.state.year){
+                if (start.getMonth() == month && start.getFullYear() == year){
                     read = true;
                 }
-                if (end.getMonth() == this.state.month && end.getFullYear() == this.state.year){
+                if (end.getMonth() == month && end.getFullYear() == year){
                     read = true;
                 }
             }
@@ -109,13 +106,8 @@ export default class Month extends Component {
                 booksToShow.push(book);
             }
         }
-        this.setState({nbBought: nbBought, nbRead: nbRead, total: total.toFixed(2),
-                                                booksToShow: booksToShow});
-    }
-
-    async loadLibrary(){
-        let books = await StorageManager.loadLibrary();
-        this.setState({books: books}, () => this.selectBooksToShow());
+        return {nbBought: nbBought, nbRead: nbRead, total: total.toFixed(2),
+                            booksToShow: booksToShow, month: month, year: year};
     }
 
     render() {
@@ -160,3 +152,9 @@ const styles = StyleSheet.create({
         fontSize: 25,
     },
 });
+
+const mapStateToProps = state => ({
+	books: state.books,
+});
+
+export default connect(mapStateToProps)(Month);

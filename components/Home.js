@@ -7,21 +7,21 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
-import StorageManager from '../storage/StorageManager';
 import GlobalStyles from './styles';
 import { View, Text } from 'react-native-animatable';
 import { ConnectedHomeButton as HomeButton, ConnectedHeaderButton as HeaderButton } from './Buttons';
+import { connect } from "react-redux";
 
 
-export default class Home extends Component {
+class Home extends Component {
     constructor(props){
         super(props);
-        this.state = { listOfKeys: [] };
+        this.state = { };
 
-        this.props.navigation.addListener('focus', () => {
+        /*this.props.navigation.addListener('focus', () => {
             // on importe la liste des clés pour avoir le nombre de livres
             this.loadKeys();
-        });
+        });*/
 
         this.props.navigation.setOptions({
             // le menu permet de vider la bibliothèque
@@ -33,13 +33,6 @@ export default class Home extends Component {
         });
     }
 
-    loadKeys = async () => {
-        let listOfKeys = await StorageManager.loadKeys();
-        if (listOfKeys != null){
-            this.setState({listOfKeys: listOfKeys});
-        }
-    }
-
     render() {
         return (
             <View style={styles.view}>
@@ -48,7 +41,7 @@ export default class Home extends Component {
                 </Text>
 
                 <Text style={styles.subTitle}>
-                    {'Il y a '+this.state.listOfKeys.length+' livres dans ta bibliothèque.'}
+                    {'Il y a '+this.props.books.length+' livres dans ta bibliothèque.'}
                 </Text>
 
                 <View style={{marginTop:30}}>
@@ -106,3 +99,9 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
 });
+
+const mapStateToProps = state => ({
+	books: state.books,
+});
+
+export default connect(mapStateToProps)(Home);

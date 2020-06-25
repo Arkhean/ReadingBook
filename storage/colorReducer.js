@@ -4,10 +4,10 @@ import
     SET_READ_COLOR,
     SET_UNREAD_COLOR
 }
-from './actions.js';
+from './colorActions.js';
 
 const initialState = {
-    mainColor: 'purple', 
+    mainColor: 'purple',
     secondaryColor: 'cyan',
     readColor: 'green',
     unreadColor: 'red'

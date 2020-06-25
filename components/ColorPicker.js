@@ -8,7 +8,9 @@ import React, { Component } from 'react';
 import GlobalStyles from './styles';
 import { ScrollView, TouchableOpacity } from 'react-native';
 
-const colors = ['cyan', 'blue', 'lime', 'green', 'red', 'orange', 'yellow', 'purple', 'pink'];
+const colors = ['cyan', 'turquoise', 'blue', 'darkblue', 'lime', 'green',
+                'brown', 'red', 'orange', 'gold', 'yellow', 'indigo', 'purple',
+                 'magenta', 'fuchsia', 'pink'];
 
 export default class ColorPicker extends Component {
     constructor(props){
@@ -26,7 +28,7 @@ export default class ColorPicker extends Component {
                         key={i}
                         style={{
                             height: 30,
-                            width: 50,
+                            width: 30,
                             margin: 5,
                             backgroundColor: item,
                             borderWidth: (i==this.state.selectedColor) ? 3 : 0,

@@ -6,21 +6,18 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
-import StorageManager from '../storage/StorageManager';
 import Book from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
+import { connect } from "react-redux";
 
-
-export default class StackToRead extends Component {
+class StackToRead extends Component {
     constructor(props){
         super(props);
-        let now = new Date(Date.now());
-        this.state = { books: [],
-                       booksToShow: [] };
+        this.state = { booksToShow: [] };
 
         this.props.navigation.addListener('focus', () => {
-            this.loadLibrary();
+            this.setState({booksToShow: this.selectBooksToShow()});
         });
 
         this.props.navigation.setOptions({
@@ -29,19 +26,14 @@ export default class StackToRead extends Component {
     }
 
     selectBooksToShow(){
-        let books = this.state.books;
+        let books = this.props.books;
         let booksToShow = [];
         for(let book of books){
             if (book.readingDates.length == 0){
                 booksToShow.push(book);
             }
         }
-        this.setState({booksToShow: booksToShow});
-    }
-
-    async loadLibrary(){
-        let books = await StorageManager.loadLibrary();
-        this.setState({books: books}, () => this.selectBooksToShow());
+        return booksToShow;
     }
 
     render() {
@@ -59,3 +51,9 @@ export default class StackToRead extends Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+	books: state.books,
+});
+
+export default connect(mapStateToProps)(StackToRead);

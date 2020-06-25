@@ -22,8 +22,7 @@ Ajouter des livres à votre bibliothèque en renseignant :
 - input text
 - date picker
 - list picker
-- menu
 - animations
 - navigation
-- sauvegarde asynchrone
+- redux
 - ...

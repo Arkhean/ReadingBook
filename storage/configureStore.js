@@ -2,7 +2,8 @@ import { createStore, combineReducers } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import FilesystemStorage from "redux-persist-filesystem-storage";
 
-import Reducer from "./reducer";
+import ColorReducer from "./colorReducer";
+import BookReducer from "./bookReducer";
 
 const persistConfig = {
 	key: "root",
@@ -10,7 +11,8 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-	colors: Reducer,
+	colors: ColorReducer,
+    books: BookReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

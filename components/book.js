@@ -21,6 +21,10 @@ export const getImage = (book) => {
     }
 }
 
+export const getKey = (book) => {
+    return book.title + book.author;
+}
+
 export const defaultBook = {   title: '',
                         author: '',
                         saga: '',

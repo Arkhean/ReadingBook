@@ -6,13 +6,13 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, ScrollView, View, Text, Alert } from 'react-native';
-import StorageManager from '../storage/StorageManager';
 import { Divider } from 'react-native-elements';
 import ColorPicker from './ColorPicker';
 import GlobalStyles from './styles';
 import { ConnectedTextButton as TextButton } from './Buttons';
 import { connect } from "react-redux";
-import { setMainColor, setSecondaryColor, setReadColor, setUnreadColor } from '../storage/actions';
+import { setMainColor, setSecondaryColor, setReadColor, setUnreadColor } from '../storage/colorActions';
+import { removeAll } from '../storage/bookActions';
 
 class Params extends Component {
     constructor(props){
@@ -25,7 +25,7 @@ class Params extends Component {
     reset = async () => {
         Alert.alert('Attention',
                     'Etes-vous sûr de vouloir supprimer tous vos livres ?',
-                    [{text: 'Supprimer', onPress: () => StorageManager.prune()},
+                    [{text: 'Supprimer', onPress: () => this.props.removeAll()},
                     {text: 'Annuler', onPress: () => {}}]
         );
     }
@@ -99,6 +99,7 @@ const mapDispatchToProps = dispatch => {
         setSecondaryColor: color => dispatch(setSecondaryColor(color)),
         setReadColor: color => dispatch(setReadColor(color)),
         setUnreadColor: color => dispatch(setUnreadColor(color)),
+		removeAll: () => dispatch(removeAll()),
 	};
 };
 

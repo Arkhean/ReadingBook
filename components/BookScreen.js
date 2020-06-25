@@ -10,28 +10,27 @@ import React, { Component } from 'react';
 import { Text, View, BackHandler, Alert } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/stack';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import StorageManager from '../storage/StorageManager';
 import VisualBook from './VisualBook';
 import Add from './Add';
 import GlobalStyles from './styles';
-import { defaultBook } from './book';
+import { defaultBook, getKey } from './book';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
+import { connect } from "react-redux";
+import { addBook, removeBook, editBook } from '../storage/bookActions';
 
 
 /* requiert 2 params : book et visualMode : true/false */
-export default class BookScreen extends Component {
+class BookScreen extends Component {
     constructor(props){
         super(props);
         this.state = {  book: Object.assign({}, defaultBook), // copy de defaultBook
                         visualMode: true,           // pour afficher un livre
                         modificationMode: false };  // quand on modifie (!= créer)
-        this.listOfKeys = [];
         this.modified = false;
         this.backup = null; // en cas de modifications annulées
 
         this.props.navigation.addListener('focus', () => {
             BackHandler.addEventListener("hardwareBackPress", this.myGoBack);
-            this.loadKeys();
             if ('fromCamera' in this.props.route.params){
                 if (this.props.route.params.fromCamera){
                     this.modified = true;
@@ -70,30 +69,31 @@ export default class BookScreen extends Component {
         });
     }
 
-    async loadKeys(){
-        this.listOfKeys = await StorageManager.loadKeys();
-    }
-
     save = (callback) => {
         const book = this.state.book;
-        let newK = book.title+book.author;
+        let newK = getKey(book);
         // la clé d'un livre correspond à la concaténation de son titre et de
         // son auteur (couple unique)
         if (book.title !== "" && book.author !== ""){
             if (!this.state.modificationMode){
                 // on ajoute un nouveau
                 // donc il faut vérifier qu'il n'existe pas déjà
-                for(let k of this.listOfKeys){
+                for(let b of this.props.books){
+                    const k = getKey(b);
                     if (k == newK){
                         Alert.alert('Erreur', book.title+' de '+book.author+' est déjà dans la bibliothèque !');
                         return;
                     }
                 }
-            }
-            StorageManager.store(newK, book).then(() => {
+                this.props.addBook(book);
                 this.modified = false;
                 callback();
-            });
+            }
+            else{
+                this.props.editBook(book);
+                this.modified = false;
+                callback();
+            }
             this.props.navigation.setOptions({ title: 'Détails du livre' });
         }
         else{
@@ -111,8 +111,8 @@ export default class BookScreen extends Component {
     delete = () => {
         Alert.alert('Supprimer ce livre?', this.state.book.title,
                 [{text: 'Supprimer', onPress: () => {
-                    StorageManager.remove(this.state.book.title+this.state.book.author)
-                                .then(() => this.myGoBack());
+                    this.props.removeBook(getKey(this.state.book));
+                    this.myGoBack();
                 }},
                     {text: 'Annuler', onPress: () => {}}]
         );
@@ -205,3 +205,17 @@ export default class BookScreen extends Component {
         }
     }
 }
+
+const mapStateToProps = state => ({
+	books: state.books,
+});
+
+const mapDispatchToProps = dispatch => {
+	return {
+        addBook: book => dispatch(addBook(book)),
+        editBook: book => dispatch(editBook(book)),
+		removeBook: key => dispatch(removeBook(key))
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookScreen);
