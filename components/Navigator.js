@@ -8,6 +8,7 @@ import Lib from './Lib';
 import GlobalStyles from './styles';
 import BarCodeScan from './BarCodeScan';
 import StackToRead from './StackToRead';
+import Stats from './Statistics';
 import Params from './Parameters';
 import { connect } from "react-redux";
 
@@ -56,6 +57,10 @@ class Navigator extends Component {
                     <Stack.Screen
                         name="params"
                         component={Params}
+                        options={options}/>
+                    <Stack.Screen
+                        name="stats"
+                        component={Stats}
                         options={options}/>
                 </Stack.Navigator>
             </NavigationContainer>

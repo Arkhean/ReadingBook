@@ -68,6 +68,11 @@ class Home extends Component {
                         text={'Pile à Lire'} />
                     <HomeButton
                         delay={900}
+                        onPress={() => this.props.navigation.navigate('stats')}
+                        icon={require('./icons/stats.png')}
+                        text={'Statistiques'} />
+                    <HomeButton
+                        delay={1100}
                         onPress={() => this.props.navigation.navigate('Scan')}
                         icon={require('./icons/add_camera.png')}
                         text={'Scanner ISBN'} />
