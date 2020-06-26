@@ -11,6 +11,7 @@ import { Picker } from '@react-native-community/picker';
 import { Divider } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import GlobalStyles from './styles';
+import { genres, formats } from './book';
 
 /* textinput custom avec un titre au dessus */
 class MyTextInput extends Component {
@@ -261,11 +262,6 @@ export default class Add extends Component {
     }
 
     render() {
-        const genres = ['<non renseigné>', 'Aventure', 'Policier', 'Science-Fiction',
-                    'Fantastique', 'Horreur', 'Biographie', 'Nouvelle', 'Conte',
-                    'Fantasy', 'Romance', 'Comtemporain', 'Classique', 'Théâtre',
-                    'Poésie'];
-        const formats = ['<non renseigné>', 'Poche', 'Semi-Poche', 'Grand Format'];
         return (
             <ScrollView >
                 <View style={{flexDirection: 'row'}}>

@@ -8,9 +8,9 @@ import React, { Component } from 'react';
 import GlobalStyles from './styles';
 import { ScrollView, TouchableOpacity } from 'react-native';
 
-const colors = ['cyan', 'turquoise', 'blue', 'darkblue', 'lime', 'green',
+export const colors = ['cyan', 'turquoise', 'blue', 'darkblue', 'lime', 'green',
                 'brown', 'red', 'orange', 'gold', 'yellow', 'indigo', 'purple',
-                 'magenta', 'fuchsia', 'pink'];
+                 'magenta', 'pink'];
 
 export default class ColorPicker extends Component {
     constructor(props){

@@ -16,12 +16,6 @@ import { connect } from "react-redux";
 class Home extends Component {
     constructor(props){
         super(props);
-        this.state = { };
-
-        /*this.props.navigation.addListener('focus', () => {
-            // on importe la liste des clés pour avoir le nombre de livres
-            this.loadKeys();
-        });*/
 
         this.props.navigation.setOptions({
             // le menu permet de vider la bibliothèque

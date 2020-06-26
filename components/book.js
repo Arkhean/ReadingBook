@@ -43,6 +43,12 @@ const isRead = (book) => {
     return book.readingDates.length > 0;
 }
 
+export const genres = ['<non renseigné>', 'Aventure', 'Policier', 'Science-Fiction',
+            'Fantastique', 'Horreur', 'Biographie', 'Nouvelle', 'Conte',
+            'Fantasy', 'Romance', 'Comtemporain', 'Classique', 'Théâtre',
+            'Poésie'];
+export const formats = ['<non renseigné>', 'Poche', 'Semi-Poche', 'Grand Format'];
+
 // affichage pour liste, cliquable pour plus de détails
 class BookRow extends Component {
     constructor(props){
