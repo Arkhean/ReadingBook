@@ -221,16 +221,12 @@ class MyImageInput extends Component {
         this.state = { image: this.props.value === '' ? null : this.props.value };
     }
 
-    onPress = () => ImagePicker.showImagePicker((response) => {
-        // TODO mettre les options en français !
-        if (response.didCancel) {
-            console.log('User cancelled image picker');
-        }
-        else if (response.error) {
+    onPress = () => ImagePicker.showImagePicker({title: 'importer une photo',
+            takePhotoButtonTitle: 'depuis l\'appareil photo',
+            chooseFromLibraryButtonTitle: 'depuis le stockage',
+            cancelButtonTitle: 'annuler' }, (response) => {
+        if (response.error) {
             console.log('ImagePicker Error: ', response.error);
-        }
-        else if (response.customButton) {
-            console.log('User tapped custom button: ', response.customButton);
         }
         else {
             const source = response.uri;

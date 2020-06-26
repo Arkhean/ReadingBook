@@ -47,7 +47,7 @@ export const genres = ['<non renseigné>', 'Aventure', 'Policier', 'Science-Fict
             'Fantastique', 'Horreur', 'Biographie', 'Nouvelle', 'Conte',
             'Fantasy', 'Romance', 'Comtemporain', 'Classique', 'Théâtre',
             'Poésie'];
-export const formats = ['<non renseigné>', 'Poche', 'Semi-Poche', 'Grand Format'];
+export const formats = ['<non renseigné>', 'Poche', 'Semi-Poche', 'Grand Format', 'Manga', 'Bande dessinée'];
 
 // affichage pour liste, cliquable pour plus de détails
 class BookRow extends Component {
