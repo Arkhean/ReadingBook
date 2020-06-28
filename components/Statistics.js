@@ -62,8 +62,10 @@ class Stats extends Component {
                         loaded: false };
 
         this.props.navigation.addListener('focus', () => {
-            this.setState({loaded: false});
-            this.generateData();
+            this.setState({loaded: false}, () => {
+                let data = this.generateData();
+                this.setState(data);
+            })
         });
 
         this.props.navigation.setOptions({
@@ -71,7 +73,7 @@ class Stats extends Component {
         });
     }
 
-    generateData = async () => {
+    generateData = () => {
         const N = 24;
         const lastMonths = getLastMonth(N);
         let bought = new Array(N).fill(0);
@@ -90,7 +92,7 @@ class Stats extends Component {
                 if (lastMonths[i].month == p.getMonth()
                     && lastMonths[i].year == p.getFullYear()){
                     bought[i] += 1;
-                    expense[i] += book.price;
+                    expense[i] += parseFloat(book.price);
                 }
             }
             /* récupération des livres lus */
@@ -111,10 +113,10 @@ class Stats extends Component {
             /* comptage des genres */
             genreCount[genres.indexOf(book.genre)].n += 1;
         }
-
-        const labels = lastMonths.map(item => displayDate(item))
-        this.setState({ labels: labels, bought: bought, read: read,
-                    expense: expense, loaded: true, genreCount: genreCount });
+        const labels = lastMonths.map(item => displayDate(item));
+        return { labels: labels, bought: bought, read: read,
+                    expense: expense.map(e => e.toFixed(2)), genreCount: genreCount,
+                loaded: true };
     }
 
 
@@ -128,92 +130,76 @@ class Stats extends Component {
           useShadowColorFromDataset: false // optional
         };
 
+        if (!this.state.loaded){
+            return (
+                <View style={{flex: 1}}>
+                    <ActivityIndicator
+                        size={50}
+                        color={this.props.colors.secondaryColor}
+                        animating={true}
+                        style={{flex: 1, alignSelf: 'center'}}/>
+                </View>
+            );
+        }
+        /* else */
         return (
             <ScrollView style={styles.view}>
                 <Text style={styles.title}>{'Nombre de Livres achetés par mois'}</Text>
-                {this.state.loaded ?
-                    <ScrollView horizontal={true}>
-                        <LineChart
-                            data={{
-                                labels: this.state.labels,
-                                datasets: [ {
-                                        data: this.state.bought,
-                                        color: (opacity = 1) => this.props.colors.mainColor,
-                                    } ],
-                            }}
-                            width={3*screenWidth}
-                            height={220}
-                            chartConfig={chartConfig} />
-                    </ScrollView>
-                    : <ActivityIndicator
-                        size={50}
-                        color={this.props.colors.secondaryColor}
-                        animating={true}
-                        style={{flex: 1, alignSelf: 'center'}}/>
-                }
+                <ScrollView horizontal={true}>
+                    <LineChart
+                        data={{
+                            labels: this.state.labels,
+                            datasets: [ {
+                                    data: this.state.bought,
+                                    color: (opacity = 1) => this.props.colors.mainColor,
+                                } ],
+                        }}
+                        width={3*screenWidth}
+                        height={220}
+                        chartConfig={chartConfig} />
+                </ScrollView>
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.title}>{'Argent dépensé par mois'}</Text>
-                {this.state.loaded ?
-                    <ScrollView horizontal={true}>
-                        <LineChart
-                            data={{
-                                labels: this.state.labels,
-                                datasets: [ {
-                                        data: this.state.expense,
-                                        color: (opacity = 1) => this.props.colors.mainColor,
-                                    } ],
-                            }}
-                            width={3*screenWidth}
-                            height={220}
-                            chartConfig={chartConfig} />
-                    </ScrollView>
-                    : <ActivityIndicator
-                        size={50}
-                        color={this.props.colors.secondaryColor}
-                        animating={true}
-                        style={{flex: 1, alignSelf: 'center'}}/>
-                }
+                <ScrollView horizontal={true}>
+                    <LineChart
+                        data={{
+                            labels: this.state.labels,
+                            datasets: [ {
+                                    data: this.state.expense,
+                                    color: (opacity = 1) => this.props.colors.mainColor,
+                                } ],
+                        }}
+                        width={3*screenWidth}
+                        height={220}
+                        chartConfig={chartConfig} />
+                </ScrollView>
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.title}>{'Nombre de Livres lus par mois'}</Text>
-                {this.state.loaded ?
-                    <ScrollView horizontal={true}>
-                        <LineChart
-                            data={{
-                                labels: this.state.labels,
-                                datasets: [ {
-                                        data: this.state.read,
-                                        color: (opacity = 1) => this.props.colors.mainColor,
-                                    } ],
-                            }}
-                            width={3*screenWidth}
-                            height={200}
-                            chartConfig={chartConfig} />
-                    </ScrollView>
-                    : <ActivityIndicator
-                        size={50}
-                        color={this.props.colors.secondaryColor}
-                        animating={true}
-                        style={{flex: 1, alignSelf: 'center'}}/>
-                }
+                <ScrollView horizontal={true}>
+                    <LineChart
+                        data={{
+                            labels: this.state.labels,
+                            datasets: [ {
+                                    data: this.state.read,
+                                    color: (opacity = 1) => this.props.colors.mainColor,
+                                } ],
+                        }}
+                        width={3*screenWidth}
+                        height={200}
+                        chartConfig={chartConfig} />
+                </ScrollView>
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.title}>{'Nombre de Livres par genre'}</Text>
-                {this.state.loaded ?
-                    <PieChart
-                        data={this.state.genreCount}
-                        width={screenWidth}
-                        height={250}
-                        chartConfig={chartConfig}
-                        accessor="n"
-                        backgroundColor="transparent"
-                        paddingLeft="15"
-                        absolute
-                    />
-                    : <ActivityIndicator
-                        size={50}
-                        color={this.props.colors.secondaryColor}
-                        animating={true}
-                        style={{flex: 1, alignSelf: 'center'}}/>
-                }
+                <PieChart
+                    data={this.state.genreCount}
+                    width={screenWidth}
+                    height={250}
+                    chartConfig={chartConfig}
+                    accessor="n"
+                    backgroundColor="transparent"
+                    paddingLeft="15"
+                    absolute
+                />
             </ScrollView>
         );
     }
