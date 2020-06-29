@@ -66,8 +66,8 @@ class BookRow extends Component {
                                                              : this.props.colors.unreadColor,
                 }}
                 animation={this.props.animation}
-                delay={100}
-                duration={1500}>
+                delay={10}
+                duration={1000}>
                 <TouchableOpacity
                     style={styles.view}
                     activeOpacity={0.5}

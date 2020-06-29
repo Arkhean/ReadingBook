@@ -9,6 +9,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, ScrollView, TextInput, BackHandler } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
+import { HeaderBackButton } from '@react-navigation/stack';
 import BookRow, { getKey } from './book';
 import GlobalStyles from './styles';
 import { createAnimatableComponent, View } from 'react-native-animatable';
@@ -43,6 +44,10 @@ class Lib extends Component {
                         icon={require('./icons/search.png')}/>
                 </View>
             ),
+            headerLeft: () =>
+                <HeaderBackButton
+                    onPress={this.myGoBack}
+                    tintColor={'white'}/>
         });
 
         this.props.navigation.addListener('focus', () => {
@@ -85,13 +90,15 @@ class Lib extends Component {
     myGoBack = () => {
         if (this.state.removeMode){
             this.deactivateRemoveMode();
-            this.setState({removeMode: false});
+            this.setState({removeMode: false, checkBoxes: this.state.booksToShow.map(() => false)});
+            return true;
         }
         else if (this.state.showFilter){
             this.deactivateShowFilter();
             this.setState({showFilter: false});
+            return true;
         }
-        return true;
+        this.props.navigation.goBack();
     }
 
 

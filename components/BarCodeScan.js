@@ -137,7 +137,7 @@ export default class BarcodeScan extends Component {
                 <RNCamera
                     style={styles.preview}
                     flashMode={this.state.torchOn ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
-                    onBarCodeRead={this.onBarCodeRead}
+                    onBarCodeRead={!this.state.loading ? this.onBarCodeRead : () => {}}
                     ref={cam => this.RNCamera = cam}
                     captureAudio={false}>
                     <ActivityIndicator
