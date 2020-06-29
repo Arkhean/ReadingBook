@@ -8,8 +8,6 @@ export const ADD_BOOK = 'ADD_BOOK';
 export const EDIT_BOOK = 'EDIT_BOOK';
 export const REMOVE_BOOK = 'REMOVE_BOOK';
 export const REMOVE_BOOKS = 'REMOVE_BOOKS'; // pour en supprimer plusieurs d'un coup
-//export const GET_LENGTH = 'GET_LENGTH'; // nombre de livres total
-//export const EXISTS = 'EXISTS';  // existence d'un livre, à vérifier avant ajout
 export const REMOVE_ALL = 'REMOVE_ALL';
 
 

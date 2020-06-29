@@ -5,20 +5,19 @@
  * ou encore l'affichage simplifié "en ligne d'une liste".
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { View, Text } from 'react-native-animatable';
+import CheckBox from '@react-native-community/checkbox';
 import GlobalStyles from './styles';
 import { connect } from "react-redux";
 
 // permet d'obtenir l'image pour un libre en prenant celle par défaut ou par url
 export const getImage = (book) => {
-    if (!('imageUri' in book) || book.imageUri === ''){
+    if (book.imageUri === ''){
         return require('./icons/book.png');
     }
-    else{
-        return { uri: book.imageUri };
-    }
+    return { uri: book.imageUri };
 }
 
 export const getKey = (book) => {
@@ -50,12 +49,14 @@ export const genres = ['<non renseigné>', 'Aventure', 'Policier', 'Science-Fict
 export const formats = ['<non renseigné>', 'Poche', 'Semi-Poche', 'Grand Format', 'Manga', 'Bande dessinée'];
 
 // affichage pour liste, cliquable pour plus de détails
-class BookRow extends Component {
+class BookRow extends PureComponent {
     constructor(props){
         super(props);
+        console.log("create"+this.props.book.title);
     }
 
     render(){
+        console.log('render'+this.props.book.title);
         return (
             <View
                 style={{
@@ -71,7 +72,8 @@ class BookRow extends Component {
                 <TouchableOpacity
                     style={styles.view}
                     activeOpacity={0.5}
-                    onPress={this.props.onClick}>
+                    onPress={() => this.props.onClick(this.props.index)}
+                    onLongPress={() => this.props.onLongClick(this.props.index)}>
                     <Image source={getImage(this.props.book)}
                            style={GlobalStyles.ImageStyle}
                     />
@@ -85,6 +87,29 @@ class BookRow extends Component {
                         <Text style={styles.author}>{this.props.book.author}</Text>
                     </View>
                 </TouchableOpacity>
+            </View>
+        );
+    }
+}
+
+class BookSelector extends PureComponent {
+    render() {
+        return (
+            <View style={styles.view}>
+                {this.props.removeMode &&
+                <CheckBox
+                    style={styles.checkbox}
+                    value={this.props.checkBox}
+                    onValueChange={() => this.props.onCheckBoxChange(this.props.index)}/>
+                }
+                <BookRow
+                    index={this.props.index}
+                    colors={this.props.colors}
+                    style={GlobalStyles.bookStyle}
+                    animation={this.props.animation}
+                    book={this.props.book}
+                    onLongClick={this.props.onLongClick}
+                    onClick={this.props.onClick}/>
             </View>
         );
     }
@@ -112,7 +137,11 @@ const styles = StyleSheet.create({
     },
     inner: {
         flex: 1
-    }
+    },
+    checkbox: {
+        alignSelf: 'center',
+        margin: 5,
+    },
 });
 
 const mapStateToProps = state => ({
@@ -120,3 +149,6 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(BookRow);
+
+const ConnectedBookSelector = connect(mapStateToProps)(BookSelector);
+export { ConnectedBookSelector as BookSelector };

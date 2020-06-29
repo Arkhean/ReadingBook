@@ -7,28 +7,40 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, TextInput, BackHandler } from 'react-native';
+import { StyleSheet, ScrollView, TextInput, BackHandler, FlatList } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { HeaderBackButton } from '@react-navigation/stack';
-import BookRow, { getKey } from './book';
+import BookRow, { getKey, defaultBook, BookSelector } from './book';
 import GlobalStyles from './styles';
 import { createAnimatableComponent, View } from 'react-native-animatable';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { connect } from "react-redux";
-import { removeBooks } from '../storage/bookActions';
+import { removeBooks, addBook } from '../storage/bookActions';
 
-const AnimatableScroll = createAnimatableComponent(ScrollView);
+//const AnimatableScroll = createAnimatableComponent(ScrollView);
+
+const noAnimation = { from:{}, to:{} };
+const rTranslation = { from: { marginLeft: -30 },
+                      to: { marginLeft: 0 } };
+const lTranslation = { from: { marginLeft: 30 },
+                      to: { marginLeft: 5 } };
+const scrollDownAnimation = { from: { marginTop: -30 },
+                              to: { marginTop: 0 }
+};
+const scrollUpAnimation = { from: { marginTop: 30 },
+                            to: { marginTop: 0 }
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
 class Lib extends Component {
     constructor(props){
         super(props);
-        this.state = {  booksToShow: this.props.books,
+        this.state = {  booksToShow: [],
                         filter: '',
                         showFilter: false,
                         removeMode: false,
-                        checkBoxes: this.props.books.map(() => false) };
+                        checkBoxes: [] };
         // on retient la valeur de ces bouléens pour gérer les animations
         this.showFilterWasTrue = false;
         this.removeModeWasTrue = false;
@@ -51,8 +63,20 @@ class Lib extends Component {
         });
 
         this.props.navigation.addListener('focus', () => {
+            console.log('focus');
             this.applyFilter(); // force render ...
         });
+
+        /* Test section */
+        /*for(let i = 0; i < 200; i++){
+            let book = Object.assign({}, defaultBook);
+            book.title = 'Coucou '+i;
+            book.author = 'julien';
+            book.saga = 'Les tests';
+            book.tome = 1;
+            this.props.addBook(book);
+        }
+        /* End */
     }
 
     /* réduit la liste à afficher aux éléments correspond au filtre entré */
@@ -75,14 +99,17 @@ class Lib extends Component {
                 }
             }
         }
+        console.log('up');
         this.setState({booksToShow: booksToShow, checkBoxes: booksToShow.map(() => false)});
     }
 
     // les checkbox servent à savoir qui est à supprimer
     onCheckBoxChange = (i) => {
-        let checkBoxes = this.state.checkBoxes;
-        checkBoxes[i] = !checkBoxes[i];
-        this.setState({checkBoxes});
+        if (this.state.removeMode){
+            let checkBoxes = this.state.checkBoxes;
+            checkBoxes[i] = !checkBoxes[i];
+            this.setState({checkBoxes});
+        }
     }
 
     // on gère soit même le retour arrière dans les cas où l'onglet de recherche
@@ -165,12 +192,18 @@ class Lib extends Component {
         }
         // il est plus efficace d'envoyer la liste des éléments à supprimer
         // plutôt qu'un par un
-        this.props.removeBooks(toRemove);
-        // actualiser la base de données locales...
-        // il faudrait remettre à jour booksToShow après la fin du remove
-        // mais on ne peut pas faire .then() ici...
-        const newBooks = this.state.booksToShow.filter(book => !toRemove.includes(getKey(book)));
-        this.setState({booksToShow: newBooks, checkBoxes: newBooks.map(() => false), removeMode: false});
+        if (toRemove.length > 0){
+            this.props.removeBooks(toRemove);
+            // actualiser la base de données locales...
+            // il faudrait remettre à jour booksToShow après la fin du remove
+            // mais on ne peut pas faire .then() ici...
+            const newBooks = this.state.booksToShow.filter(book => !toRemove.includes(getKey(book)));
+            this.setState({booksToShow: newBooks, checkBoxes: newBooks.map(() => false), removeMode: false});
+        }
+        else{
+            this.setState({checkBoxes: this.state.booksToShow.map(() => false), removeMode: false});
+        }
+
     }
 
     deactivateRemoveMode = () => {
@@ -194,21 +227,59 @@ class Lib extends Component {
         return true;
     }
 
+    handleLongItemClick = (index) => {
+        if (!this.state.removeMode){
+            this.activateRemoveMode();
+            this.onCheckBoxChange(index);
+        }
+    }
+
+    handleItemClick = (index) => {
+        if (this.state.removeMode){
+            this.onCheckBoxChange(index);
+        }
+        else{
+            this.props.navigation.navigate('BookScreen', {book: this.booksToShow[index], visualMode: true});
+        }
+    }
+
+    renderItem = (bookAnim, item, index) => {
+        console.log('render item');
+        /*return (
+            <View
+                key={index}
+                style={styles.view}>
+                {this.state.removeMode &&
+                <CheckBox
+                    style={styles.checkbox}
+                    value={this.state.checkBoxes[index]}
+                    onValueChange={() => this.onCheckBoxChange(index)}/>
+                }
+                <BookRow
+                    style={GlobalStyles.bookStyle}
+                    animation={bookAnim}
+                    book={item}
+                    index={index}
+                    onLongClick={this.handleLongItemClick}
+                    onClick={this.handleItemClick}/>
+            </View>
+        );*/
+        return (
+            <BookSelector
+                index={index}
+                removeMode={this.state.removeMode}
+                checkBox={this.state.checkBoxes[index]}
+                onCheckBoxChange={this.onCheckBoxChange}
+                animation={bookAnim}
+                book={item}
+                onLongClick={this.handleLongItemClick}
+                onClick={this.handleItemClick} />
+        );
+    }
+
     /* render */
     render() {
         /* Etape 1 : choisir les bonnes animations */
-        const noAnimation = { from:{}, to:{} };
-        const rTranslation = { from: { marginLeft: -30 },
-                              to: { marginLeft: 0 } };
-        const lTranslation = { from: { marginLeft: 30 },
-                              to: { marginLeft: 5 } };
-        const scrollDownAnimation = { from: { marginTop: -30 },
-                                      to: { marginTop: 0 }
-        };
-        const scrollUpAnimation = { from: { marginTop: 30 },
-                                    to: { marginTop: 0 }
-        };
-
         let scrollAnim = noAnimation;
         let bookAnim = noAnimation;
         if (this.state.removeMode){
@@ -235,6 +306,7 @@ class Lib extends Component {
         }
 
         /* maintenant on peut render */
+        console.log('render lib');
         return (
             <View
                 animation={scrollAnim}
@@ -251,26 +323,11 @@ class Lib extends Component {
                         value={this.state.filter}
                         onChangeText={text => this.setState({filter: text}, () => this.applyFilter())}/>
                 }
-                <AnimatableScroll>
-                    {this.state.booksToShow.map((book,i) =>
-                        <View
-                            key={i}
-                            style={styles.view}>
-                            {this.state.removeMode &&
-                            <CheckBox
-                                style={styles.checkbox}
-                                value={this.state.checkBoxes[i]}
-                                onValueChange={() => this.onCheckBoxChange(i)}/>
-                            }
-                            <BookRow
-                                style={GlobalStyles.bookStyle}
-                                animation={bookAnim}
-                                book={book}
-                                onClick={this.state.removeMode ? () => this.onCheckBoxChange(i)
-                                                               : () => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>
-                        </View>)
-                    }
-                </AnimatableScroll>
+                <FlatList
+                    windowSize={4}
+                    data={this.state.booksToShow}
+                    renderItem={({item, index}) => this.renderItem(bookAnim, item, index)}
+                    keyExtractor={getKey} />
             </View>
         );
     }
@@ -292,6 +349,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
 	return {
+        addBook: book => dispatch(addBook(book)),
         removeBooks: keys => dispatch(removeBooks(keys)),
 	};
 };
