@@ -6,8 +6,8 @@
  */
 
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
-import BookRow from './book';
+import { Text, View, StyleSheet, ScrollView, FlatList } from 'react-native';
+import BookRow, { getKey } from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
@@ -21,7 +21,12 @@ class Month extends Component {
         super(props);
         let now = new Date(Date.now());
         this.state = {
-            ...this.selectBooksToShow(now.getMonth(), now.getFullYear()),
+            nbBought: 0,
+            nbRead: 0,
+            total: 0,
+            booksToShow: [],
+            month: now.getMonth(),
+            year: now.getFullYear(),
             showPicker: false,
         };
 
@@ -110,6 +115,22 @@ class Month extends Component {
                             booksToShow: booksToShow, month: month, year: year};
     }
 
+    handleItemClick = (index) => {
+        this.props.navigation.navigate('BookScreen', {book: this.state.booksToShow[index], visualMode: true});
+    }
+
+    renderItem = ({item, index}) => {
+        return (
+            <BookRow
+                style={GlobalStyles.bookStyle}
+                animation={'bounceIn'}
+                index={index}
+                book={item}
+                onClick={this.handleItemClick}
+                onLongClick={this.handleItemClick}/>
+        );
+    }
+
     render() {
         return (
             <View style={styles.view}>
@@ -119,16 +140,11 @@ class Month extends Component {
                 <Text style={styles.text}> {this.state.nbRead+ ' livres lus'} </Text>
                 <Text style={styles.text}> {this.state.total+ ' € dépensés'} </Text>
                 <Divider style={GlobalStyles.divider}/>
-                <ScrollView>
-                    {this.state.booksToShow.length != 0
-                        && this.state.booksToShow.map((book, i) =>
-                            <BookRow
-                                style={GlobalStyles.bookStyle}
-                                animation={'bounceIn'}
-                                key={i}
-                                book={book}
-                                onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>)}
-                </ScrollView>
+                <FlatList
+                    windowSize={8}
+                    data={this.state.booksToShow}
+                    renderItem={this.renderItem}
+                    keyExtractor={getKey} />
             </View>
         );
     }

@@ -154,7 +154,6 @@ class BookScreen extends Component {
             }
             else{
                 // si on a rien touché, on peut quitter
-                console.log('remove');
                 BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
                 this.props.navigation.goBack();
             }

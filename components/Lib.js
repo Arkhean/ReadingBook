@@ -239,41 +239,26 @@ class Lib extends Component {
             this.onCheckBoxChange(index);
         }
         else{
-            this.props.navigation.navigate('BookScreen', {book: this.booksToShow[index], visualMode: true});
+            this.props.navigation.navigate('BookScreen', {book: this.state.booksToShow[index], visualMode: true});
         }
     }
 
     renderItem = (bookAnim, item, index) => {
         console.log('render item');
-        /*return (
-            <View
-                key={index}
-                style={styles.view}>
-                {this.state.removeMode &&
-                <CheckBox
-                    style={styles.checkbox}
-                    value={this.state.checkBoxes[index]}
-                    onValueChange={() => this.onCheckBoxChange(index)}/>
-                }
-                <BookRow
-                    style={GlobalStyles.bookStyle}
-                    animation={bookAnim}
-                    book={item}
-                    index={index}
-                    onLongClick={this.handleLongItemClick}
-                    onClick={this.handleItemClick}/>
-            </View>
-        );*/
         return (
-            <BookSelector
-                index={index}
-                removeMode={this.state.removeMode}
-                checkBox={this.state.checkBoxes[index]}
-                onCheckBoxChange={this.onCheckBoxChange}
+            <View
                 animation={bookAnim}
-                book={item}
-                onLongClick={this.handleLongItemClick}
-                onClick={this.handleItemClick} />
+                delay={10}
+                duration={1000}>
+                <BookSelector
+                    index={index}
+                    removeMode={this.state.removeMode}
+                    checkBox={this.state.checkBoxes[index]}
+                    onCheckBoxChange={this.onCheckBoxChange}
+                    book={item}
+                    onLongClick={this.handleLongItemClick}
+                    onClick={this.handleItemClick} />
+            </View>
         );
     }
 
@@ -324,7 +309,7 @@ class Lib extends Component {
                         onChangeText={text => this.setState({filter: text}, () => this.applyFilter())}/>
                 }
                 <FlatList
-                    windowSize={4}
+                    windowSize={7}
                     data={this.state.booksToShow}
                     renderItem={({item, index}) => this.renderItem(bookAnim, item, index)}
                     keyExtractor={getKey} />

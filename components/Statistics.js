@@ -59,17 +59,19 @@ class Stats extends Component {
                         read: [],
                         expense: [],
                         genreCount: [],
-                        loaded: false };
-
-        this.props.navigation.addListener('focus', () => {
-            this.setState({loaded: false}, () => {
-                let data = this.generateData();
-                this.setState(data);
-            })
-        });
+                        initialized: false };
 
         this.props.navigation.setOptions({
             title: 'Statistiques sur 24 mois',
+        });
+    }
+
+    componentDidMount = () => {
+        this.props.navigation.addListener('focus', () => {
+            this.setState({initialized: false}, () => {
+                let data = this.generateData();
+                this.setState(data);
+            })
         });
     }
 
@@ -115,10 +117,9 @@ class Stats extends Component {
         }
         const labels = lastMonths.map(item => displayDate(item));
         return { labels: labels, bought: bought, read: read,
-                    expense: expense.map(e => e.toFixed(2)), genreCount: genreCount,
-                loaded: true };
+                    expense: expense.map(e => parseFloat(e.toFixed(2))), genreCount: genreCount,
+                initialized: true };
     }
-
 
     render() {
         const chartConfig = {
@@ -130,15 +131,13 @@ class Stats extends Component {
           useShadowColorFromDataset: false // optional
         };
 
-        if (!this.state.loaded){
+        if (!this.state.initialized){
             return (
-                <View style={{flex: 1}}>
-                    <ActivityIndicator
-                        size={50}
-                        color={this.props.colors.secondaryColor}
-                        animating={true}
-                        style={{flex: 1, alignSelf: 'center'}}/>
-                </View>
+                <ActivityIndicator
+                    size={50}
+                    color={this.props.colors.secondaryColor}
+                    animating={true}
+                    style={{flex: 1, alignSelf: 'center'}}/>
             );
         }
         /* else */

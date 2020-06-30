@@ -5,8 +5,8 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
-import Book from './book';
+import { StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import BookRow, { getKey } from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
 import { connect } from "react-redux";
@@ -16,16 +16,21 @@ class StackToRead extends Component {
         super(props);
         this.state = { booksToShow: [] };
 
-        this.props.navigation.addListener('focus', () => {
-            this.setState({booksToShow: this.selectBooksToShow()});
-        });
-
         this.props.navigation.setOptions({
             title: 'Pile à lire',
         });
     }
 
-    selectBooksToShow(){
+    componentDidMount = () => {
+        let booksToShow = this.selectBooksToShow();
+        this.setState({booksToShow: booksToShow});
+        this.props.navigation.addListener('focus', () => {
+            let booksToShow = this.selectBooksToShow();
+            this.setState({booksToShow: booksToShow});
+        });
+    }
+
+    selectBooksToShow = () => {
         let books = this.props.books;
         let booksToShow = [];
         for(let book of books){
@@ -36,24 +41,36 @@ class StackToRead extends Component {
         return booksToShow;
     }
 
+    handleItemClick = (index) => {
+        this.props.navigation.navigate('BookScreen', {book: this.state.booksToShow[index], visualMode: true});
+    }
+
+    renderItem = ({item, index}) => {
+        return (
+            <BookRow
+                style={GlobalStyles.bookStyle}
+                animation={'bounceIn'}
+                index={index}
+                book={item}
+                onClick={this.handleItemClick}
+                onLongClick={this.handleItemClick}/>
+        );
+    }
+
     render() {
         return (
-            <ScrollView>
-                {this.state.booksToShow.map((book,i) =>
-                    <Book
-                        key={i}
-                        style={GlobalStyles.bookStyle}
-                        animation={'bounceIn'}
-                        book={book}
-                        onClick={() => this.props.navigation.navigate('BookScreen', {book: book, visualMode: true})}/>)
-                }
-            </ScrollView>
+            <FlatList
+                windowSize={10}
+                data={this.state.booksToShow}
+                renderItem={this.renderItem}
+                keyExtractor={getKey} />
         );
     }
 }
 
 const mapStateToProps = state => ({
 	books: state.books,
+    colors: state.colors
 });
 
 export default connect(mapStateToProps)(StackToRead);

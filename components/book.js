@@ -5,7 +5,7 @@
  * ou encore l'affichage simplifié "en ligne d'une liste".
  */
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Component } from 'react';
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { View, Text } from 'react-native-animatable';
 import CheckBox from '@react-native-community/checkbox';
@@ -94,8 +94,10 @@ class BookRow extends PureComponent {
 
 class BookSelector extends PureComponent {
     render() {
+        console.log('selector');
         return (
-            <View style={styles.view}>
+            <View
+                style={styles.view}>
                 {this.props.removeMode &&
                 <CheckBox
                     style={styles.checkbox}
@@ -106,7 +108,6 @@ class BookSelector extends PureComponent {
                     index={this.props.index}
                     colors={this.props.colors}
                     style={GlobalStyles.bookStyle}
-                    animation={this.props.animation}
                     book={this.props.book}
                     onLongClick={this.props.onLongClick}
                     onClick={this.props.onClick}/>
