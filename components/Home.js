@@ -7,6 +7,7 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import Orientation from 'react-native-orientation-locker';
 import GlobalStyles from './styles';
 import { View, Text } from 'react-native-animatable';
 import { ConnectedHomeButton as HomeButton, ConnectedHeaderButton as HeaderButton } from './Buttons';
@@ -25,6 +26,10 @@ class Home extends Component {
                     icon={require('./icons/settings.png')}/>
             ),
         });
+    }
+
+    componentDidMount() {
+        Orientation.lockToPortrait(); //this will lock the view to Portrait
     }
 
     render() {

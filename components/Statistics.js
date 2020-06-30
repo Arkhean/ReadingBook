@@ -9,6 +9,7 @@ import { StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import GlobalStyles from './styles';
 import { View, Text } from 'react-native-animatable';
 import { Divider } from 'react-native-elements';
+import { Picker } from '@react-native-community/picker';
 import { ConnectedHomeButton as HomeButton, ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { genres } from './book';
 import { colors } from './ColorPicker';
@@ -50,6 +51,11 @@ const displayDate = (date) => {
     month += 1;
     return (month < 10 ? '0'+month : month) + '/' + year.toString().slice(-2);
 }
+
+const titles = ['Nombre de Livres achetés par mois',
+                'Argent dépensé par mois',
+                'Nombre de Livres lus par mois',
+                'Nombre de Livres par genre' ];
 
 class Stats extends Component {
     constructor(props){
@@ -116,9 +122,14 @@ class Stats extends Component {
             genreCount[genres.indexOf(book.genre)].n += 1;
         }
         const labels = lastMonths.map(item => displayDate(item));
-        return { labels: labels, bought: bought, read: read,
-                    expense: expense.map(e => parseFloat(e.toFixed(2))), genreCount: genreCount,
+        return { labels: labels,
+                data: [bought, expense.map(e => parseFloat(e.toFixed(2))), read, genreCount],
+                cursor: 0,
                 initialized: true };
+    }
+
+    onChange = (index) => {
+        this.setState({cursor: index});
     }
 
     render() {
@@ -142,72 +153,45 @@ class Stats extends Component {
         }
         /* else */
         return (
-            <ScrollView style={styles.view}>
-                <Text style={styles.title}>{'Nombre de Livres achetés par mois'}</Text>
-                <ScrollView horizontal={true}>
-                    <LineChart
-                        data={{
-                            labels: this.state.labels,
-                            datasets: [ {
-                                    data: this.state.bought,
-                                    color: (opacity = 1) => this.props.colors.mainColor,
-                                } ],
-                        }}
-                        width={3*screenWidth}
-                        height={220}
-                        chartConfig={chartConfig} />
-                </ScrollView>
-                <Divider style={GlobalStyles.divider}/>
-                <Text style={styles.title}>{'Argent dépensé par mois'}</Text>
-                <ScrollView horizontal={true}>
-                    <LineChart
-                        data={{
-                            labels: this.state.labels,
-                            datasets: [ {
-                                    data: this.state.expense,
-                                    color: (opacity = 1) => this.props.colors.mainColor,
-                                } ],
-                        }}
-                        width={3*screenWidth}
-                        height={220}
-                        chartConfig={chartConfig} />
-                </ScrollView>
-                <Divider style={GlobalStyles.divider}/>
-                <Text style={styles.title}>{'Nombre de Livres lus par mois'}</Text>
-                <ScrollView horizontal={true}>
-                    <LineChart
-                        data={{
-                            labels: this.state.labels,
-                            datasets: [ {
-                                    data: this.state.read,
-                                    color: (opacity = 1) => this.props.colors.mainColor,
-                                } ],
-                        }}
-                        width={3*screenWidth}
-                        height={200}
-                        chartConfig={chartConfig} />
-                </ScrollView>
-                <Divider style={GlobalStyles.divider}/>
-                <Text style={styles.title}>{'Nombre de Livres par genre'}</Text>
-                <PieChart
-                    data={this.state.genreCount}
-                    width={screenWidth}
-                    height={250}
-                    chartConfig={chartConfig}
-                    accessor="n"
-                    backgroundColor="transparent"
-                    paddingLeft="15"
-                    absolute
-                />
-            </ScrollView>
+            <View style={{padding: 5, height: 300}}>
+                <View style={{flex: 1, borderWidth: 1, borderColor: 'gray', borderRadius: 10}}>
+                    <Picker
+                        style={{flex: 1}}
+                        selectedValue={titles[this.state.cursor]}
+                        onValueChange={(itemValue, itemIndex) => this.onChange(itemIndex)}>
+                        {titles.map((item, i) => <Picker.Item key={i} label={item} value={item} />)}
+                    </Picker>
+                </View>
+                {this.state.cursor != 3
+                    ? <ScrollView horizontal={true} style={{marginTop: 10}}>
+                        <LineChart
+                            data={{
+                                labels: this.state.labels,
+                                datasets: [ {
+                                        data: this.state.data[this.state.cursor],
+                                        color: (opacity = 1) => this.props.colors.mainColor,
+                                    } ],
+                            }}
+                            width={3*screenWidth}
+                            height={220}
+                            chartConfig={chartConfig} />
+                    </ScrollView>
+                    : <PieChart
+                        data={this.state.data[this.state.cursor]}
+                        width={screenWidth}
+                        height={250}
+                        chartConfig={chartConfig}
+                        accessor="n"
+                        backgroundColor="transparent"
+                        paddingLeft="15"
+                        absolute />
+                }
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    view: {
-
-    },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
