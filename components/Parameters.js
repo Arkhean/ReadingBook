@@ -25,7 +25,7 @@ class Params extends Component {
     reset = async () => {
         Alert.alert('Attention',
                     'Etes-vous sûr de vouloir supprimer tous vos livres ?',
-                    [{text: 'Supprimer', onPress: () => this.props.removeAll()},
+                    [{text: 'Supprimer', onPress: this.props.removeAll},
                     {text: 'Annuler', onPress: () => {}}]
         );
     }

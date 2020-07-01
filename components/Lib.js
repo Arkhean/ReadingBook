@@ -68,9 +68,9 @@ class Lib extends Component {
         });
 
         /* Test section */
-        /*for(let i = 0; i < 200; i++){
+        for(let i = 0; i < 1; i++){
             let book = Object.assign({}, defaultBook);
-            book.title = 'Coucou '+i;
+            book.title = 'Un titre de quarante caractères !!!!!!!';
             book.author = 'julien';
             book.saga = 'Les tests';
             book.tome = 1;
@@ -79,7 +79,7 @@ class Lib extends Component {
         /* End */
     }
 
-    /* réduit la liste à afficher aux éléments correspond au filtre entré */
+    /* réduit la liste à afficher aux éléments correspondant au filtre entré */
     applyFilter = () => {
         const filter = this.state.filter;
         let booksToShow = []
@@ -244,7 +244,6 @@ class Lib extends Component {
     }
 
     renderItem = (bookAnim, item, index) => {
-        console.log('render item');
         return (
             <View
                 animation={bookAnim}
@@ -269,21 +268,21 @@ class Lib extends Component {
         let bookAnim = noAnimation;
         if (this.state.removeMode){
             scrollAnim = noAnimation;
-            bookAnim = rTranslation
+            //bookAnim = rTranslation
         }
         else if (this.removeModeWasTrue){
             this.removeModeWasTrue = false;
             scrollAnim = noAnimation;
-            bookAnim = lTranslation;
+            //bookAnim = lTranslation;
         }
         else if (this.showFilterWasTrue){
             this.showFilterWasTrue = false;
             scrollAnim = scrollUpAnimation;
-            bookAnim = noAnimation;
+            //bookAnim = noAnimation;
         }
         else if (this.state.showFilter){
             scrollAnim = scrollDownAnimation;
-            bookAnim = noAnimation;
+            //bookAnim = noAnimation;
         }
         else{
             scrollAnim = noAnimation;

@@ -50,13 +50,7 @@ export const formats = ['<non renseigné>', 'Poche', 'Semi-Poche', 'Grand Format
 
 // affichage pour liste, cliquable pour plus de détails
 class BookRow extends PureComponent {
-    constructor(props){
-        super(props);
-        console.log("create"+this.props.book.title);
-    }
-
     render(){
-        console.log('render'+this.props.book.title);
         return (
             <View
                 style={{
@@ -94,7 +88,6 @@ class BookRow extends PureComponent {
 
 class BookSelector extends PureComponent {
     render() {
-        console.log('selector');
         return (
             <View
                 style={styles.view}>

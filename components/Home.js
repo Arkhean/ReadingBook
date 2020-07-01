@@ -22,7 +22,7 @@ class Home extends Component {
             // le menu permet de vider la bibliothèque
             headerRight: () => (
                 <HeaderButton
-                    onPress={() => this.props.navigation.navigate('params')}
+                    onPress={this.navigateToParams}
                     icon={require('./icons/settings.png')}/>
             ),
         });
@@ -30,6 +30,38 @@ class Home extends Component {
 
     componentDidMount() {
         Orientation.lockToPortrait(); //this will lock the view to Portrait
+    }
+
+
+    /* on stock ici les fonctions de navigation pour ne pas re-render les
+       boutons pour rien */
+    navigateToParams = () => {
+        this.props.navigation.navigate('params');
+    }
+
+    navigateToBookScreen = () => {
+        this.props.navigation.navigate('BookScreen',
+                                            {book: null, visualMode: false});
+    }
+
+    navigateToMonth = () => {
+        this.props.navigation.navigate('Month');
+    }
+
+    navigateToLib = () => {
+        this.props.navigation.navigate('Bibliothèque');
+    }
+
+    navigateToStack = () => {
+        this.props.navigation.navigate('stack');
+    }
+
+    navigateToStats = () => {
+        this.props.navigation.navigate('stats');
+    }
+
+    navigateToScan = () => {
+        this.props.navigation.navigate('Scan');
     }
 
     render() {
@@ -46,33 +78,32 @@ class Home extends Component {
                 <View style={{marginTop:30}}>
                     <HomeButton
                         delay={100}
-                        onPress={() => this.props.navigation.navigate('BookScreen',
-                                                {book: null, visualMode: false})}
+                        onPress={this.navigateToBookScreen}
                         icon={require('./icons/playlist_add.png')}
                         text={'Ajouter un Livre'} />
                     <HomeButton
                         delay={300}
-                        onPress={() => this.props.navigation.navigate('Bibliothèque')}
+                        onPress={this.navigateToLib}
                         icon={require('./icons/books.png')}
                         text={'Voir la Bibliothèque'} />
                     <HomeButton
                         delay={500}
-                        onPress={() => this.props.navigation.navigate('Month')}
+                        onPress={this.navigateToMonth}
                         icon={require('./icons/calendar.png')}
                         text={'Livres du mois'} />
                     <HomeButton
                         delay={700}
-                        onPress={() => this.props.navigation.navigate('stack')}
+                        onPress={this.navigateToStack}
                         icon={require('./icons/list.png')}
                         text={'Pile à Lire'} />
                     <HomeButton
                         delay={900}
-                        onPress={() => this.props.navigation.navigate('stats')}
+                        onPress={this.navigateToStats}
                         icon={require('./icons/stats.png')}
                         text={'Statistiques'} />
                     <HomeButton
                         delay={1100}
-                        onPress={() => this.props.navigation.navigate('Scan')}
+                        onPress={this.navigateToScan}
                         icon={require('./icons/add_camera.png')}
                         text={'Scanner ISBN'} />
                 </View>

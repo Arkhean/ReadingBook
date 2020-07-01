@@ -29,7 +29,7 @@ export default class BarcodeScan extends Component {
         this.props.navigation.setOptions({
             headerRight: () => (
                 <HeaderButton
-                    onPress={() => this.handleTourch(this.state.torchOn)}
+                    onPress={this.handleTourch}
                     icon={this.state.torchOn ? require('./icons/flash_on.png') : require('./icons/flash_off.png')}/>
             ),
         });
@@ -42,7 +42,7 @@ export default class BarcodeScan extends Component {
         NetInfo.fetch().then(state => {
             if (!state.isConnected){
                 Alert.alert('Attention', 'Une connexion internet est requise pour utiliser cette option',
-                [ {text: 'retour', onPress: () => this.props.navigation.goBack()},
+                [ {text: 'retour', onPress: this.props.navigation.goBack},
                 {text: "c'est fait", onPress: this.detectInternet} ]);
             }
         });
@@ -116,19 +116,21 @@ export default class BarcodeScan extends Component {
     }
 
     /* allumer la lampe peut aider à la prise de vue */
-    handleTourch = (value) => {
+    handleTourch = () => {
         if (value === true) {
             this.setState({ torchOn: false });
         } else {
             this.setState({ torchOn: true });
         }
-        this.props.navigation.setOptions({
-            headerRight: () => (
-                <HeaderButton
-                    onPress={() => this.handleTourch(this.state.torchOn)}
-                    icon={this.state.torchOn ? require('./icons/flash_on.png') : require('./icons/flash_off.png')}/>
-            ),
-        });
+        this.setState({ torchOn: !this.state.torchOn }, () => {
+            this.props.navigation.setOptions({
+                headerRight: () => (
+                    <HeaderButton
+                        onPress={this.handleTourch}
+                        icon={this.state.torchOn ? require('./icons/flash_on.png') : require('./icons/flash_off.png')}/>
+                ),
+            });
+        })
     }
 
     render() {
