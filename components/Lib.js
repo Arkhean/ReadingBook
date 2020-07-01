@@ -68,7 +68,7 @@ class Lib extends Component {
         });
 
         /* Test section */
-        for(let i = 0; i < 1; i++){
+        /*for(let i = 0; i < 1; i++){
             let book = Object.assign({}, defaultBook);
             book.title = 'Un titre de quarante caractères !!!!!!!';
             book.author = 'julien';

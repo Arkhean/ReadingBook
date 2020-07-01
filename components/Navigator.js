@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from './Home';
 import Month from './Month';
 import BookScreen from './BookScreen';
-import Lib from './Lib';
+import Lib from './Lib2';
 import GlobalStyles from './styles';
 import BarCodeScan from './BarCodeScan';
 import StackToRead from './StackToRead';
