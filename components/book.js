@@ -66,7 +66,8 @@ class BookRow extends PureComponent {
                                         ? this.props.colors.readColor
                                         : this.props.colors.unreadColor,
                 }}
-                animation={this.props.animation}
+
+                animation={'bounceIn'}
                 delay={10}
                 duration={1000}>
                 <TouchableOpacity

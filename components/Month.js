@@ -124,7 +124,6 @@ class Month extends Component {
         return (
             <BookRow
                 style={GlobalStyles.bookStyle}
-                animation={'bounceIn'}
                 index={index}
                 book={item}
                 onClick={this.handleItemClick}

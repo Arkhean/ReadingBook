@@ -12,7 +12,7 @@ import CheckBox from '@react-native-community/checkbox';
 import { HeaderBackButton } from '@react-navigation/stack';
 import BookRow, { getKey, defaultBook, BookSelector } from './book';
 import GlobalStyles from './styles';
-import { createAnimatableComponent, View } from 'react-native-animatable';
+import { View } from 'react-native-animatable';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { connect } from "react-redux";
 import { removeBooks, addBook } from '../storage/bookActions';
@@ -237,21 +237,16 @@ class Lib extends Component {
         }
     }
 
-    renderItem = (bookAnim, item, index) => {
+    renderItem = ({item, index}) => {
         return (
-            <View
-                animation={bookAnim}
-                delay={10}
-                duration={1000}>
-                <BookSelector
-                    index={index}
-                    removeMode={this.state.removeMode}
-                    checkBox={this.state.checkBoxes[index]}
-                    onCheckBoxChange={this.onCheckBoxChange}
-                    book={item}
-                    onLongClick={this.handleLongItemClick}
-                    onClick={this.handleItemClick} />
-            </View>
+            <BookSelector
+                index={index}
+                removeMode={this.state.removeMode}
+                checkBox={this.state.checkBoxes[index]}
+                onCheckBoxChange={this.onCheckBoxChange}
+                book={item}
+                onLongClick={this.handleLongItemClick}
+                onClick={this.handleItemClick} />
         );
     }
 
@@ -259,28 +254,15 @@ class Lib extends Component {
     render() {
         /* Etape 1 : choisir les bonnes animations */
         let scrollAnim = noAnimation;
-        let bookAnim = noAnimation;
-        /*if (this.state.removeMode){
-            scrollAnim = noAnimation;
-            //bookAnim = rTranslation
-        }
-        else if (this.removeModeWasTrue){
-            this.removeModeWasTrue = false;
-            scrollAnim = noAnimation;
-            //bookAnim = lTranslation;
-        }
-        else*/ if (this.showFilterWasTrue){
+        if (this.showFilterWasTrue){
             this.showFilterWasTrue = false;
             scrollAnim = scrollUpAnimation;
-            //bookAnim = noAnimation;
         }
         else if (this.state.showFilter){
             scrollAnim = scrollDownAnimation;
-            //bookAnim = noAnimation;
         }
         else{
             scrollAnim = noAnimation;
-            bookAnim = 'bounceIn';
         }
 
         /* maintenant on peut render */
@@ -304,7 +286,8 @@ class Lib extends Component {
                 <FlatList
                     windowSize={7}
                     data={this.state.booksToShow}
-                    renderItem={({item, index}) => this.renderItem(bookAnim, item, index)}
+                    extraData={this.state.removeMode}
+                    renderItem={this.renderItem}
                     keyExtractor={getKey} />
             </View>
         );
