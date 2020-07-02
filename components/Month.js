@@ -1,6 +1,6 @@
 /*
  * author: Julien Miens
- * date: june 2020
+ * date: juin-juillet 2020
  * description: composant affichant la liste des livres lus et achetés ce mois-ci
  * avec possibilité de visualiser les mois précédents.
  */
@@ -116,7 +116,8 @@ class Month extends Component {
     }
 
     handleItemClick = (index) => {
-        this.props.navigation.navigate('BookScreen', {book: this.state.booksToShow[index], visualMode: true});
+        this.props.navigation.navigate('BookScreen',
+                    { book: this.state.booksToShow[index], visualMode: true });
     }
 
     renderItem = ({item, index}) => {
@@ -134,11 +135,19 @@ class Month extends Component {
     render() {
         return (
             <View style={styles.view}>
-                <Text style={styles.title}>{months[this.state.month]+" "+this.state.year}</Text>
+                <Text style={styles.title}>
+                    {months[this.state.month]+" "+this.state.year}
+                </Text>
                 <Divider style={GlobalStyles.divider}/>
-                <Text style={styles.text}> {this.state.nbBought+ ' livres achetés'} </Text>
-                <Text style={styles.text}> {this.state.nbRead+ ' livres lus'} </Text>
-                <Text style={styles.text}> {this.state.total+ ' € dépensés'} </Text>
+                <Text style={styles.text}>
+                    {this.state.nbBought+ ' livres achetés'}
+                </Text>
+                <Text style={styles.text}>
+                    {this.state.nbRead+ ' livres lus'}
+                </Text>
+                <Text style={styles.text}>
+                    {this.state.total+ ' € dépensés'}
+                </Text>
                 <Divider style={GlobalStyles.divider}/>
                 <FlatList
                     windowSize={8}

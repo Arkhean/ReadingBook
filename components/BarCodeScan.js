@@ -1,6 +1,6 @@
 /*
  * author: Julien Miens
- * date: june 2020
+ * date: juin 2020
  * description: utilise l'appareil photo pour lire un code bar sur le dos d'un
  * livre, celui-ci correspondant souvent à l'ISBN de celui-ci
  * ensuite, une requête est envoyé à l'API google books pour obtenir des infos
@@ -30,7 +30,9 @@ export default class BarcodeScan extends Component {
             headerRight: () => (
                 <HeaderButton
                     onPress={this.handleTourch}
-                    icon={this.state.torchOn ? require('./icons/flash_on.png') : require('./icons/flash_off.png')}/>
+                    icon={this.state.torchOn
+                                ? require('./icons/flash_on.png')
+                                : require('./icons/flash_off.png')}/>
             ),
         });
 
@@ -38,12 +40,15 @@ export default class BarcodeScan extends Component {
 
     }
 
+    // on a besoin d'une connexion internet pour faire les requêtes
+    // on alert tant qu'il n'y en a pas
     detectInternet = () => {
         NetInfo.fetch().then(state => {
             if (!state.isConnected){
-                Alert.alert('Attention', 'Une connexion internet est requise pour utiliser cette option',
-                [ {text: 'retour', onPress: this.props.navigation.goBack},
-                {text: "c'est fait", onPress: this.detectInternet} ]);
+                Alert.alert('Attention',
+                    'Une connexion internet est requise pour utiliser cette option',
+                    [ {text: 'retour', onPress: this.props.navigation.goBack},
+                      {text: "c'est fait", onPress: this.detectInternet} ]);
             }
         });
     }
@@ -51,6 +56,7 @@ export default class BarcodeScan extends Component {
 
     onBarCodeRead = (e) => {
         if(!this.stopPreview) {
+            // on bloque la caméra, sinon onBarCodeRead est rappelée plusieurs fois
             this.stopPreview = true;
             this.setState({loading: true});
             // faire la requête et retransmettre les données vers add
@@ -117,17 +123,14 @@ export default class BarcodeScan extends Component {
 
     /* allumer la lampe peut aider à la prise de vue */
     handleTourch = () => {
-        if (value === true) {
-            this.setState({ torchOn: false });
-        } else {
-            this.setState({ torchOn: true });
-        }
         this.setState({ torchOn: !this.state.torchOn }, () => {
             this.props.navigation.setOptions({
                 headerRight: () => (
                     <HeaderButton
                         onPress={this.handleTourch}
-                        icon={this.state.torchOn ? require('./icons/flash_on.png') : require('./icons/flash_off.png')}/>
+                        icon={this.state.torchOn
+                                ? require('./icons/flash_on.png')
+                                : require('./icons/flash_off.png')}/>
                 ),
             });
         })
@@ -138,7 +141,9 @@ export default class BarcodeScan extends Component {
             <View style={styles.container}>
                 <RNCamera
                     style={styles.preview}
-                    flashMode={this.state.torchOn ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
+                    flashMode={this.state.torchOn
+                                    ? RNCamera.Constants.FlashMode.torch
+                                    : RNCamera.Constants.FlashMode.off}
                     onBarCodeRead={!this.state.loading ? this.onBarCodeRead : () => {}}
                     ref={cam => this.RNCamera = cam}
                     captureAudio={false}>

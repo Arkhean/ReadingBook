@@ -45,7 +45,18 @@ export default styles = {
         paddingHorizontal: 10,
         alignItems: 'center',
         flex: 1,
-        borderRadius: 10
+        borderRadius: 10,
+        textAlignVertical: 'top'
+    },
+    multilineInput: {
+        //height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        paddingHorizontal: 10,
+        alignItems: 'center',
+        flex: 1,
+        borderRadius: 10,
+        textAlignVertical: 'top'
     },
     divider: {
         backgroundColor: 'gray',

@@ -1,7 +1,8 @@
 /*
  * author: Julien Miens
- * date: june 2020
- * description: permet l'ajout de nouveau livre dans la bibliothèque
+ * date: juin-juillet 2020
+ * description: permet l'ajout de nouveau livre dans la bibliothèque,
+ * possibilité d'importer une photo depuis l'appareil photo / la gallerie
  */
 
 import React, { Component } from 'react';
@@ -17,21 +18,30 @@ import { genres, formats } from './book';
 class MyTextInput extends Component {
     constructor(props){
         super(props);
-        this.state = { max: this.props.maxLength === undefined ? 40 : this.props.maxLength };
+        this.state = {
+            max: this.props.maxLength === undefined ? 40 : this.props.maxLength
+        };
     }
 
+    onChangeText = (text) => {
+        this.props.onChange(text);
+    }
+
+    // pour assurer la gestion du multiline, fournir la prop multiline={true}
     render() {
         return (
             <View style={this.props.style}>
                 <Text style={styles.title}>{this.props.title}</Text>
                 <TextInput
-                    style={GlobalStyles.input}
+                    style={this.props.multiline ? GlobalStyles.multilineInput : GlobalStyles.input}
                     editable={this.props.editable}
                     placeholder={this.props.type == 'numeric' ? '0' : ''}
                     value={this.props.value == 0 ? '' : this.props.value.toString()}
                     keyboardType={this.props.type}
                     maxLength={this.state.max}
-                    onChangeText={text => this.props.onChange(text)}/>
+                    multiline={this.props.multiline}
+                    numberOfLines={this.props.multiline ? 4 : 1}
+                    onChangeText={this.props.onChange}/>
             </View>
         );
     }
@@ -42,6 +52,7 @@ class MyTextInput extends Component {
 // permet d'avoir un date à deux chiffres, e.g. 1/2 -> 01/02
 function pad(n) {return n < 10 ? "0"+n : n;}
 
+// affiche une date au format 02/06/2020 pour le 2 juin 2020
 function displayDate(date){
     date = new Date(date);
     return pad(date.getDate())+"/"+pad(date.getMonth()+1)+"/"+date.getFullYear();
@@ -56,11 +67,15 @@ class MydateInput extends Component {
         this.setDate = this.setDate.bind(this);
     }
 
-    setDate(date){
+    setDate = (event, date) => {
         if (date != undefined){
             this.setState({date: date, show: false});
             this.props.onChange(date);
         }
+    }
+
+    activateSelection = () => {
+        this.setState({show: true});
     }
 
     render() {
@@ -68,20 +83,22 @@ class MydateInput extends Component {
             <View style={this.props.style}>
                 <Text style={styles.title}>{this.props.title}</Text>
                 {this.state.show &&
-                    <DateTimePicker
+                <DateTimePicker
                     testID="dateTimePicker"
                     value={this.state.date}
                     mode="date"
                     is24Hour={true}
                     display="default"
-                    onChange={(event, selectedDate) => this.setDate(selectedDate)} />
+                    onChange={this.setDate} />
                 }
                 <TouchableOpacity
                     style={GlobalStyles.input}
                     editable={this.props.editable}
                     activeOpacity={0.5}
-                    onPress={() => this.setState({show: true})}>
-                    <Text style={{fontSize: 18, marginTop: 5}}> {displayDate(this.state.date)} </Text>
+                    onPress={this.activateSelection}>
+                    <Text style={{fontSize: 18, marginTop: 5}}>
+                        {displayDate(this.state.date)}
+                    </Text>
                 </TouchableOpacity>
             </View>
         );
@@ -95,10 +112,12 @@ class MultiDateInput extends Component {
         this.state = { dates: this.props.value,
                        show: false,
                        inputNum: 0 }; // 0 pour date début, 1 date de fin
+        // indique le numéro de la ligne de selection de dates
+        // (chaque ligne est constitué de start+end)
         this.cursor = 0;
     }
 
-    setDate = (date) => {
+    setDate = (event, date) => {
         if (date != undefined){
             let dates = this.state.dates;
             if (this.state.inputNum === 0){
@@ -122,12 +141,14 @@ class MultiDateInput extends Component {
         }
     }
 
+    // ajouter une ligne
     newDates = () => {
         let dates = this.state.dates;
         dates.push({start: new Date(Date.now()), end: new Date(Date.now())});
         this.setState({dates: dates});
     }
 
+    // supprimer une ligne
     removeDate = (i) => {
         let dates = this.state.dates;
         dates.splice(i, 1);
@@ -150,29 +171,39 @@ class MultiDateInput extends Component {
                 {this.state.show &&
                     <DateTimePicker
                     testID="dateTimePicker"
-                    value={this.state.inputNum === 0 ? this.state.dates[this.cursor].start : this.state.dates[this.cursor].end}
+                    value={this.state.inputNum === 0
+                            ? this.state.dates[this.cursor].start
+                            : this.state.dates[this.cursor].end}
                     mode="date"
                     is24Hour={true}
                     display="default"
-                    onChange={(event, selectedDate) => this.setDate(selectedDate)} />
+                    onChange={this.setDate} />
                 }
                 {this.state.dates.map((item, i) =>
                     <View key={i} style={{flexDirection: 'row', marginBottom: 5}}>
-                        <Text style={{fontSize: 18, marginRight: 5, alignSelf: 'center'}}>{'du'}</Text>
+                        <Text style={{fontSize: 18, marginRight: 5, alignSelf: 'center'}}>
+                            {'du'}
+                        </Text>
                         <TouchableOpacity
                             style={GlobalStyles.input}
                             editable={this.props.editable}
                             activeOpacity={0.5}
                             onPress={() => { this.setState({show: true, inputNum: 0}); this.cursor = i; }}>
-                            <Text style={{fontSize: 18, marginTop: 5}}> {displayDate(this.state.dates[i].start)} </Text>
+                            <Text style={{fontSize: 18, marginTop: 5}}>
+                                {displayDate(this.state.dates[i].start)}
+                            </Text>
                         </TouchableOpacity>
-                        <Text style={{marginHorizontal: 5, fontSize: 18, alignSelf: 'center'}}>{'au'}</Text>
+                        <Text style={{marginHorizontal: 5, fontSize: 18, alignSelf: 'center'}}>
+                            {'au'}
+                        </Text>
                         <TouchableOpacity
                             style={GlobalStyles.input}
                             editable={this.props.editable}
                             activeOpacity={0.5}
                             onPress={() => { this.setState({show: true, inputNum: 1}); this.cursor = i; }}>
-                            <Text style={{fontSize: 18, marginTop: 5}}> {displayDate(this.state.dates[i].end)} </Text>
+                            <Text style={{fontSize: 18, marginTop: 5}}>
+                                {displayDate(this.state.dates[i].end)}
+                            </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={GlobalStyles.RedButton}
@@ -196,16 +227,23 @@ class MyPicker extends Component {
         super(props);
     }
 
+    // la liste est à fournir dans props.data
     render() {
         return (
             <View style={{margin: 10, flexDirection: 'row'}}>
-                <Text style={styles.title}>{this.props.title}</Text>
-                <View style={{flex: 1, borderWidth: 1, borderColor: 'gray', borderRadius: 10}}>
+                <Text style={styles.title}>
+                    {this.props.title}
+                </Text>
+                <View style={{ flex: 1,
+                               borderWidth: 1,
+                               borderColor: 'gray',
+                               borderRadius: 10}}>
                     <Picker
                         style={{flex: 1}}
                         selectedValue={this.props.value}
                         onValueChange={(itemValue, itemIndex) => this.props.onChange(itemValue)}>
-                        {this.props.data.map((item, i) => <Picker.Item key={i} label={item} value={item} />)}
+                        {this.props.data.map((item, i) =>
+                            <Picker.Item key={i} label={item} value={item} />)}
                     </Picker>
                 </View>
             </View>
@@ -215,25 +253,28 @@ class MyPicker extends Component {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+/* permet d'importer une image depuis l'appareil photo ou la bibliothèque */
 class MyImageInput extends Component {
     constructor(props){
         super(props);
         this.state = { image: this.props.value === '' ? null : this.props.value };
     }
 
-    onPress = () => ImagePicker.showImagePicker({title: 'importer une photo',
+    onPress = () => ImagePicker.showImagePicker({
+            title: 'importer une photo',
             takePhotoButtonTitle: 'depuis l\'appareil photo',
             chooseFromLibraryButtonTitle: 'depuis le stockage',
-            cancelButtonTitle: 'annuler' }, (response) => {
-        if (response.error) {
-            console.log('ImagePicker Error: ', response.error);
-        }
-        else {
-            const source = response.uri;
-            this.setState({ image: source });
-            this.props.onChange(source);
-         }
-    });
+            cancelButtonTitle: 'annuler'
+        }, (response) => {
+            if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else {
+                const source = response.uri;
+                this.setState({ image: source });
+                this.props.onChange(source);
+            }
+        });
 
     render(){
         return (
@@ -263,12 +304,16 @@ export default class Add extends Component {
                 <View style={{flexDirection: 'row'}}>
                     <View style={{flex: 1}}>
                         <MyTextInput
-                            title='Titre' value={this.props.book.title} type='default'
+                            title='Titre'
+                            value={this.props.book.title}
+                            type='default'
                             style={styles.viewVertical}
                             onChange={text => this.props.onChange('title', text)}/>
                         <MyTextInput
                             style={styles.viewVertical}
-                            title='Auteur' value={this.props.book.author} type='default'
+                            title='Auteur'
+                            value={this.props.book.author}
+                            type='default'
                             onChange={text => this.props.onChange('author', text)}/>
                     </View>
                     <MyImageInput
@@ -280,11 +325,15 @@ export default class Add extends Component {
 
                 <MyTextInput
                     style={styles.viewHorizontal}
-                    title='Saga' value={this.props.book.saga} type='default'
+                    title='Saga'
+                    value={this.props.book.saga}
+                    type='default'
                     onChange={text => this.props.onChange('saga', text)}/>
                 <MyTextInput
                     style={styles.viewHorizontal}
-                    title='Tome' value={this.props.book.nTome} type='numeric'
+                    title='Tome'
+                    value={this.props.book.nTome}
+                    type='numeric'
                     editable={this.props.book.saga != ''}
                     onChange={text => this.props.onChange('nTome', text)}/>
 
@@ -292,40 +341,54 @@ export default class Add extends Component {
 
                 <MyPicker
                     style={styles.viewHorizontal}
-                    title='Genre' value={this.props.book.genre}
+                    title='Genre'
+                    value={this.props.book.genre}
                     data={genres}
                     onChange={value => this.props.onChange('genre', value)}/>
                 <MyTextInput
                     style={styles.viewHorizontal}
-                    title='Editeur' value={this.props.book.editor} type='default'
+                    title='Editeur'
+                    value={this.props.book.editor}
+                    type='default'
                     onChange={text => this.props.onChange('editor', text)}/>
                 <MyPicker
-                    title='Format' value={this.props.book.format}
+                    title='Format'
+                    value={this.props.book.format}
                     data={formats}
                     onChange={value => this.props.onChange('format', value)}/>
                 <MyTextInput
                     style={styles.viewHorizontal}
-                    title='Prix' value={this.props.book.price} type='numeric'
+                    title='Prix'
+                    value={this.props.book.price}
+                    type='numeric'
                     onChange={text => this.props.onChange('price', text)}/>
                 <MyTextInput
                     style={styles.viewHorizontal}
-                    title='Nombre de pages' value={this.props.book.nPages} type='numeric'
+                    title='Nombre de pages'
+                    value={this.props.book.nPages}
+                    type='numeric'
                     onChange={text => this.props.onChange('nPages', text)}/>
 
                 <Divider style={GlobalStyles.divider}/>
 
                 <MydateInput
                     style={styles.viewHorizontal}
-                    title="Date d'achat" value={this.props.book.purchaseDate}
+                    title="Date d'achat"
+                    value={this.props.book.purchaseDate}
                     onChange={text => this.props.onChange('purchaseDate', text)}/>
                 <MultiDateInput
                     style={styles.viewVertical}
-                    title='Dates de lecture' value={this.props.book.readingDates}
+                    title='Dates de lecture'
+                    value={this.props.book.readingDates}
                     onChange={text => this.props.onChange('readingDates', text)}/>
                 <MyTextInput
                     style={styles.viewVertical}
-                    title='Commentaires' value={this.props.book.comment} type='default'
-                    maxLength={200} onChange={text => this.props.onChange('comment', text)}/>
+                    title='Commentaires'
+                    value={this.props.book.comment}
+                    type='default'
+                    multiline={true}
+                    maxLength={200}
+                    onChange={text => this.props.onChange('comment', text)}/>
             </ScrollView>
         );
     }

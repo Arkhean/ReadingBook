@@ -1,10 +1,17 @@
+/*
+ * author: Julien Miens
+ * date: juin-juillet 2020
+ * description: composant de navigation entre les différentes vues
+ */
+
+
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './Home';
 import Month from './Month';
 import BookScreen from './BookScreen';
-import Lib from './Lib2';
+import Lib from './Lib';
 import GlobalStyles from './styles';
 import BarCodeScan from './BarCodeScan';
 import StackToRead from './StackToRead';

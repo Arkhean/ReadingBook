@@ -1,7 +1,9 @@
 /*
  * author: Julien Miens
- * date: june 2020
- * description: color picker
+ * date: juin 2020
+ * description: permet de selectionner une couleur, les couleurs possibles sont
+ * limitées pour la liste, on choisit on appuyant sur la couleur désirée dans
+ * une ScrollView horizontale
  */
 
 import React, { Component } from 'react';

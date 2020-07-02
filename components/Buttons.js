@@ -1,6 +1,6 @@
 /*
  * author: Julien Miens
- * date: june 2020
+ * date: juin 2020
  * description: les boutons
  */
 
@@ -10,6 +10,8 @@ import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { View, Text } from 'react-native-animatable';
 import { connect } from "react-redux";
 
+
+// boutons utilisés dans la HeaderBar à droite
 class HeaderButton extends Component {
     render(){
         return (
@@ -32,6 +34,7 @@ class HeaderButton extends Component {
     }
 }
 
+// bouton avec du texte
 class TextButton extends Component {
     render(){
         return (
@@ -55,6 +58,7 @@ class TextButton extends Component {
     }
 }
 
+// boutons utilisé uniquement dans Home
 class HomeButton extends Component {
     render(){
         return (

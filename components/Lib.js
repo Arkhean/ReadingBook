@@ -1,6 +1,6 @@
 /*
  * author: Julien Miens
- * date: june 2020
+ * date: juin-juillet 2020
  * description: composant affichant la liste entière de tous les livres contenus
  * dans la bibliothèque, il propose la suppression et redirige vers un affichage
  * détaillé au besoin (pour consultation ou modification).
@@ -17,13 +17,11 @@ import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { connect } from "react-redux";
 import { removeBooks, addBook } from '../storage/bookActions';
 
-//const AnimatableScroll = createAnimatableComponent(ScrollView);
-
 const noAnimation = { from:{}, to:{} };
-const rTranslation = { from: { marginLeft: -30 },
+/*const rTranslation = { from: { marginLeft: -30 },
                       to: { marginLeft: 0 } };
 const lTranslation = { from: { marginLeft: 30 },
-                      to: { marginLeft: 5 } };
+                      to: { marginLeft: 5 } };*/
 const scrollDownAnimation = { from: { marginTop: -30 },
                               to: { marginTop: 0 }
 };
@@ -66,17 +64,6 @@ class Lib extends Component {
             console.log('focus');
             this.applyFilter(); // force render ...
         });
-
-        /* Test section */
-        /*for(let i = 0; i < 1; i++){
-            let book = Object.assign({}, defaultBook);
-            book.title = 'Un titre de quarante caractères !!!!!!!';
-            book.author = 'julien';
-            book.saga = 'Les tests';
-            book.tome = 1;
-            this.props.addBook(book);
-        }
-        /* End */
     }
 
     /* réduit la liste à afficher aux éléments correspondant au filtre entré */
@@ -117,7 +104,8 @@ class Lib extends Component {
     myGoBack = () => {
         if (this.state.removeMode){
             this.deactivateRemoveMode();
-            this.setState({removeMode: false, checkBoxes: this.state.booksToShow.map(() => false)});
+            this.setState({ removeMode: false,
+                            checkBoxes: this.state.booksToShow.map(() => false) });
             return true;
         }
         else if (this.state.showFilter){
@@ -198,10 +186,13 @@ class Lib extends Component {
             // il faudrait remettre à jour booksToShow après la fin du remove
             // mais on ne peut pas faire .then() ici...
             const newBooks = this.state.booksToShow.filter(book => !toRemove.includes(getKey(book)));
-            this.setState({booksToShow: newBooks, checkBoxes: newBooks.map(() => false), removeMode: false});
+            this.setState({ booksToShow: newBooks,
+                            checkBoxes: newBooks.map(() => false),
+                            removeMode: false });
         }
         else{
-            this.setState({checkBoxes: this.state.booksToShow.map(() => false), removeMode: false});
+            this.setState({ checkBoxes: this.state.booksToShow.map(() => false),
+                            removeMode: false });
         }
 
     }
@@ -216,7 +207,9 @@ class Lib extends Component {
                         onPress={this.activateRemoveMode}
                         icon={require('./icons/trash.png')}/>
                     <HeaderButton
-                        onPress={this.state.showFilter ? this.deactivateShowFilter : this.activateShowFilter}
+                        onPress={this.state.showFilter
+                                        ? this.deactivateShowFilter
+                                        : this.activateShowFilter}
                         icon={require('./icons/search.png')}/>
                 </View>
             ),
@@ -239,7 +232,8 @@ class Lib extends Component {
             this.onCheckBoxChange(index);
         }
         else{
-            this.props.navigation.navigate('BookScreen', {book: this.state.booksToShow[index], visualMode: true});
+            this.props.navigation.navigate('BookScreen',
+                    { book: this.state.booksToShow[index], visualMode: true });
         }
     }
 
@@ -266,7 +260,7 @@ class Lib extends Component {
         /* Etape 1 : choisir les bonnes animations */
         let scrollAnim = noAnimation;
         let bookAnim = noAnimation;
-        if (this.state.removeMode){
+        /*if (this.state.removeMode){
             scrollAnim = noAnimation;
             //bookAnim = rTranslation
         }
@@ -275,7 +269,7 @@ class Lib extends Component {
             scrollAnim = noAnimation;
             //bookAnim = lTranslation;
         }
-        else if (this.showFilterWasTrue){
+        else*/ if (this.showFilterWasTrue){
             this.showFilterWasTrue = false;
             scrollAnim = scrollUpAnimation;
             //bookAnim = noAnimation;
@@ -290,7 +284,6 @@ class Lib extends Component {
         }
 
         /* maintenant on peut render */
-        console.log('render lib');
         return (
             <View
                 animation={scrollAnim}
@@ -305,7 +298,8 @@ class Lib extends Component {
                             alignItems: 'center',
                         }}
                         value={this.state.filter}
-                        onChangeText={text => this.setState({filter: text}, () => this.applyFilter())}/>
+                        onChangeText={text => this.setState({filter: text},
+                                                    () => this.applyFilter())}/>
                 }
                 <FlatList
                     windowSize={7}

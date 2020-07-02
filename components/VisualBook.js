@@ -1,6 +1,6 @@
 /*
  * author: Julien Miens
- * date: june 2020
+ * date: juin 2020
  * description: composant affichant le détails d'un livre,
  * utilisé dans BookScreen
  */
@@ -32,34 +32,61 @@ export default class VisualBook extends Component {
                     <Image source={getImage(this.props.book)}
                            style={GlobalStyles.BigImageStyle}/>
                     <View style={{flex:1}}>
-                        <Text style={styles.title}>{book.title}</Text>
-                        {book.saga != '' && <Text style={styles.subtitle}>{book.saga+", tome "+book.nTome}</Text>}
-                        <Text style={styles.author}>{"de "+book.author}</Text>
+                        <Text style={styles.title}>
+                            {book.title}
+                        </Text>
+                        {book.saga != '' &&
+                            <Text style={styles.subtitle}>
+                                {book.saga+", tome "+book.nTome}
+                            </Text>
+                        }
+                        <Text style={styles.author}>
+                            {"de "+book.author}
+                        </Text>
                     </View>
                 </View>
 
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>{"Genre: "}
-                    <Text style={styles.innerText}>{book.genre}</Text>
+                    <Text style={styles.innerText}>
+                        {book.genre}
+                    </Text>
                 </Text>
-                <Text style={styles.text}>{"Publié par: "}
-                    <Text style={styles.innerText}>{book.editor}</Text>
+                <Text style={styles.text}>
+                    {"Publié par: "}
+                    <Text style={styles.innerText}>
+                        {book.editor}
+                    </Text>
                 </Text>
-                <Text style={styles.text}>{"Format: "}
-                    <Text style={styles.innerText}>{book.format}</Text>
+                <Text style={styles.text}>
+                    {"Format: "}
+                    <Text style={styles.innerText}>
+                        {book.format}
+                    </Text>
                 </Text>
                 <Divider style={GlobalStyles.divider}/>
-                <Text style={styles.text}>{"Acheté le "+displayDate(date1)+" pour "+book.price+" €."}</Text>
-                <Text style={styles.text}>{"Le livre contient "+book.nPages+" pages."}</Text>
-                {book.readingDates.length == 0 && <Text style={styles.text}>{"Le livre n'a pas été lu."}</Text>}
+                <Text style={styles.text}>
+                    {"Acheté le "+displayDate(date1)+" pour "+book.price+" €."}
+                </Text>
+                <Text style={styles.text}>
+                    {"Le livre contient "+book.nPages+" pages."}
+                </Text>
+                {book.readingDates.length == 0 &&
+                    <Text style={styles.text}>
+                        {"Le livre n'a pas été lu."}
+                    </Text>
+                }
                 {book.readingDates.map((item, i) =>
                     <Text key={i} style={styles.innerText}>
                         {'Lu du '+displayDate(new Date(item.start))+' au '+displayDate(new Date(item.end))}
                     </Text>)
                 }
                 <Divider style={GlobalStyles.divider}/>
-                <Text style={styles.text}>{"Commentaires: "}
-                    <Text style={styles.innerText}>{book.comment}</Text>
+                <Text style={styles.text}>
+                    {"Commentaires: "}
+                    <Text style={styles.innerText}>
+                        {book.comment}
+                    </Text>
                 </Text>
             </View>
         );

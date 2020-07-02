@@ -1,6 +1,6 @@
 /*
  * author: Julien Miens
- * date: june 2020
+ * date: juin-juillet 2020
  * description: éléments de base à la gestion des livres, notamment l'objet vide
  * ou encore l'affichage simplifié "en ligne d'une liste".
  */
@@ -20,6 +20,7 @@ export const getImage = (book) => {
     return { uri: book.imageUri };
 }
 
+// on suppose que le couple title, author est unique
 export const getKey = (book) => {
     return book.title + book.author;
 }
@@ -38,6 +39,7 @@ export const defaultBook = {   title: '',
                         imageUri: '',
                         comment: '', };
 
+// on vérifie qu'un livre a été lu avec la longueur de sa liste de lectures
 const isRead = (book) => {
     return book.readingDates.length > 0;
 }
@@ -46,8 +48,11 @@ export const genres = ['<non renseigné>', 'Aventure', 'Policier', 'Science-Fict
             'Fantastique', 'Horreur', 'Biographie', 'Nouvelle', 'Conte',
             'Fantasy', 'Romance', 'Comtemporain', 'Classique', 'Théâtre',
             'Poésie'];
-export const formats = ['<non renseigné>', 'Poche', 'Semi-Poche', 'Grand Format', 'Manga', 'Bande dessinée'];
 
+export const formats = ['<non renseigné>', 'Poche', 'Semi-Poche',
+                            'Grand Format', 'Manga', 'Bande dessinée'];
+
+////////////////////////////////////////////////////////////////////////////////
 // affichage pour liste, cliquable pour plus de détails
 class BookRow extends PureComponent {
     render(){
@@ -57,8 +62,9 @@ class BookRow extends PureComponent {
                     flex: 1,
                     margin: 5,
                     borderRadius: 10,
-                    backgroundColor: isRead(this.props.book) ? this.props.colors.readColor
-                                                             : this.props.colors.unreadColor,
+                    backgroundColor: isRead(this.props.book)
+                                        ? this.props.colors.readColor
+                                        : this.props.colors.unreadColor,
                 }}
                 animation={this.props.animation}
                 delay={10}
@@ -72,13 +78,17 @@ class BookRow extends PureComponent {
                            style={GlobalStyles.ImageStyle}
                     />
                     <View style={styles.inner}>
-                        <Text style={styles.title}>{this.props.book.title}</Text>
+                        <Text style={styles.title}>
+                            {this.props.book.title}
+                        </Text>
                         {this.props.book.saga != '' &&
                             <Text style={styles.subtitle}>
                                 {this.props.book.saga+", tome "+this.props.book.nTome}
                             </Text>
                         }
-                        <Text style={styles.author}>{this.props.book.author}</Text>
+                        <Text style={styles.author}>
+                            {this.props.book.author}
+                        </Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -86,6 +96,7 @@ class BookRow extends PureComponent {
     }
 }
 
+/* ajoute une checkbox lors d'un clic long (voir Lib.js) */
 class BookSelector extends PureComponent {
     render() {
         return (

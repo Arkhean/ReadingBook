@@ -10,18 +10,20 @@ import GlobalStyles from './styles';
 import { View, Text } from 'react-native-animatable';
 import { Divider } from 'react-native-elements';
 import { Picker } from '@react-native-community/picker';
-import { ConnectedHomeButton as HomeButton, ConnectedHeaderButton as HeaderButton } from './Buttons';
+import { ConnectedHomeButton as HomeButton,
+        ConnectedHeaderButton as HeaderButton
+    } from './Buttons';
 import { genres } from './book';
 import { colors } from './ColorPicker';
 import { connect } from "react-redux";
 
 import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart
+    LineChart,
+    BarChart,
+    PieChart,
+    ProgressChart,
+    ContributionGraph,
+    StackedBarChart
 } from "react-native-chart-kit";
 
 import { Dimensions } from "react-native";
@@ -30,6 +32,7 @@ const screenWidth = Dimensions.get("window").width;
 const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
                         'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
+// fourni la liste des n derniers mois à partir d'aujourd'hui
 const getLastMonth = (n) => {
     const now = new Date(Date.now());
     let m = now.getMonth() + 1;
@@ -46,6 +49,7 @@ const getLastMonth = (n) => {
     return res.reverse();
 }
 
+// renvoie 02/20 pour février 2020
 const displayDate = (date) => {
     let { month, year } = date;
     month += 1;
@@ -60,7 +64,7 @@ const titles = ['Nombre de Livres achetés par mois',
 class Stats extends Component {
     constructor(props){
         super(props);
-        this.state = { labels: [],
+        this.state = {  labels: [],
                         bought: [],
                         read: [],
                         expense: [],
@@ -123,13 +127,16 @@ class Stats extends Component {
         }
         const labels = lastMonths.map(item => displayDate(item));
         return { labels: labels,
-                data: [bought, expense.map(e => parseFloat(e.toFixed(2))), read, genreCount],
+                data: [ bought,
+                        expense.map(e => parseFloat(e.toFixed(2))),
+                        read,
+                        genreCount ],
                 cursor: 0,
                 initialized: true };
     }
 
     onChange = (index) => {
-        this.setState({cursor: index});
+        this.setState({ cursor: index });
     }
 
     render() {
@@ -177,14 +184,14 @@ class Stats extends Component {
                             chartConfig={chartConfig} />
                     </ScrollView>
                     : <PieChart
-                        data={this.state.data[this.state.cursor]}
-                        width={screenWidth}
-                        height={250}
-                        chartConfig={chartConfig}
-                        accessor="n"
-                        backgroundColor="transparent"
-                        paddingLeft="15"
-                        absolute />
+                            data={this.state.data[this.state.cursor]}
+                            width={screenWidth}
+                            height={250}
+                            chartConfig={chartConfig}
+                            accessor="n"
+                            backgroundColor="transparent"
+                            paddingLeft="15"
+                            absolute />
                 }
             </View>
         );

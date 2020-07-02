@@ -24,6 +24,7 @@ class StackToRead extends Component {
     componentDidMount = () => {
         let booksToShow = this.selectBooksToShow();
         this.setState({booksToShow: booksToShow});
+        // rafraichir si la liste à été modifié entre temps
         this.props.navigation.addListener('focus', () => {
             let booksToShow = this.selectBooksToShow();
             this.setState({booksToShow: booksToShow});
@@ -42,7 +43,8 @@ class StackToRead extends Component {
     }
 
     handleItemClick = (index) => {
-        this.props.navigation.navigate('BookScreen', {book: this.state.booksToShow[index], visualMode: true});
+        this.props.navigation.navigate('BookScreen',
+                    { book: this.state.booksToShow[index], visualMode: true });
     }
 
     renderItem = ({item, index}) => {

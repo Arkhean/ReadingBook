@@ -1,6 +1,6 @@
 /*
  * author: Julien Miens
- * date: june 2020
+ * date: juin-juillet 2020
  * description: composant d'accueil affichant le nombre de livres dans la
  * biblothèque ainsi que les boutons vers les autres pages.
  */

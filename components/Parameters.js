@@ -11,7 +11,12 @@ import ColorPicker from './ColorPicker';
 import GlobalStyles from './styles';
 import { ConnectedTextButton as TextButton } from './Buttons';
 import { connect } from "react-redux";
-import { setMainColor, setSecondaryColor, setReadColor, setUnreadColor } from '../storage/colorActions';
+import {
+    setMainColor,
+    setSecondaryColor,
+    setReadColor,
+    setUnreadColor
+} from '../storage/colorActions';
 import { removeAll } from '../storage/bookActions';
 
 class Params extends Component {
@@ -33,25 +38,35 @@ class Params extends Component {
     render() {
         return (
             <ScrollView>
-                <Text style={styles.title}>{'Application de Carnet de Lecture permettant d\'enregistrer sa collection personnelle de livres.'}</Text>
+                <Text style={styles.title}>
+                    {'Application de Carnet de Lecture permettant d\'enregistrer sa collection personnelle de livres.'}
+                </Text>
 
                 <Divider style={GlobalStyles.divider}/>
-                <Text style={styles.text}>{'Couleur principale'}</Text>
+                <Text style={styles.text}>
+                    {'Couleur principale'}
+                </Text>
                 <ColorPicker
                     color={this.props.colors.mainColor}
-                    onChange={(color) => this.props.setMainColor(color)} />
-                <Text style={styles.text}>{'Couleur secondaire'}</Text>
+                    onChange={this.props.setMainColor} />
+                <Text style={styles.text}>
+                    {'Couleur secondaire'}
+                </Text>
                 <ColorPicker
                     color={this.props.colors.secondaryColor}
-                    onChange={(color) => this.props.setSecondaryColor(color)} />
-                <Text style={styles.text}>{'Couleur des livres lus'}</Text>
+                    onChange={this.props.setSecondaryColor} />
+                <Text style={styles.text}>
+                    {'Couleur des livres lus'}
+                </Text>
                 <ColorPicker
                     color={this.props.colors.readColor}
-                    onChange={(color) => this.props.setReadColor(color)} />
-                <Text style={styles.text}>{'Couleur des livres non-lus'}</Text>
+                    onChange={this.props.setReadColor} />
+                <Text style={styles.text}>
+                    {'Couleur des livres non-lus'}
+                </Text>
                 <ColorPicker
                     color={this.props.colors.unreadColor}
-                    onChange={(color) => this.props.setUnreadColor(color)} />
+                    onChange={this.props.setUnreadColor} />
 
                 <Divider style={GlobalStyles.divider}/>
                 <TextButton
@@ -59,11 +74,19 @@ class Params extends Component {
                     text={'Réinitialiser l\'application'}/>
 
                 <Divider style={GlobalStyles.divider}/>
-                <Text style={styles.text}>{'Version 1.0.0'}</Text>
-                <Text style={styles.subtext}>{'Développée par Julien Miens, Juin 2020'}</Text>
+                <Text style={styles.text}>
+                    {'Version 1.0.1'}
+                </Text>
+                <Text style={styles.subtext}>
+                    {'Développée par Julien Miens, Juin-Juillet 2020'}
+                </Text>
                 <View style={{marginVertical: 30}}>
-                    <Text style={styles.text}>{'Crédits:'}</Text>
-                    <Text style={styles.subtext}>{'Icones de material.io'}</Text>
+                    <Text style={styles.text}>
+                        {'Crédits:'}
+                    </Text>
+                    <Text style={styles.subtext}>
+                        {'Icones de material.io'}
+                    </Text>
                 </View>
 
             </ScrollView>

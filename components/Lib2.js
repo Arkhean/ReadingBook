@@ -1,9 +1,8 @@
 /*
  * author: Julien Miens
- * date: june 2020
- * description: composant affichant la liste entière de tous les livres contenus
- * dans la bibliothèque, il propose la suppression et redirige vers un affichage
- * détaillé au besoin (pour consultation ou modification).
+ * date: juillet 2020
+ * description: version de test, non utilisée, voir Lib.js
+ * (plein de bugs)
  */
 
 import React, { Component } from 'react';

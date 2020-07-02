@@ -1,6 +1,6 @@
 /*
  * author: Julien Miens
- * date: june 2020
+ * date: juin-juillet 2020
  * description: composant pour la manipulation d'un livre
  * il permet ou de le visualiser via le composant BookRow ou de le modifier en
  * passant par le composant Add (qui a servi à sa création à l'origine).
@@ -40,11 +40,12 @@ class BookScreen extends Component {
             /* on visualise le contenu du livre */
             if (this.props.route.params.book != null){
                 // petit hack pour retirer un warning
-                let book = 'fromCamera' in this.props.route.params ? JSON.parse(this.props.route.params.book)
-                                                                   : this.props.route.params.book;
-                this.setState({book: book,
+                let book = 'fromCamera' in this.props.route.params
+                                ? JSON.parse(this.props.route.params.book)
+                                : this.props.route.params.book;
+                this.setState({ book: book,
                                 visualMode: this.props.route.params.visualMode,
-                                modificationMode: false});
+                                modificationMode: false });
                 this.props.navigation.setOptions({
                     title: 'Détails du livre',
                     headerLeft: () =>
@@ -55,9 +56,9 @@ class BookScreen extends Component {
             }
             /* on va créer un nouveau livre */
             else{
-                this.setState({book: Object.assign({}, defaultBook), // copy de defaultBook
+                this.setState({ book: Object.assign({}, defaultBook), // copy de defaultBook
                                 visualMode: this.props.route.params.visualMode,
-                                modificationMode: false});
+                                modificationMode: false });
                 this.props.navigation.setOptions({
                     title: 'Ajouter un livre',
                     headerLeft: () =>
@@ -69,6 +70,7 @@ class BookScreen extends Component {
         });
     }
 
+    // sauvegarde ou edit un book
     save = (callback) => {
         const book = this.state.book;
         let newK = getKey(book);
@@ -90,6 +92,7 @@ class BookScreen extends Component {
                 callback();
             }
             else{
+                // sinon on est en train de modifier un existant
                 this.props.editBook(book);
                 this.modified = false;
                 callback();
@@ -104,7 +107,9 @@ class BookScreen extends Component {
     alertCancel = () => {
         // annuler les modifs avec le backup
         this.modified = false;
-        this.setState({book: this.backup, visualMode: true, modificationMode: false});
+        this.setState({ book: this.backup,
+                        visualMode: true,
+                        modificationMode: false });
     }
 
     // pour supprimer ce livre
@@ -127,13 +132,14 @@ class BookScreen extends Component {
                 // s'il a été modifié
                 Alert.alert('Attention !', 'Quitter sans sauvegarder ?' ,
                         [{text: 'sauvegarder', onPress: () => this.save(() => {
-                            this.setState({visualMode: true, modificationMode: false});
+                            this.setState({ visualMode: true,
+                                            modificationMode: false });
                         })},
                             {text: 'annuler', onPress: this.alertCancel}]);
             }
             else{
                 // s'il n'a pas été modifié, on revient en visual
-                this.setState({visualMode: true, modificationMode: false});
+                this.setState({ visualMode: true, modificationMode: false });
             }
         }
         else{
@@ -162,15 +168,16 @@ class BookScreen extends Component {
 
     enterModifyMode = () => {
         this.backup = Object.assign({}, this.state.book); // en cas d'annulation
-        this.setState({visualMode: false, modificationMode: true});
-        this.props.navigation.setOptions({title: 'Modification'});
+        this.setState({ visualMode: false, modificationMode: true });
+        this.props.navigation.setOptions({ title: 'Modification' });
     }
 
+    // callback appelé dans add pour modifier le state avec le book
     setField = (target, value) => {
         this.modified = true;
         let book = this.state.book;
         book[target] = value;
-        this.setState({book});
+        this.setState({ book });
     }
 
     render() {
