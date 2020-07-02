@@ -11,6 +11,7 @@ import { View, Text } from 'react-native-animatable';
 import CheckBox from '@react-native-community/checkbox';
 import GlobalStyles from './styles';
 import { connect } from "react-redux";
+import { translate } from '../translations/translator';
 
 // permet d'obtenir l'image pour un libre en prenant celle par défaut ou par url
 export const getImage = (book) => {
@@ -44,13 +45,16 @@ const isRead = (book) => {
     return book.readingDates.length > 0;
 }
 
-export const genres = ['<non renseigné>', 'Aventure', 'Policier', 'Science-Fiction',
-            'Fantastique', 'Horreur', 'Biographie', 'Nouvelle', 'Conte',
-            'Fantasy', 'Romance', 'Comtemporain', 'Classique', 'Théâtre',
-            'Poésie'];
+export const genres = [translate('empty'), translate('Aventure'),
+            translate('Policier'), translate('Science-Fiction'), translate('Fantastique'),
+            translate('Horreur'), translate('Biographie'), translate('Nouvelle'),
+            translate('Conte'), translate('Fantasy'), translate('Romance'),
+            translate('Comtemporain'), translate('Classique'), translate('Théâtre'),
+            translate('Poésie')];
 
-export const formats = ['<non renseigné>', 'Poche', 'Semi-Poche',
-                            'Grand Format', 'Manga', 'Bande dessinée'];
+export const formats = [translate('empty'), translate('Poche'),
+            translate('Semi-Poche'), translate('Grand Format'), translate('Manga'),
+            translate('Bande dessinée') ];
 
 ////////////////////////////////////////////////////////////////////////////////
 // affichage pour liste, cliquable pour plus de détails

@@ -10,7 +10,7 @@ import { Text, View, StyleSheet, Image } from 'react-native';
 import Book, { getImage } from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
-
+import { translate } from '../translations/translator';
 
 function pad(n) {return n < 10 ? "0"+n : n;}
 
@@ -41,49 +41,49 @@ export default class VisualBook extends Component {
                             </Text>
                         }
                         <Text style={styles.author}>
-                            {"de "+book.author}
+                            {translate('visual1')+book.author}
                         </Text>
                     </View>
                 </View>
 
                 <Divider style={GlobalStyles.divider}/>
-                <Text style={styles.text}>{"Genre: "}
+                <Text style={styles.text}>{translate('visual2')}
                     <Text style={styles.innerText}>
                         {book.genre}
                     </Text>
                 </Text>
                 <Text style={styles.text}>
-                    {"Publié par: "}
+                    {translate('visual3')}
                     <Text style={styles.innerText}>
                         {book.editor}
                     </Text>
                 </Text>
                 <Text style={styles.text}>
-                    {"Format: "}
+                    {translate('visual4')}
                     <Text style={styles.innerText}>
                         {book.format}
                     </Text>
                 </Text>
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>
-                    {"Acheté le "+displayDate(date1)+" pour "+book.price+" €."}
+                    {translate('visual5')+displayDate(date1)+translate('visual6')+book.price+translate('visual7')}
                 </Text>
                 <Text style={styles.text}>
-                    {"Le livre contient "+book.nPages+" pages."}
+                    {translate('visual8')+book.nPages+translate('visual9')}
                 </Text>
                 {book.readingDates.length == 0 &&
                     <Text style={styles.text}>
-                        {"Le livre n'a pas été lu."}
+                        {translate('visual10')}
                     </Text>
                 }
                 {book.readingDates.map((item, i) =>
                     <Text key={i} style={styles.innerText}>
-                        {'Lu du '+displayDate(new Date(item.start))+' au '+displayDate(new Date(item.end))}
+                        {translate('visual11')+displayDate(new Date(item.start))+translate('visual12')+displayDate(new Date(item.end))}
                     </Text>)
                 }
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>
-                    {"Commentaires: "}
+                    {translate('visual13')}
                     <Text style={styles.innerText}>
                         {book.comment}
                     </Text>

@@ -12,6 +12,7 @@ import GlobalStyles from './styles';
 import { View, Text } from 'react-native-animatable';
 import { ConnectedHomeButton as HomeButton, ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { connect } from "react-redux";
+import { translate } from '../translations/translator';
 
 
 class Home extends Component {
@@ -68,11 +69,11 @@ class Home extends Component {
         return (
             <View style={styles.view}>
                 <Text style={styles.title}>
-                    {'Bienvenue dans ton Carnet de Lecture !'}
+                    {translate('Welcome')}
                 </Text>
 
                 <Text style={styles.subTitle}>
-                    {'Il y a '+this.props.books.length+' livres dans ta bibliothèque.'}
+                    {translate('homeSub1')+this.props.books.length+translate('homeSub2')}
                 </Text>
 
                 <View style={{marginTop:30}}>
@@ -80,32 +81,32 @@ class Home extends Component {
                         delay={100}
                         onPress={this.navigateToBookScreen}
                         icon={require('./icons/playlist_add.png')}
-                        text={'Ajouter un Livre'} />
+                        text={translate('home1')} />
                     <HomeButton
                         delay={300}
                         onPress={this.navigateToLib}
                         icon={require('./icons/books.png')}
-                        text={'Voir la Bibliothèque'} />
+                        text={translate('home2')} />
                     <HomeButton
                         delay={500}
                         onPress={this.navigateToMonth}
                         icon={require('./icons/calendar.png')}
-                        text={'Livres du mois'} />
+                        text={translate('home3')} />
                     <HomeButton
                         delay={700}
                         onPress={this.navigateToStack}
                         icon={require('./icons/list.png')}
-                        text={'Pile à Lire'} />
+                        text={translate('home4')} />
                     <HomeButton
                         delay={900}
                         onPress={this.navigateToStats}
                         icon={require('./icons/stats.png')}
-                        text={'Statistiques'} />
+                        text={translate('home5')} />
                     <HomeButton
                         delay={1100}
                         onPress={this.navigateToScan}
                         icon={require('./icons/add_camera.png')}
-                        text={'Scanner ISBN'} />
+                        text={translate('home6')} />
                 </View>
             </View>
         );

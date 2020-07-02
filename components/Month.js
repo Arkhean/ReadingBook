@@ -12,9 +12,12 @@ import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { connect } from "react-redux";
+import { translate } from '../translations/translator';
 
-const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
-                        'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+const months = [translate('Janvier'), translate('Février'), translate('Mars'),
+                translate('Avril'), translate('Mai'), translate('Juin'),
+                translate('Juillet'), translate('Août'), translate('Septembre'),
+                translate('Octobre'), translate('Novembre'), translate('Décembre')];
 
 class Month extends Component {
     constructor(props){
@@ -31,7 +34,7 @@ class Month extends Component {
         };
 
         this.props.navigation.setOptions({
-            title: 'Livres du mois',
+            title: translate('home3'),
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <HeaderButton
@@ -139,13 +142,13 @@ class Month extends Component {
                 </Text>
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>
-                    {this.state.nbBought+ ' livres achetés'}
+                    {this.state.nbBought+translate('monthBought')}
                 </Text>
                 <Text style={styles.text}>
-                    {this.state.nbRead+ ' livres lus'}
+                    {this.state.nbRead+translate('monthRead')}
                 </Text>
                 <Text style={styles.text}>
-                    {this.state.total+ ' € dépensés'}
+                    {this.state.total+translate('month€')}
                 </Text>
                 <Divider style={GlobalStyles.divider}/>
                 <FlatList

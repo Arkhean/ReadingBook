@@ -10,6 +10,7 @@ import BookRow, { getKey } from './book';
 import { Divider } from 'react-native-elements';
 import GlobalStyles from './styles';
 import { connect } from "react-redux";
+import { translate } from '../translations/translator';
 
 class StackToRead extends Component {
     constructor(props){
@@ -17,7 +18,7 @@ class StackToRead extends Component {
         this.state = { booksToShow: [] };
 
         this.props.navigation.setOptions({
-            title: 'Pile à lire',
+            title: translate('home4'),
         });
     }
 

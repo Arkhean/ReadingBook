@@ -13,6 +13,8 @@ import { Divider } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import GlobalStyles from './styles';
 import { genres, formats } from './book';
+import { translate } from '../translations/translator';
+
 
 /* textinput custom avec un titre au dessus */
 class MyTextInput extends Component {
@@ -122,7 +124,7 @@ class MultiDateInput extends Component {
             let dates = this.state.dates;
             if (this.state.inputNum === 0){
                 if (date > dates[this.cursor].end){
-                    Alert.alert('La date de début doit être inférieure à la date de fin !');
+                    Alert.alert(translate('addalert1'));
                     return;
                 }
                 else{
@@ -131,7 +133,7 @@ class MultiDateInput extends Component {
             }
             else{
                 if (date < dates[this.cursor].start){
-                    Alert.alert('La date de fin doit être supérieure à la date de début !');
+                    Alert.alert(translate('addalert2'));
                     return;
                 }
                 dates[this.cursor].end = date;
@@ -261,10 +263,10 @@ class MyImageInput extends Component {
     }
 
     onPress = () => ImagePicker.showImagePicker({
-            title: 'importer une photo',
-            takePhotoButtonTitle: 'depuis l\'appareil photo',
-            chooseFromLibraryButtonTitle: 'depuis le stockage',
-            cancelButtonTitle: 'annuler'
+            title: translate('addimport'),
+            takePhotoButtonTitle: translate('addimport1'),
+            chooseFromLibraryButtonTitle: translate('addimport2'),
+            cancelButtonTitle: translate('cancel')
         }, (response) => {
             if (response.error) {
                 console.log('ImagePicker Error: ', response.error);
@@ -304,14 +306,14 @@ export default class Add extends Component {
                 <View style={{flexDirection: 'row'}}>
                     <View style={{flex: 1}}>
                         <MyTextInput
-                            title='Titre'
+                            title={translate('title')}
                             value={this.props.book.title}
                             type='default'
                             style={styles.viewVertical}
                             onChange={text => this.props.onChange('title', text)}/>
                         <MyTextInput
                             style={styles.viewVertical}
-                            title='Auteur'
+                            title={translate('author')}
                             value={this.props.book.author}
                             type='default'
                             onChange={text => this.props.onChange('author', text)}/>
@@ -325,13 +327,13 @@ export default class Add extends Component {
 
                 <MyTextInput
                     style={styles.viewHorizontal}
-                    title='Saga'
+                    title={translate('saga')}
                     value={this.props.book.saga}
                     type='default'
                     onChange={text => this.props.onChange('saga', text)}/>
                 <MyTextInput
                     style={styles.viewHorizontal}
-                    title='Tome'
+                    title={translate('tome')}
                     value={this.props.book.nTome}
                     type='numeric'
                     editable={this.props.book.saga != ''}
@@ -341,30 +343,30 @@ export default class Add extends Component {
 
                 <MyPicker
                     style={styles.viewHorizontal}
-                    title='Genre'
+                    title={translate('genre')}
                     value={this.props.book.genre}
                     data={genres}
                     onChange={value => this.props.onChange('genre', value)}/>
                 <MyTextInput
                     style={styles.viewHorizontal}
-                    title='Editeur'
+                    title={translate('editor')}
                     value={this.props.book.editor}
                     type='default'
                     onChange={text => this.props.onChange('editor', text)}/>
                 <MyPicker
-                    title='Format'
+                    title={translate('format')}
                     value={this.props.book.format}
                     data={formats}
                     onChange={value => this.props.onChange('format', value)}/>
                 <MyTextInput
                     style={styles.viewHorizontal}
-                    title='Prix'
+                    title={translate('price')}
                     value={this.props.book.price}
                     type='numeric'
                     onChange={text => this.props.onChange('price', text)}/>
                 <MyTextInput
                     style={styles.viewHorizontal}
-                    title='Nombre de pages'
+                    title={translate('nbPages')}
                     value={this.props.book.nPages}
                     type='numeric'
                     onChange={text => this.props.onChange('nPages', text)}/>
@@ -373,17 +375,17 @@ export default class Add extends Component {
 
                 <MydateInput
                     style={styles.viewHorizontal}
-                    title="Date d'achat"
+                    title={translate('purchase')}
                     value={this.props.book.purchaseDate}
                     onChange={text => this.props.onChange('purchaseDate', text)}/>
                 <MultiDateInput
                     style={styles.viewVertical}
-                    title='Dates de lecture'
+                    title={translate('read')}
                     value={this.props.book.readingDates}
                     onChange={text => this.props.onChange('readingDates', text)}/>
                 <MyTextInput
                     style={styles.viewVertical}
-                    title='Commentaires'
+                    title={translate('comment')}
                     value={this.props.book.comment}
                     type='default'
                     multiline={true}

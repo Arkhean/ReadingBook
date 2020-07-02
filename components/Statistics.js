@@ -16,6 +16,7 @@ import { ConnectedHomeButton as HomeButton,
 import { genres } from './book';
 import { colors } from './ColorPicker';
 import { connect } from "react-redux";
+import { translate } from '../translations/translator';
 
 import {
     LineChart,
@@ -29,8 +30,11 @@ import {
 import { Dimensions } from "react-native";
 const screenWidth = Dimensions.get("window").width;
 
-const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
-                        'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+const months = [translate('Janvier'), translate('Février'), translate('Mars'),
+                translate('Avril'), translate('Mai'), translate('Juin'),
+                translate('Juillet'), translate('Août'), translate('Septembre'),
+                translate('Octobre'), translate('Novembre'), translate('Décembre')];
+
 
 // fourni la liste des n derniers mois à partir d'aujourd'hui
 const getLastMonth = (n) => {
@@ -56,10 +60,10 @@ const displayDate = (date) => {
     return (month < 10 ? '0'+month : month) + '/' + year.toString().slice(-2);
 }
 
-const titles = ['Nombre de Livres achetés par mois',
-                'Argent dépensé par mois',
-                'Nombre de Livres lus par mois',
-                'Nombre de Livres par genre' ];
+const titles = [translate('stats1'),
+                translate('stats2'),
+                translate('stats3'),
+                translate('stats4') ];
 
 class Stats extends Component {
     constructor(props){
@@ -72,7 +76,7 @@ class Stats extends Component {
                         initialized: false };
 
         this.props.navigation.setOptions({
-            title: 'Statistiques sur 24 mois',
+            title: translate('stats5'),
         });
     }
 

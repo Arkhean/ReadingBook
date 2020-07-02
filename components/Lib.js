@@ -16,12 +16,9 @@ import { View } from 'react-native-animatable';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { connect } from "react-redux";
 import { removeBooks, addBook } from '../storage/bookActions';
+import { translate } from '../translations/translator';
 
 const noAnimation = { from:{}, to:{} };
-/*const rTranslation = { from: { marginLeft: -30 },
-                      to: { marginLeft: 0 } };
-const lTranslation = { from: { marginLeft: 30 },
-                      to: { marginLeft: 5 } };*/
 const scrollDownAnimation = { from: { marginTop: -30 },
                               to: { marginTop: 0 }
 };
@@ -80,13 +77,12 @@ class Lib extends Component {
                 if ( book.title.includes(filter) ||
                      book.author.includes(filter) ||
                      book.saga.includes(filter) ||
-                     (book.genre != '<non renseigné>' && book.genre.includes(filter)) ||
+                     (book.genre != translate('empty') && book.genre.includes(filter)) ||
                      (book.editor.includes(filter)) ){
                         booksToShow.push(book);
                 }
             }
         }
-        console.log('up');
         this.setState({booksToShow: booksToShow, checkBoxes: booksToShow.map(() => false)});
     }
 

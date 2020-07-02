@@ -17,6 +17,7 @@ import { defaultBook, getKey } from './book';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { connect } from "react-redux";
 import { addBook, removeBook, editBook } from '../storage/bookActions';
+import { translate } from '../translations/translator';
 
 
 /* requiert 2 params : book et visualMode : true/false */
@@ -47,7 +48,7 @@ class BookScreen extends Component {
                                 visualMode: this.props.route.params.visualMode,
                                 modificationMode: false });
                 this.props.navigation.setOptions({
-                    title: 'Détails du livre',
+                    title: translate('details'),
                     headerLeft: () =>
                         <HeaderBackButton
                             onPress={this.myGoBack}
@@ -60,7 +61,7 @@ class BookScreen extends Component {
                                 visualMode: this.props.route.params.visualMode,
                                 modificationMode: false });
                 this.props.navigation.setOptions({
-                    title: 'Ajouter un livre',
+                    title: translate('home1'),
                     headerLeft: () =>
                         <HeaderBackButton
                             onPress={this.myGoBack}
@@ -83,7 +84,8 @@ class BookScreen extends Component {
                 for(let b of this.props.books){
                     const k = getKey(b);
                     if (k == newK){
-                        Alert.alert('Erreur', book.title+' de '+book.author+' est déjà dans la bibliothèque !');
+                        Alert.alert(translate('error'),
+                            book.title+translate('bookAlert1')+book.author+translate('bookAlert2'));
                         return;
                     }
                 }
@@ -97,10 +99,10 @@ class BookScreen extends Component {
                 this.modified = false;
                 callback();
             }
-            this.props.navigation.setOptions({ title: 'Détails du livre' });
+            this.props.navigation.setOptions({ title: translate('details') });
         }
         else{
-            Alert.alert('Il faut au minimum renseigner le titre et l\'auteur !');
+            Alert.alert(translate("addAlert3"));
         }
     }
 
@@ -114,12 +116,12 @@ class BookScreen extends Component {
 
     // pour supprimer ce livre
     delete = () => {
-        Alert.alert('Supprimer ce livre?', this.state.book.title,
-                [{text: 'Supprimer', onPress: () => {
+        Alert.alert(translate('delete'), this.state.book.title,
+                [{text: translate('deleteConfirm'), onPress: () => {
                     this.props.removeBook(getKey(this.state.book));
                     this.myGoBack();
                 }},
-                    {text: 'Annuler', onPress: () => {}}]
+                    {text: translate('cancel'), onPress: () => {}}]
         );
     }
 
@@ -130,12 +132,12 @@ class BookScreen extends Component {
             // si on modifie un livre
             if (this.modified){
                 // s'il a été modifié
-                Alert.alert('Attention !', 'Quitter sans sauvegarder ?' ,
-                        [{text: 'sauvegarder', onPress: () => this.save(() => {
+                Alert.alert(translate('alertSave1'), translate('alertSave2'),
+                        [{text: translate('alertSave3'), onPress: () => this.save(() => {
                             this.setState({ visualMode: true,
                                             modificationMode: false });
                         })},
-                            {text: 'annuler', onPress: this.alertCancel}]);
+                            {text: translate('cancel'), onPress: this.alertCancel}]);
             }
             else{
                 // s'il n'a pas été modifié, on revient en visual
@@ -146,14 +148,14 @@ class BookScreen extends Component {
             // si on crée un livre
             if (this.modified){
                 // on a entrée des trucs, mais pas enregistré
-                Alert.alert('Attention !', 'Quitter sans sauvegarder ?' ,
-                        [{text: 'sauvegarder', onPress: () => {
+                Alert.alert(translate('alertSave1'), translate('alertSave2'),
+                        [{text: translate('alertSave3'), onPress: () => {
                                 this.save(() => {
                                     BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
                                     this.props.navigation.goBack();
                                 });
                             }},
-                            {text: 'annuler', onPress: () => {
+                            {text: translate('cancel'), onPress: () => {
                                 BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
                                 this.props.navigation.goBack();
                             }}]);
@@ -169,7 +171,7 @@ class BookScreen extends Component {
     enterModifyMode = () => {
         this.backup = Object.assign({}, this.state.book); // en cas d'annulation
         this.setState({ visualMode: false, modificationMode: true });
-        this.props.navigation.setOptions({ title: 'Modification' });
+        this.props.navigation.setOptions({ title: translate('modification') });
     }
 
     // callback appelé dans add pour modifier le state avec le book

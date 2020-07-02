@@ -18,20 +18,21 @@ import {
     setUnreadColor
 } from '../storage/colorActions';
 import { removeAll } from '../storage/bookActions';
+import { translate } from '../translations/translator';
 
 class Params extends Component {
     constructor(props){
         super(props);
         this.props.navigation.setOptions({
-            title: 'Paramètres',
+            title: translate('parameters'),
         });
     }
 
     reset = async () => {
-        Alert.alert('Attention',
-                    'Etes-vous sûr de vouloir supprimer tous vos livres ?',
-                    [{text: 'Supprimer', onPress: this.props.removeAll},
-                    {text: 'Annuler', onPress: () => {}}]
+        Alert.alert(translate('attention'),
+                    translate('paramAlert'),
+                    [{text: translate('deleteConfirm'), onPress: this.props.removeAll},
+                    {text: translate('cancel'), onPress: () => {}}]
         );
     }
 
@@ -39,30 +40,30 @@ class Params extends Component {
         return (
             <ScrollView>
                 <Text style={styles.title}>
-                    {'Application de Carnet de Lecture permettant d\'enregistrer sa collection personnelle de livres.'}
+                    {translate('paramInfo1')}
                 </Text>
 
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>
-                    {'Couleur principale'}
+                    {translate('paramInfo2')}
                 </Text>
                 <ColorPicker
                     color={this.props.colors.mainColor}
                     onChange={this.props.setMainColor} />
                 <Text style={styles.text}>
-                    {'Couleur secondaire'}
+                    {translate('paramInfo3')}
                 </Text>
                 <ColorPicker
                     color={this.props.colors.secondaryColor}
                     onChange={this.props.setSecondaryColor} />
                 <Text style={styles.text}>
-                    {'Couleur des livres lus'}
+                    {translate('paramInfo4')}
                 </Text>
                 <ColorPicker
                     color={this.props.colors.readColor}
                     onChange={this.props.setReadColor} />
                 <Text style={styles.text}>
-                    {'Couleur des livres non-lus'}
+                    {translate('paramInfo5')}
                 </Text>
                 <ColorPicker
                     color={this.props.colors.unreadColor}
@@ -71,21 +72,21 @@ class Params extends Component {
                 <Divider style={GlobalStyles.divider}/>
                 <TextButton
                     onPress={this.reset}
-                    text={'Réinitialiser l\'application'}/>
+                    text={translate('paramInfo6')}/>
 
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>
                     {'Version 1.0.1'}
                 </Text>
                 <Text style={styles.subtext}>
-                    {'Développée par Julien Miens, Juin-Juillet 2020'}
+                    {translate('paramInfo7')}
                 </Text>
                 <View style={{marginVertical: 30}}>
                     <Text style={styles.text}>
-                        {'Crédits:'}
+                        {translate('paramInfo8')}
                     </Text>
                     <Text style={styles.subtext}>
-                        {'Icones de material.io'}
+                        {translate('paramInfo9')}
                     </Text>
                 </View>
 

@@ -16,6 +16,7 @@ import { defaultBook } from './book';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { StackActions } from '@react-navigation/native';
 import NetInfo from '@react-native-community/netinfo';
+import { translate } from '../translations/translator';
 
 export default class BarcodeScan extends Component {
     constructor(props) {
