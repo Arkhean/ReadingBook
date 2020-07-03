@@ -366,7 +366,7 @@ export default class Add extends Component {
                     onChange={text => this.props.onChange('price', text)}/>
                 <MyTextInput
                     style={styles.viewHorizontal}
-                    title={translate('nbPages')}
+                    title={translate('nbpages')}
                     value={this.props.book.nPages}
                     type='numeric'
                     onChange={text => this.props.onChange('nPages', text)}/>

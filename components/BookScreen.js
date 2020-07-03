@@ -85,7 +85,7 @@ class BookScreen extends Component {
                     const k = getKey(b);
                     if (k == newK){
                         Alert.alert(translate('error'),
-                            book.title+translate('bookAlert1')+book.author+translate('bookAlert2'));
+                            book.title+translate('bookalert1')+book.author+translate('bookalert2'));
                         return;
                     }
                 }
@@ -102,7 +102,7 @@ class BookScreen extends Component {
             this.props.navigation.setOptions({ title: translate('details') });
         }
         else{
-            Alert.alert(translate("addAlert3"));
+            Alert.alert(translate("addalert3"));
         }
     }
 
@@ -132,8 +132,8 @@ class BookScreen extends Component {
             // si on modifie un livre
             if (this.modified){
                 // s'il a été modifié
-                Alert.alert(translate('alertSave1'), translate('alertSave2'),
-                        [{text: translate('alertSave3'), onPress: () => this.save(() => {
+                Alert.alert(translate('attention'), translate('alertsave2'),
+                        [{text: translate('alertsave3'), onPress: () => this.save(() => {
                             this.setState({ visualMode: true,
                                             modificationMode: false });
                         })},
@@ -148,8 +148,8 @@ class BookScreen extends Component {
             // si on crée un livre
             if (this.modified){
                 // on a entrée des trucs, mais pas enregistré
-                Alert.alert(translate('alertSave1'), translate('alertSave2'),
-                        [{text: translate('alertSave3'), onPress: () => {
+                Alert.alert(translate('attention'), translate('alertsave2'),
+                        [{text: translate('alertsave3'), onPress: () => {
                                 this.save(() => {
                                     BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
                                     this.props.navigation.goBack();

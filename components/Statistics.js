@@ -30,10 +30,10 @@ import {
 import { Dimensions } from "react-native";
 const screenWidth = Dimensions.get("window").width;
 
-const months = [translate('Janvier'), translate('Février'), translate('Mars'),
-                translate('Avril'), translate('Mai'), translate('Juin'),
-                translate('Juillet'), translate('Août'), translate('Septembre'),
-                translate('Octobre'), translate('Novembre'), translate('Décembre')];
+const months = [translate('janvier'), translate('fevrier'), translate('mars'),
+                translate('avril'), translate('mai'), translate('juin'),
+                translate('juillet'), translate('aout'), translate('septembre'),
+                translate('octobre'), translate('novembre'), translate('decembre')];
 
 
 // fourni la liste des n derniers mois à partir d'aujourd'hui

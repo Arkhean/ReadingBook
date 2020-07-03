@@ -30,8 +30,8 @@ class Params extends Component {
 
     reset = async () => {
         Alert.alert(translate('attention'),
-                    translate('paramAlert'),
-                    [{text: translate('deleteConfirm'), onPress: this.props.removeAll},
+                    translate('paramalert'),
+                    [{text: translate('deleteconfirm'), onPress: this.props.removeAll},
                     {text: translate('cancel'), onPress: () => {}}]
         );
     }
@@ -40,30 +40,30 @@ class Params extends Component {
         return (
             <ScrollView>
                 <Text style={styles.title}>
-                    {translate('paramInfo1')}
+                    {translate('paraminfo1')}
                 </Text>
 
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>
-                    {translate('paramInfo2')}
+                    {translate('paraminfo2')}
                 </Text>
                 <ColorPicker
                     color={this.props.colors.mainColor}
                     onChange={this.props.setMainColor} />
                 <Text style={styles.text}>
-                    {translate('paramInfo3')}
+                    {translate('paraminfo3')}
                 </Text>
                 <ColorPicker
                     color={this.props.colors.secondaryColor}
                     onChange={this.props.setSecondaryColor} />
                 <Text style={styles.text}>
-                    {translate('paramInfo4')}
+                    {translate('paraminfo4')}
                 </Text>
                 <ColorPicker
                     color={this.props.colors.readColor}
                     onChange={this.props.setReadColor} />
                 <Text style={styles.text}>
-                    {translate('paramInfo5')}
+                    {translate('paraminfo5')}
                 </Text>
                 <ColorPicker
                     color={this.props.colors.unreadColor}
@@ -72,21 +72,21 @@ class Params extends Component {
                 <Divider style={GlobalStyles.divider}/>
                 <TextButton
                     onPress={this.reset}
-                    text={translate('paramInfo6')}/>
+                    text={translate('paraminfo6')}/>
 
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>
                     {'Version 1.0.1'}
                 </Text>
                 <Text style={styles.subtext}>
-                    {translate('paramInfo7')}
+                    {translate('paraminfo7')}
                 </Text>
                 <View style={{marginVertical: 30}}>
                     <Text style={styles.text}>
-                        {translate('paramInfo8')}
+                        {translate('paraminfo8')}
                     </Text>
                     <Text style={styles.subtext}>
-                        {translate('paramInfo9')}
+                        {translate('paraminfo9')}
                     </Text>
                 </View>
 

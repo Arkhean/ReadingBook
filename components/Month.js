@@ -14,10 +14,10 @@ import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { connect } from "react-redux";
 import { translate } from '../translations/translator';
 
-const months = [translate('Janvier'), translate('Février'), translate('Mars'),
-                translate('Avril'), translate('Mai'), translate('Juin'),
-                translate('Juillet'), translate('Août'), translate('Septembre'),
-                translate('Octobre'), translate('Novembre'), translate('Décembre')];
+const months = [translate('janvier'), translate('fevrier'), translate('mars'),
+                translate('avril'), translate('mai'), translate('juin'),
+                translate('juillet'), translate('aout'), translate('septembre'),
+                translate('octobre'), translate('novembre'), translate('decembre')];
 
 class Month extends Component {
     constructor(props){
@@ -142,13 +142,13 @@ class Month extends Component {
                 </Text>
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>
-                    {this.state.nbBought+translate('monthBought')}
+                    {this.state.nbBought+translate('monthbought')}
                 </Text>
                 <Text style={styles.text}>
-                    {this.state.nbRead+translate('monthRead')}
+                    {this.state.nbRead+translate('monthread')}
                 </Text>
                 <Text style={styles.text}>
-                    {this.state.total+translate('month€')}
+                    {this.state.total+translate('monthmoney')}
                 </Text>
                 <Divider style={GlobalStyles.divider}/>
                 <FlatList

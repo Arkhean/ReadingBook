@@ -45,16 +45,16 @@ const isRead = (book) => {
     return book.readingDates.length > 0;
 }
 
-export const genres = [translate('empty'), translate('Aventure'),
-            translate('Policier'), translate('Science-Fiction'), translate('Fantastique'),
-            translate('Horreur'), translate('Biographie'), translate('Nouvelle'),
-            translate('Conte'), translate('Fantasy'), translate('Romance'),
-            translate('Comtemporain'), translate('Classique'), translate('Théâtre'),
-            translate('Poésie')];
+export const genres = [translate('empty'), translate('aventure'),
+            translate('policier'), translate('sf'), translate('fantastique'),
+            translate('horreur'), translate('biographie'), translate('nouvelle'),
+            translate('conte'), translate('fantasy'), translate('romance'),
+            translate('contemporain'), translate('classique'), translate('theatre'),
+            translate('poesie')];
 
-export const formats = [translate('empty'), translate('Poche'),
-            translate('Semi-Poche'), translate('Grand Format'), translate('Manga'),
-            translate('Bande dessinée') ];
+export const formats = [translate('empty'), translate('poche'),
+            translate('semipoche'), translate('grandformat'), translate('manga'),
+            translate('bandedessinee') ];
 
 ////////////////////////////////////////////////////////////////////////////////
 // affichage pour liste, cliquable pour plus de détails
