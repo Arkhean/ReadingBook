@@ -14,10 +14,8 @@ import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { connect } from "react-redux";
 import { translate } from '../translations/translator';
 
-const months = [translate('janvier'), translate('fevrier'), translate('mars'),
-                translate('avril'), translate('mai'), translate('juin'),
-                translate('juillet'), translate('aout'), translate('septembre'),
-                translate('octobre'), translate('novembre'), translate('decembre')];
+const months = ['janvier', 'fevrier', 'mars', 'avril', 'mai', 'juin', 'juillet',
+                        'aout', 'septembre','octobre', 'novembre', 'decembre'];
 
 class Month extends Component {
     constructor(props){
@@ -138,7 +136,7 @@ class Month extends Component {
         return (
             <View style={styles.view}>
                 <Text style={styles.title}>
-                    {months[this.state.month]+" "+this.state.year}
+                    {translate(months[this.state.month])+" "+this.state.year}
                 </Text>
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>

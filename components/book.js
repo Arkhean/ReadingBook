@@ -30,9 +30,9 @@ export const defaultBook = {   title: '',
                         author: '',
                         saga: '',
                         nTome: 1, // si sage != ''
-                        genre: '<non renseigné>',
+                        genre: translate('empty'),
                         editor: '',
-                        format: '<non renseigné>', // poche, grand format
+                        format: translate('empty'), // poche, grand format
                         price: 0,
                         nPages: 0,
                         purchaseDate: new Date(Date.now()),
@@ -45,16 +45,12 @@ const isRead = (book) => {
     return book.readingDates.length > 0;
 }
 
-export const genres = [translate('empty'), translate('aventure'),
-            translate('policier'), translate('sf'), translate('fantastique'),
-            translate('horreur'), translate('biographie'), translate('nouvelle'),
-            translate('conte'), translate('fantasy'), translate('romance'),
-            translate('contemporain'), translate('classique'), translate('theatre'),
-            translate('poesie')];
+export const genres = ['empty', 'aventure', 'policier', 'sf', 'fantastique',
+            'horreur', 'biographie', 'nouvelle', 'conte', 'fantasy', 'romance',
+            'contemporain', 'classique', 'theatre', 'poesie'];
 
-export const formats = [translate('empty'), translate('poche'),
-            translate('semipoche'), translate('grandformat'), translate('manga'),
-            translate('bandedessinee') ];
+export const formats = ['empty', 'poche', 'semipoche', 'grandformat', 'manga',
+            'bandedessinee' ];
 
 ////////////////////////////////////////////////////////////////////////////////
 // affichage pour liste, cliquable pour plus de détails

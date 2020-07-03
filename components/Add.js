@@ -245,7 +245,7 @@ class MyPicker extends Component {
                         selectedValue={this.props.value}
                         onValueChange={(itemValue, itemIndex) => this.props.onChange(itemValue)}>
                         {this.props.data.map((item, i) =>
-                            <Picker.Item key={i} label={item} value={item} />)}
+                            <Picker.Item key={i} label={translate(item)} value={item} />)}
                     </Picker>
                 </View>
             </View>

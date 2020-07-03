@@ -30,11 +30,6 @@ import {
 import { Dimensions } from "react-native";
 const screenWidth = Dimensions.get("window").width;
 
-const months = [translate('janvier'), translate('fevrier'), translate('mars'),
-                translate('avril'), translate('mai'), translate('juin'),
-                translate('juillet'), translate('aout'), translate('septembre'),
-                translate('octobre'), translate('novembre'), translate('decembre')];
-
 
 // fourni la liste des n derniers mois à partir d'aujourd'hui
 const getLastMonth = (n) => {
@@ -60,10 +55,7 @@ const displayDate = (date) => {
     return (month < 10 ? '0'+month : month) + '/' + year.toString().slice(-2);
 }
 
-const titles = [translate('stats1'),
-                translate('stats2'),
-                translate('stats3'),
-                translate('stats4') ];
+const titles = ['stats1', 'stats2', 'stats3', 'stats4' ];
 
 class Stats extends Component {
     constructor(props){
@@ -170,7 +162,7 @@ class Stats extends Component {
                         style={{flex: 1}}
                         selectedValue={titles[this.state.cursor]}
                         onValueChange={(itemValue, itemIndex) => this.onChange(itemIndex)}>
-                        {titles.map((item, i) => <Picker.Item key={i} label={item} value={item} />)}
+                        {titles.map((item, i) => <Picker.Item key={i} label={translate(item)} value={item} />)}
                     </Picker>
                 </View>
                 {this.state.cursor != 3
