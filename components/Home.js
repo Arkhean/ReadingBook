@@ -50,7 +50,7 @@ class Home extends Component {
     }
 
     navigateToLib = () => {
-        this.props.navigation.navigate('Bibliothèque');
+        this.props.navigation.navigate('Lib');
     }
 
     navigateToStack = () => {

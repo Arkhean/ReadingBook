@@ -50,7 +50,7 @@ class Navigator extends Component {
                         component={BookScreen}
                         options={options}/>
                     <Stack.Screen
-                        name="Bibliothèque"
+                        name="Lib"
                         component={Lib}
                         options={options}/>
                     <Stack.Screen

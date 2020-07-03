@@ -41,6 +41,7 @@ class Lib extends Component {
         this.removeModeWasTrue = false;
 
         this.props.navigation.setOptions({
+            title: translate('lib'),
             headerRight: () => (
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <HeaderButton
