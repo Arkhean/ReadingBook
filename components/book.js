@@ -32,7 +32,7 @@ export const defaultBook = {   title: '',
                         nTome: 1, // si sage != ''
                         genre: 'empty',
                         editor: '',
-                        format: 'empty', 
+                        format: 'empty',
                         price: 0,
                         nPages: 0,
                         purchaseDate: new Date(Date.now()),
@@ -46,8 +46,6 @@ const isRead = (book) => {
 }
 
 export const equal = (book1, book2) => {
-    console.log(book1);
-    console.log(book2);
     if (book1.readingDates.length == book2.readingDates.length) {
         res = true;
         for(let i in book1.readingDates){

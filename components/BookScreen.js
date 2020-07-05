@@ -89,12 +89,13 @@ class BookScreen extends Component {
                     }
                 }
                 this.props.addBook(book);
-                BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
-                this.props.navigation.goBack();
+                this.backup = Object.assign({}, this.state.book);
+                callback();
             }
             else{
                 // sinon on est en train de modifier un existant
                 this.props.editBook(book);
+                this.backup = Object.assign({}, this.state.book);
                 callback();
             }
             this.props.navigation.setOptions({ title: translate('details') });
@@ -166,6 +167,7 @@ class BookScreen extends Component {
     }
 
     enterModifyMode = () => {
+        this.backup = Object.assign({}, this.state.book); // en cas de modifications annulées
         this.setState({ visualMode: false, modificationMode: true });
         this.props.navigation.setOptions({ title: translate('modification') });
     }
