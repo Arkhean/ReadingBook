@@ -187,11 +187,19 @@ class MultiDateInput extends Component {
                             {'du'}
                         </Text>
                         <TouchableOpacity
-                            style={GlobalStyles.input}
+                            style={{
+                                height: 40,
+                                borderColor: 'gray',
+                                borderWidth: 1,
+                                alignItems: 'center',
+                                flex: 1,
+                                borderRadius: 10,
+                                textAlignVertical: 'top'
+                            }}
                             editable={this.props.editable}
                             activeOpacity={0.5}
                             onPress={() => { this.setState({show: true, inputNum: 0}); this.cursor = i; }}>
-                            <Text style={{fontSize: 18, marginTop: 5}}>
+                            <Text style={{fontSize: 17, marginTop: 6}}>
                                 {displayDate(this.state.dates[i].start)}
                             </Text>
                         </TouchableOpacity>
@@ -199,11 +207,19 @@ class MultiDateInput extends Component {
                             {'au'}
                         </Text>
                         <TouchableOpacity
-                            style={GlobalStyles.input}
+                            style={{
+                                height: 40,
+                                borderColor: 'gray',
+                                borderWidth: 1,
+                                alignItems: 'center',
+                                flex: 1,
+                                borderRadius: 10,
+                                textAlignVertical: 'top'
+                            }}
                             editable={this.props.editable}
                             activeOpacity={0.5}
                             onPress={() => { this.setState({show: true, inputNum: 1}); this.cursor = i; }}>
-                            <Text style={{fontSize: 18, marginTop: 5}}>
+                            <Text style={{fontSize: 17, marginTop: 6}}>
                                 {displayDate(this.state.dates[i].end)}
                             </Text>
                         </TouchableOpacity>
@@ -273,8 +289,10 @@ class MyImageInput extends Component {
             }
             else {
                 const source = response.uri;
-                this.setState({ image: source });
-                this.props.onChange(source);
+                if (source !== undefined){
+                    this.setState({ image: source });
+                    this.props.onChange(source);
+                }
             }
         });
 

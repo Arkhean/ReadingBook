@@ -49,7 +49,6 @@ export default styles = {
         textAlignVertical: 'top'
     },
     multilineInput: {
-        //height: 40,
         borderColor: 'gray',
         borderWidth: 1,
         paddingHorizontal: 10,

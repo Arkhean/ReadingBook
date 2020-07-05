@@ -87,7 +87,7 @@ class Stats extends Component {
         let bought = new Array(N).fill(0);
         let read = new Array(N).fill(0);
         let expense = new Array(N).fill(0);
-        let genreCount = genres.map((name,i) => {return {name: name,
+        let genreCount = genres.map((name,i) => {return {name: translate(name),
                                                             n: 0,
                                                             color: colors[i],
                                                             legendFontColor: colors[i]}

@@ -49,7 +49,7 @@ export default class VisualBook extends Component {
                 <Divider style={GlobalStyles.divider}/>
                 <Text style={styles.text}>{translate('visual2')}
                     <Text style={styles.innerText}>
-                        {book.genre}
+                        {translate(book.genre)}
                     </Text>
                 </Text>
                 <Text style={styles.text}>
@@ -61,7 +61,7 @@ export default class VisualBook extends Component {
                 <Text style={styles.text}>
                     {translate('visual4')}
                     <Text style={styles.innerText}>
-                        {book.format}
+                        {translate(book.format)}
                     </Text>
                 </Text>
                 <Divider style={GlobalStyles.divider}/>

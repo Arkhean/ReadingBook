@@ -13,7 +13,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import VisualBook from './VisualBook';
 import Add from './Add';
 import GlobalStyles from './styles';
-import { defaultBook, getKey } from './book';
+import { defaultBook, getKey, equal } from './book';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { connect } from "react-redux";
 import { addBook, removeBook, editBook } from '../storage/bookActions';
@@ -27,16 +27,9 @@ class BookScreen extends Component {
         this.state = {  book: Object.assign({}, defaultBook), // copy de defaultBook
                         visualMode: true,           // pour afficher un livre
                         modificationMode: false };  // quand on modifie (!= créer)
-        this.modified = false;
-        this.backup = null; // en cas de modifications annulées
 
         this.props.navigation.addListener('focus', () => {
             BackHandler.addEventListener("hardwareBackPress", this.myGoBack);
-            if ('fromCamera' in this.props.route.params){
-                if (this.props.route.params.fromCamera){
-                    this.modified = true;
-                }
-            }
 
             /* on visualise le contenu du livre */
             if (this.props.route.params.book != null){
@@ -47,6 +40,7 @@ class BookScreen extends Component {
                 this.setState({ book: book,
                                 visualMode: this.props.route.params.visualMode,
                                 modificationMode: false });
+                this.backup = Object.assign({}, book); // en cas de modifications annulées
                 this.props.navigation.setOptions({
                     title: translate('details'),
                     headerLeft: () =>
@@ -60,6 +54,7 @@ class BookScreen extends Component {
                 this.setState({ book: Object.assign({}, defaultBook), // copy de defaultBook
                                 visualMode: this.props.route.params.visualMode,
                                 modificationMode: false });
+                this.backup = Object.assign({}, defaultBook); // en cas de modifications annulées
                 this.props.navigation.setOptions({
                     title: translate('home1'),
                     headerLeft: () =>
@@ -69,6 +64,10 @@ class BookScreen extends Component {
                 });
             }
         });
+    }
+
+    isModified = () => {
+        return !equal(this.backup, this.state.book);
     }
 
     // sauvegarde ou edit un book
@@ -90,13 +89,12 @@ class BookScreen extends Component {
                     }
                 }
                 this.props.addBook(book);
-                this.modified = false;
-                callback();
+                BackHandler.removeEventListener("hardwareBackPress", this.myGoBack);
+                this.props.navigation.goBack();
             }
             else{
                 // sinon on est en train de modifier un existant
                 this.props.editBook(book);
-                this.modified = false;
                 callback();
             }
             this.props.navigation.setOptions({ title: translate('details') });
@@ -108,7 +106,6 @@ class BookScreen extends Component {
 
     alertCancel = () => {
         // annuler les modifs avec le backup
-        this.modified = false;
         this.setState({ book: this.backup,
                         visualMode: true,
                         modificationMode: false });
@@ -130,7 +127,7 @@ class BookScreen extends Component {
     myGoBack = async () => {
         if (this.state.modificationMode){
             // si on modifie un livre
-            if (this.modified){
+            if (this.isModified()){
                 // s'il a été modifié
                 Alert.alert(translate('attention'), translate('alertsave2'),
                         [{text: translate('alertsave3'), onPress: () => this.save(() => {
@@ -146,7 +143,7 @@ class BookScreen extends Component {
         }
         else{
             // si on crée un livre
-            if (this.modified){
+            if (this.isModified()){
                 // on a entrée des trucs, mais pas enregistré
                 Alert.alert(translate('attention'), translate('alertsave2'),
                         [{text: translate('alertsave3'), onPress: () => {
@@ -169,14 +166,12 @@ class BookScreen extends Component {
     }
 
     enterModifyMode = () => {
-        this.backup = Object.assign({}, this.state.book); // en cas d'annulation
         this.setState({ visualMode: false, modificationMode: true });
         this.props.navigation.setOptions({ title: translate('modification') });
     }
 
     // callback appelé dans add pour modifier le state avec le book
     setField = (target, value) => {
-        this.modified = true;
         let book = this.state.book;
         book[target] = value;
         this.setState({ book });

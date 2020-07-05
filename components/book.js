@@ -30,9 +30,9 @@ export const defaultBook = {   title: '',
                         author: '',
                         saga: '',
                         nTome: 1, // si sage != ''
-                        genre: translate('empty'),
+                        genre: 'empty',
                         editor: '',
-                        format: translate('empty'), // poche, grand format
+                        format: 'empty', 
                         price: 0,
                         nPages: 0,
                         purchaseDate: new Date(Date.now()),
@@ -43,6 +43,34 @@ export const defaultBook = {   title: '',
 // on vérifie qu'un livre a été lu avec la longueur de sa liste de lectures
 const isRead = (book) => {
     return book.readingDates.length > 0;
+}
+
+export const equal = (book1, book2) => {
+    console.log(book1);
+    console.log(book2);
+    if (book1.readingDates.length == book2.readingDates.length) {
+        res = true;
+        for(let i in book1.readingDates){
+            res = res && (book1.readingDates[i].start == book2.readingDates[i].start);
+            res = res && (book1.readingDates[i].end == book2.readingDates[i].end);
+        }
+        return res &&
+            book1.title == book2.title &&
+            book1.author == book2.author &&
+            book1.genre == book2.genre &&
+            book1.saga == book2.saga &&
+            book1.nTome == book2.nTome &&
+            book1.editor == book2.editor &&
+            book1.format == book2.format &&
+            book1.price == book2.price &&
+            book1.nPages == book2.nPages &&
+            book1.purchaseDate == book2.purchaseDate &&
+            book1.imageUri == book2.imageUri &&
+            book1.comment == book2.comment;
+    }
+    else {
+        return false;
+    }
 }
 
 export const genres = ['empty', 'aventure', 'policier', 'sf', 'fantastique',
