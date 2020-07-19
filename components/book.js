@@ -45,9 +45,15 @@ const isRead = (book) => {
     return book.readingDates.length > 0;
 }
 
+export const copy = (book) => {
+    let newBook = Object.assign({}, book);
+    newBook.readingDates = [...book.readingDates];
+    return newBook;
+}
+
 export const equal = (book1, book2) => {
     if (book1.readingDates.length == book2.readingDates.length) {
-        res = true;
+        let res = true;
         for(let i in book1.readingDates){
             res = res && (book1.readingDates[i].start == book2.readingDates[i].start);
             res = res && (book1.readingDates[i].end == book2.readingDates[i].end);

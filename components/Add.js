@@ -282,10 +282,15 @@ class MyImageInput extends Component {
             title: translate('addimport'),
             takePhotoButtonTitle: translate('addimport1'),
             chooseFromLibraryButtonTitle: translate('addimport2'),
+            customButtons: [{name: 'del', title: translate('addimport3')}],
             cancelButtonTitle: translate('cancel')
         }, (response) => {
             if (response.error) {
                 console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton === 'del'){
+                this.setState({ image: null });
+                this.props.onChange('');
             }
             else {
                 const source = response.uri;

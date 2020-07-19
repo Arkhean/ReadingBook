@@ -13,7 +13,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import VisualBook from './VisualBook';
 import Add from './Add';
 import GlobalStyles from './styles';
-import { defaultBook, getKey, equal } from './book';
+import { defaultBook, getKey, equal, copy } from './book';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { connect } from "react-redux";
 import { addBook, removeBook, editBook } from '../storage/bookActions';
@@ -24,7 +24,7 @@ import { translate } from '../translations/translator';
 class BookScreen extends Component {
     constructor(props){
         super(props);
-        this.state = {  book: Object.assign({}, defaultBook), // copy de defaultBook
+        this.state = {  book: copy(defaultBook), // copy de defaultBook
                         visualMode: true,           // pour afficher un livre
                         modificationMode: false };  // quand on modifie (!= créer)
 
@@ -40,7 +40,7 @@ class BookScreen extends Component {
                 this.setState({ book: book,
                                 visualMode: this.props.route.params.visualMode,
                                 modificationMode: false });
-                this.backup = Object.assign({}, book); // en cas de modifications annulées
+                this.backup = copy(book); // en cas de modifications annulées
                 this.props.navigation.setOptions({
                     title: translate('details'),
                     headerLeft: () =>
@@ -51,10 +51,10 @@ class BookScreen extends Component {
             }
             /* on va créer un nouveau livre */
             else{
-                this.setState({ book: Object.assign({}, defaultBook), // copy de defaultBook
+                this.setState({ book: copy(defaultBook), // copy de defaultBook
                                 visualMode: this.props.route.params.visualMode,
                                 modificationMode: false });
-                this.backup = Object.assign({}, defaultBook); // en cas de modifications annulées
+                this.backup = copy(defaultBook); // en cas de modifications annulées
                 this.props.navigation.setOptions({
                     title: translate('home1'),
                     headerLeft: () =>
@@ -89,13 +89,13 @@ class BookScreen extends Component {
                     }
                 }
                 this.props.addBook(book);
-                this.backup = Object.assign({}, this.state.book);
+                this.backup = copy(this.state.book);
                 callback();
             }
             else{
                 // sinon on est en train de modifier un existant
                 this.props.editBook(book);
-                this.backup = Object.assign({}, this.state.book);
+                this.backup = copy(this.state.book);
                 callback();
             }
             this.props.navigation.setOptions({ title: translate('details') });
@@ -167,7 +167,7 @@ class BookScreen extends Component {
     }
 
     enterModifyMode = () => {
-        this.backup = Object.assign({}, this.state.book); // en cas de modifications annulées
+        this.backup = copy(this.state.book); // en cas de modifications annulées
         this.setState({ visualMode: false, modificationMode: true });
         this.props.navigation.setOptions({ title: translate('modification') });
     }

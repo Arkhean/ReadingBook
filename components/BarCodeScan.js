@@ -12,7 +12,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Alert, Image, ActivityIndicator } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import GlobalStyles from './styles';
-import { defaultBook } from './book';
+import { defaultBook, copy } from './book';
 import { ConnectedHeaderButton as HeaderButton } from './Buttons';
 import { StackActions } from '@react-navigation/native';
 import NetInfo from '@react-native-community/netinfo';
@@ -79,7 +79,7 @@ export default class BarcodeScan extends Component {
                                             response.json().then((json) => {
                                                 // générer le book avec les infos
                                                 const info = json.volumeInfo;
-                                                let book = Object.assign({}, defaultBook);
+                                                let book = copy(defaultBook);
                                                 book.title = info.title;
                                                 book.author = info.authors[0]; // TODO si plusieurs auteurs
                                                 book.nPages = info.pageCount;
